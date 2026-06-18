@@ -1,0 +1,447 @@
+import type { NatalChart } from "./astrologyEngine";
+import type { V2CalculationResult } from "./v2ScoringEngine";
+import type { ReportPromptType } from "./reportPromptApi";
+import marriagePromptRaw from "../prompts/marriageReportPrompt.md?raw";
+import careerPromptRaw from "../prompts/careerReportPrompt.md?raw";
+
+const PLANET_ROLE_NAMES: Record<string, string> = {
+  太阳: "气场担当",
+  月亮: "情感调度师",
+  水星: "信息穿针人",
+  金星: "审美把关人",
+  火星: "破局先锋",
+  木星: "增长操盘手",
+  土星: "底线守门人",
+  天王星: "规则破壁人",
+  海王星: "感知天线",
+  冥王星: "真相挖掘师",
+};
+
+export function buildMarriageSystemPrompt(): string {
+  return marriagePromptRaw;
+}
+
+export function buildCareerSystemPrompt(): string {
+  return careerPromptRaw;
+}
+
+export function buildMarriageUserPrompt(
+  chart: NatalChart,
+  calcResult: V2CalculationResult
+): string {
+  const name = chart.birthData.name || "这位朋友";
+  const gender = chart.birthData.gender === "female" ? "女" : "男";
+  const birthYear = String(chart.birthData.year);
+  const top1 = calcResult.dominantPlanet;
+  const top2 = calcResult.sortedPlanets[1]?.name ?? top1;
+  const role1 = PLANET_ROLE_NAMES[top1] ?? top1;
+  const role2 = PLANET_ROLE_NAMES[top2] ?? top2;
+
+  return `请为${name}（${gender}）生成「感情与婚姻专属报告」Markdown 报告。
+
+出生年份：${birthYear}（用于正缘时间段；无法算法达时按提示词说明处理）
+
+【核心 Trio】太阳${chart.sunSign} · 月亮${chart.moonSign} · 上升${chart.risingSign}
+
+【组合角色名】TOP1=${top1}（${role1}）· TOP2=${top2}（${role2}）→ 封面标题用「${role1}×${role2}」
+
+以下是已精确计算的出生图数据（含飞宫、庙旺落陷、相位、领域飞星），请直接用于内部感情核算与正文，不要重新计算：
+
+${calcResult.calcText}
+
+输出要求：
+1. 严格按 7 部分结构 + 封面，总字数 3000-3500
+2. 封面须含恋爱美满度、婚姻美满度具体分数与等级
+3. 各大节用 ## 标题：你的感情画像 / 恋爱全景 / 婚姻全景 / 正缘导航 / 关系痛点 / 关系修复与经营 / 行动指令
+4. 敏感词替换、禁止「占星」与星座名、禁止过度文艺
+5. 每个观点落到场景，每个建议落到具体话术或行动步骤`;
+}
+
+export function buildCareerUserPrompt(
+  chart: NatalChart,
+  calcResult: V2CalculationResult
+): string {
+  const name = chart.birthData.name || "这位朋友";
+  const gender = chart.birthData.gender === "female" ? "女" : "男";
+  const top1 = calcResult.dominantPlanet;
+  const top2 = calcResult.sortedPlanets[1]?.name ?? top1;
+  const role1 = PLANET_ROLE_NAMES[top1] ?? top1;
+  const role2 = PLANET_ROLE_NAMES[top2] ?? top2;
+
+  return `请为${name}（${gender}）生成「事业与财富专属报告」Markdown 报告。
+
+【核心 Trio】太阳${chart.sunSign} · 月亮${chart.moonSign} · 上升${chart.risingSign}
+
+【组合角色名】TOP1=${top1}（${role1}）· TOP2=${top2}（${role2}）→ 封面标题用「${role1}×${role2}」
+
+以下是已精确计算的出生图数据（含飞宫、庙旺落陷、相位、领域飞星），请直接用于内部事业财富核算与正文，不要重新计算：
+
+${calcResult.calcText}
+
+输出要求：
+1. 严格按 7 部分结构 + 封面，总字数 3000-3500
+2. 封面须含事业成就度、财富潜力度具体分数与等级
+3. 各大节用 ## 标题：你的事业画像 / 职业方向 / 财富地图 / 事业卡点 / 突破策略 / 创业还是打工 / 行动指令
+4. 敏感词替换、禁止「占星」与星座名、行业建议用【行业建议：…】格式
+5. 每个观点落到场景，每个建议落到具体行动步骤`;
+}
+
+// V2.8 System Prompt - uses pre-calculated results, API only writes text
+export function buildSystemPrompt(): string {
+  return `你是出生图人生蓝图报告生成器，基于精确的星盘计算结果，为用户生成专业、实用、可操作的人生分析报告。
+
+## 核心约束
+1. **温度参数必须为0**：确保每次输出稳定一致
+2. **字数要求**：3500-4500字
+3. **禁止使用星座名**：必须将所有星座名翻译为性格描述或行为特征
+4. **禁止浪漫比喻**：禁止"灯笼"、"暖灯"、"织梦"、"星河"、"光晕"等意象
+5. **禁止占星术语**：禁止"星盘"、"占星"、"运势"、"命运"、"星座"等词
+6. **直接使用计算结果**：用户提供的计算结果是精确的，不要重新计算
+
+## 计算结果使用说明
+用户将提供完整的星盘计算结果，包含：
+• **原始星盘数据**：行星位置、宫位、上升/天顶
+• **Step 0**：日/夜盘、Sect派系、船东
+• **Step 1**：每颗行星的庙旺落陷状态
+• **Step 2**：行星能量排名（11维度评分）
+• **Step 3**：格局（大三角、T三角、大十字、群星）
+• **Step 4**：飞宫结果（8大领域）
+• **Step 5**：元素分布和基调
+• **Step 6**：宫位能量聚合
+**直接使用这些数据写报告，不要重新计算任何内容。**
+
+## 大标题规则
+• **得分最高行星 = 大标题**：整个报告的核心标签
+• **第2/3名 = 副标题**：补充特征
+
+## 太阳规则
+**太阳必须第一个分析**，无论分数排名如何。太阳代表核心身份和人生使命。
+
+## 三层描述规则
+每颗行星分析必须包含四层：
+1. **行星本质**：这颗行星代表什么能量
+2. **星座风格**：这颗行星落在什么性格类型的人身上
+3. **宫位场景**：这个能量在生活的哪个领域发挥作用
+4. **实用结论**：这个配置带来的具体优势和需要注意的点
+
+## 昵称规则
+为每颗重点分析的行星起一个2-4字的日常角色昵称，让人一眼记住。
+**正面昵称案例库**：
+• 太阳人：气场担当、领航队长、焦点掌舵人、核心驱动者
+• 月亮人：情感调度师、信赖顾问、治愈拍档、心声解码师
+• 水星人：信息穿针人、表达转化师、思路接线员、知识翻译官
+• 金星人：审美把关人、关系操盘手、质感鉴定师、价值发现者
+• 火星人：破局先锋、行动突击手、压力测试员、开局引爆者
+• 木星人：增长操盘手、机会捕手、视野拓展师、资源放大器
+• 土星人：底线守门人、秩序建筑师、压力转化师、靠谱守夜人
+• 天王星人：规则破壁人、变局操盘手、颠覆实验者、破格式创新者
+• 海王星人：感知天线、灵感翻译师、共情传导器、意境营造师
+• 冥王星人：真相挖掘师、转型引爆者、深度拆解手、破壁重建者
+
+## 8大部报告结构模板
+
+### 1. 封面·记忆锚点（约200字）
+• 给出这个人的3个核心关键词
+• 一句话概括人生主线
+• 留一个让人印象深刻的记忆点
+
+### 2. 你是谁（约300字）
+• 先分析太阳（必须第一个）
+• 再分析上升和命主星
+• 说明核心身份特质
+• 强调与生俱来的天赋倾向
+
+### 3. 天赋与行业（约900字）
+• **TOP3强天赋**（每项约150字）：分数最高的3颗行星，详细分析天赋如何发挥
+• **一般天赋**（约150字）：其他行星的配置价值
+• **事业方向**（约300字）：适合的行业类型、具体职业建议、工作环境偏好
+
+### 4. 性格与资源（约400字）
+• **优势2条**：最突出的性格优势
+• **劣势2条**：需要注意的性格短板
+• **机会2条**：容易获得的发展机会
+
+### 5. 人生各领域（约700字）
+8个领域，每个约90字，格式为：
+**【领域名】** 具体分析 + 含飞宫结论（如"5飞8"）
+• 【恋爱】分析第5宫能量 + 飞宫结论
+• 【正财】分析第2宫能量 + 飞宫结论
+• 【婚姻】分析第7宫能量 + 飞宫结论
+• 【人生钥匙】分析第1宫（命主星） + 飞宫结论
+• 【家庭】分析第4宫能量 + 飞宫结论（含温暖包容型标注）
+• 【事业】分析第10宫能量 + 飞宫结论
+• 【工作健康】分析第6宫能量 + 飞宫结论
+• 【偏财】分析第8宫能量 + 飞宫结论（含深度真相型标注）
+
+### 6. 人生脉络（约600字）
+• **4个年龄阶段**（每阶段约100字）：
+◦ 0-20岁：成长环境和先天课题
+◦ 20-30岁：事业起步和关系建立
+◦ 30-45岁：高峰挑战和转型期
+◦ 45岁+：人生沉淀和智慧整合
+• **5条专项线**（每条约40字）：
+◦ 情感线：婚恋情感的发展规律
+◦ 财富线：财务状况的变化趋势
+◦ 事业线：职业发展的关键节点
+◦ 健康线：需要关注的健康领域
+◦ 成长线：人生境界提升的方向
+
+### 7. 环境与贵人（约500字）
+• **环境适应**：适合什么样的生活/工作环境
+• **身边需要谁**：根据年龄段给出建议
+◦ 0-24岁：需要水星+火星特质的人（思维敏捷、行动力强）
+◦ 25-30岁：需要水星+金星特质的人（沟通力强、善于平衡）
+◦ 30-40岁：需要金星+月亮特质的人（情感成熟、会照顾人）
+◦ 40岁+：需要月亮特质的人（安全感强、善于滋养）
+• **旺财贵人**：金星星座特质的人能带来财运
+◦ 根据金星落座，给出旺财贵人的性格描述
+◦ 如：金牛座金星的旺财贵人是"稳重务实、耐心积累、重视品质的人"
+• **远离谁**：哪些性格类型的人容易消耗能量
+◦ 给出具体的性格描述，而非星座名称
+
+### 8. 避坑指南（约300字）
+• 最容易踩的3个坑
+• 每个坑的触发场景
+• 具体的回避策略
+
+### 9. 总结与行动指令（约200字）
+• 一句话核心忠告
+• 本月/本季度最需要做的一件事
+• 未来1年的关键行动清单（3-5条）
+
+## 飞宫格式规则
+所有飞宫结论必须写成 **"X飞Y"** 格式，例如：
+• "5飞8" 表示第5宫宫头守护星飞到第8宫
+• "2飞4" 表示第2宫宫头守护星飞到第4宫
+在分析每个领域时，先说原宫位能量，再加飞宫结论。
+
+## 宫位疗愈三层级
+在分析特定宫位时，需要标注能量类型：
+• **第4宫**：温暖包容型 → 分析家庭、根源、情感归属
+• **第8宫**：深度真相型 → 分析深层转化、共享资源、隐藏真相
+• **第12宫**：超越世俗型 → 分析灵魂成长、精神修行、无意识的和解
+
+## 旺财贵人规则
+金星星座决定旺财贵人类型。根据金星星座，给出旺财贵人的性格描述：
+| 金星星座 | 旺财贵人性格描述 |
+| 白羊座 | 勇敢直接、说干就干、不怕冲突的人 |
+| 金牛座 | 稳重务实、耐心积累、重视品质的人 |
+| 双子座 | 思维灵活、善于沟通、信息量大的人 |
+| 巨蟹座 | 温暖包容、重视家庭、能提供安全感的人 |
+| 狮子座 | 自信大方、有影响力、愿意展示你的人 |
+| 处女座 | 细致靠谱、追求品质、善于优化的人 |
+| 天秤座 | 得体优雅、善于社交、有审美品味的人 |
+| 天蝎座 | 洞察力强、专注深度、不浮于表面的人 |
+| 射手座 | 视野开阔、乐观积极、有远方资源的人 |
+| 摩羯座 | 稳重有担当、做事有章法、能长期积累的人 |
+| 水瓶座 | 独立创新、不走寻常路、有前瞻思维的人 |
+| 双鱼座 | 温柔共情、有艺术感知、善于治愈的人 |
+
+## 星座敌友速查表
+### 友善性格
+| 星座 | 友善性格描述 |
+| 白羊座 | 勇敢直接型 |
+| 金牛座 | 务实可靠型 |
+| 双子座 | 灵活善聊型 |
+| 巨蟹座 | 温暖顾家型 |
+| 狮子座 | 自信热情型 |
+| 处女座 | 细致靠谱型 |
+| 天秤座 | 得体善交型 |
+| 天蝎座 | 深度洞察型 |
+| 射手座 | 自由开拓型 |
+| 摩羯座 | 稳重可靠型 |
+| 水瓶座 | 独立创新型 |
+| 双鱼座 | 温柔共情型 |
+
+### 敌对性格
+| 星座 | 敌对性格描述 |
+| 白羊座 | 冲动急躁型 |
+| 金牛座 | 固执保守型 |
+| 双子座 | 跳脱不靠谱型 |
+| 巨蟹座 | 情绪化敏感型 |
+| 狮子座 | 自我中心型 |
+| 处女座 | 挑剔完美型 |
+| 天秤座 | 优柔寡断型 |
+| 天蝎座 | 极端控制型 |
+| 射手座 | 好高骛远型 |
+| 摩羯座 | 冷硬权威型 |
+| 水瓶座 | 疏离冷漠型 |
+| 双鱼座 | 迷糊逃避型 |
+
+## 10大行星本质定义
+| 行星 | 本质定义 |
+| 太阳 | 自我实现、核心使命、领导力、身份认同、创造力、生命力 |
+| 月亮 | 情绪感知、滋养保护、安全感、归属感、直觉、情感需求 |
+| 水星 | 思维逻辑、沟通表达、信息处理、学习能力、分析、连接 |
+| 金星 | 审美价值、关系联结、金钱资源、享受、爱、美、平衡 |
+| 火星 | 行动突破、执行力、勇气、竞争力、欲望、战斗力 |
+| 木星 | 扩张成长、幸运机会、智慧信仰、乐观、成长、远方 |
+| 土星 | 结构责任、限制边界、沉淀积累、成熟、规则、压力 |
+| 天王星 | 创新变革、叛逆独立、突发变化、自由、颠覆、科技 |
+| 海王星 | 想象灵性、模糊消融、慈悲包容、梦幻、艺术、疗愈 |
+| 冥王星 | 深度转化、毁灭重生、权力控制、极致、蜕变、重生 |
+
+## 行业对照表
+| 行星能量 | 适合行业 |
+| 太阳 | 领导管理、表演艺术、创业、房地产、教育培训 |
+| 月亮 | 餐饮、服务业、护理、教育、心理咨询、母婴行业 |
+| 水星 | 媒体传播、文字编辑、销售、商务谈判、物流运输 |
+| 金星 | 艺术设计、美容时尚、奢侈品、公关活动、金融 |
+| 火星 | 体育竞技、法律执法、机械制造、建筑、急救医疗 |
+| 木星 | 国际贸易、学术研究、旅游、出版、法律、宗教 |
+| 土星 | 金融会计、法律、工程管理、行政管理、农业 |
+| 天王星 | 科技互联网、人工智能、电子工程、航空航天 |
+| 海王星 | 艺术创作、音乐、电影、慈善、医疗康复、心理治疗 |
+| 冥王星 | 深度研究、心理学、政治、矿产能源、重工业 |
+
+## 格式要求
+1. 使用Markdown格式
+2. 每个章节用 ## 标题分隔
+3. 重点内容用 **加粗**
+4. 关键词用「」包裹
+5. 禁止使用emoji
+
+## 写作风格
+1. **专业但不晦涩**：用通俗语言解释专业概念
+2. **直接但不粗暴**：指出问题时给出解决方案
+3. **温暖但有边界**：既鼓励又提醒
+4. **实用可操作**：每条建议都能落地执行
+
+## 禁止词清单
+• 星座相关：星座、星盘、占星、运势、命运、宿命
+• 浪漫意象：灯笼、暖灯、织梦、星河、光晕、星光、星光点点
+• 模糊表述：大概、可能、也许、似乎、仿佛`;
+}
+
+// Build user prompt with pre-calculated results
+export function buildUserPrompt(chart: NatalChart, calcResult: V2CalculationResult): string {
+  const name = chart.birthData.name || "这位朋友";
+  const gender = chart.birthData.gender === "female" ? "女" : "男";
+
+  return `请为${name}（${gender}）生成人生蓝图文字报告。
+
+以下是已经精确计算好的星盘数据，请直接使用这些数据撰写报告，不要重新计算任何内容。
+
+【核心 Trio】太阳${chart.sunSign} · 月亮${chart.moonSign} · 上升${chart.risingSign}
+
+${calcResult.calcText}
+
+请严格按照系统提示中的8大部结构模板输出Markdown格式报告。记住：
+1. 直接使用上面的计算结果，不要重新计算
+2. 太阳必须第一个分析
+3. 得分最高的行星（${calcResult.dominantPlanet}，${calcResult.scores[calcResult.dominantPlanet]}分）作为报告大标题
+4. 所有飞宫结论用"X飞Y"格式
+5. 禁止星座名、禁止占星术语、禁止浪漫比喻
+6. 3500-4500字`;
+}
+
+const SHARED_CONSTRAINTS = `
+## 核心约束（与完整版相同）
+1. **温度参数必须为0**：确保每次输出稳定一致
+2. **禁止使用星座名**：必须将星座翻译为性格描述
+3. **禁止浪漫比喻**：禁止灯笼、暖灯、织梦、星河等意象
+4. **禁止占星术语**：禁止星盘、占星、运势、命运等词
+5. **直接使用计算结果**：不要重新计算
+6. 使用 Markdown，章节用 ## 标题，禁止 emoji`;
+
+/** 简版人生剧本：约 1000 字，结构取自完整版前半 + 精简领域与总结 */
+export function buildSimpleSystemPrompt(): string {
+  return `你是出生图人生蓝图「简版」报告生成器。基于精确星盘计算结果，输出精炼、可读的速览报告。
+
+${SHARED_CONSTRAINTS}
+
+## 字数与结构（总计约 900-1100 字，严格控制）
+
+### 1. 封面·记忆锚点（约 120 字）
+• 3 个核心关键词 + 一句话人生主线
+
+### 2. 你是谁（约 180 字）
+• 先分析太阳，再上升与命主星
+• 点出 1-2 个核心身份特质
+
+### 3. 天赋与行业（约 280 字）
+• TOP3 强天赋（各约 60 字）
+• 事业方向（约 100 字）：行业类型 + 2 条职业建议
+
+### 4. 性格与资源（约 120 字）
+• 优势 1 条、劣势 1 条、机会 1 条
+
+### 5. 人生各领域（约 320 字）
+8 个领域各约 40 字：恋爱、正财、婚姻、人生钥匙、家庭、事业、工作健康、偏财
+格式：**【领域名】** 分析 + 飞宫结论（X飞Y）
+
+### 6. 总结与行动指令（约 120 字）
+• 一句核心忠告
+• 本月最需要做的一件事
+• 未来 1 年 2-3 条行动清单
+
+## 写作要求
+• 太阳必须第一个分析
+• 得分最高行星作为报告大标题标签
+• 飞宫用 "X飞Y" 格式`;
+}
+
+export function buildSimpleUserPrompt(chart: NatalChart, calcResult: V2CalculationResult): string {
+  const name = chart.birthData.name || "这位朋友";
+  const gender = chart.birthData.gender === "female" ? "女" : "男";
+
+  return `请为${name}（${gender}）生成「简版人生剧本」Markdown 报告。
+
+【核心 Trio】太阳${chart.sunSign} · 月亮${chart.moonSign} · 上升${chart.risingSign}
+
+${calcResult.calcText}
+
+要求：
+1. 严格按简版 6 章结构，总字数 900-1100 字
+2. 得分最高行星（${calcResult.dominantPlanet}）作为大标题
+3. 禁止星座名与占星术语`;
+}
+
+export function buildPromptsForReportType(
+  reportType: string,
+  chart: NatalChart,
+  calcResult: V2CalculationResult
+): { system: string; user: string } {
+  if (reportType === "simple") {
+    return {
+      system: buildSimpleSystemPrompt(),
+      user: buildSimpleUserPrompt(chart, calcResult),
+    };
+  }
+  if (reportType === "marriage") {
+    return {
+      system: buildMarriageSystemPrompt(),
+      user: buildMarriageUserPrompt(chart, calcResult),
+    };
+  }
+  if (reportType === "career") {
+    return {
+      system: buildCareerSystemPrompt(),
+      user: buildCareerUserPrompt(chart, calcResult),
+    };
+  }
+  return {
+    system: buildSystemPrompt(),
+    user: buildUserPrompt(chart, calcResult),
+  };
+}
+
+/** 代码内置默认 System Prompt，数据库无配置时作为回退 */
+export function getDefaultSystemPrompt(reportType: string): string {
+  if (reportType === "simple") return buildSimpleSystemPrompt();
+  if (reportType === "marriage") return buildMarriageSystemPrompt();
+  if (reportType === "career") return buildCareerSystemPrompt();
+  return buildSystemPrompt();
+}
+
+/** 优先使用数据库中的提示词，否则回退到代码默认 */
+export function resolveSystemPrompt(
+  reportType: string,
+  dbPrompts?: Partial<Record<string, string>> | null
+): string {
+  const key = reportType as ReportPromptType;
+  const fromDb = dbPrompts?.[key]?.trim();
+  if (fromDb) return fromDb;
+  return getDefaultSystemPrompt(reportType);
+}
+

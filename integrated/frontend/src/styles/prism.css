@@ -1,0 +1,231 @@
+/* PRISM 人生剧本 — shared theme (from prism-full-flow.html) */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+.prism-root {
+  --prism-navy: #0D1B2A;
+  --prism-navy-mid: #1B2A4A;
+  --prism-gold: #E8B951;
+  --prism-gold-light: #F0D68A;
+  --prism-gold-dark: #C49A3C;
+  --prism-cream: #FAF6F0;
+  --prism-danger: #D94F4F;
+  background: var(--prism-navy);
+  color: var(--prism-cream);
+  font-family: 'Inter', 'Noto Serif SC', serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.prism-font-display { font-family: 'Cinzel', serif; }
+.prism-font-serif { font-family: 'Noto Serif SC', serif; }
+
+/* Starfield */
+.prism-starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.prism-star {
+  position: absolute; border-radius: 50%;
+  background: rgba(232, 185, 81, 0.6);
+  animation: prismTwinkle var(--dur, 3s) ease-in-out infinite alternate;
+}
+@keyframes prismTwinkle {
+  0% { opacity: 0.15; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+.prism-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.prism-nebula::before {
+  content: ''; position: absolute; top: -20%; left: -10%; width: 60%; height: 60%;
+  background: radial-gradient(ellipse, rgba(68,49,141,0.12) 0%, transparent 70%);
+  animation: prismNebulaDrift 20s ease-in-out infinite alternate;
+}
+.prism-nebula::after {
+  content: ''; position: absolute; bottom: -15%; right: -10%; width: 55%; height: 55%;
+  background: radial-gradient(ellipse, rgba(123,94,167,0.08) 0%, transparent 70%);
+  animation: prismNebulaDrift 25s ease-in-out infinite alternate-reverse;
+}
+@keyframes prismNebulaDrift {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px,-20px) scale(1.1); }
+}
+
+.prism-orbit-ring {
+  position: fixed; top: 50%; left: 50%; border-radius: 50%;
+  border: 1px solid rgba(232,185,81,0.05); z-index: 0; pointer-events: none;
+  animation: prismOrbitSpin 120s linear infinite;
+}
+.prism-orbit-ring-1 { width: 550px; height: 550px; margin: -275px 0 0 -275px; }
+.prism-orbit-ring-1::after {
+  content: ''; position: absolute; top: -4px; left: 50%; width: 8px; height: 8px;
+  background: var(--prism-gold); border-radius: 50%; box-shadow: 0 0 12px rgba(232,185,81,0.5);
+}
+.prism-orbit-ring-2 {
+  width: 400px; height: 400px; margin: -200px 0 0 -200px;
+  animation-duration: 90s; animation-direction: reverse; border-color: rgba(232,185,81,0.03);
+}
+@keyframes prismOrbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Page transitions */
+.prism-page {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100%; padding: 24px 20px;
+  animation: prismFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes prismFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Buttons */
+.prism-btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  height: 54px; padding: 0 40px;
+  background: linear-gradient(135deg, var(--prism-gold-dark), var(--prism-gold), var(--prism-gold-dark));
+  background-size: 200% 100%; border: none; border-radius: 12px;
+  color: var(--prism-navy); font-family: 'Cinzel', serif; font-size: 14px;
+  font-weight: 700; letter-spacing: 4px; cursor: pointer;
+  transition: all 0.4s ease; position: relative; overflow: hidden;
+}
+.prism-btn-gold::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.6s ease;
+}
+.prism-btn-gold:hover:not(:disabled) {
+  background-position: 100% 0; box-shadow: 0 0 40px rgba(232,185,81,0.25); transform: translateY(-1px);
+}
+.prism-btn-gold:hover:not(:disabled)::before { left: 100%; }
+.prism-btn-gold:disabled { opacity: 0.5; cursor: not-allowed; }
+.prism-btn-gold.w-full { width: 100%; }
+
+/* Question UI */
+.prism-dim-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid rgba(232,185,81,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 600;
+  color: rgba(232,185,81,0.2); transition: all 0.5s ease;
+  background: rgba(13,27,42,0.4);
+}
+.prism-dim-icon.active {
+  border-color: rgba(232,185,81,0.5); color: var(--prism-gold);
+  background: rgba(232,185,81,0.08); box-shadow: 0 0 15px rgba(232,185,81,0.1);
+}
+.prism-dim-icon.done {
+  border-color: rgba(232,185,81,0.35); color: var(--prism-gold); background: rgba(232,185,81,0.12);
+}
+
+.prism-progress-track { width: 100%; height: 2px; background: rgba(232,185,81,0.08); border-radius: 1px; overflow: hidden; }
+.prism-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--prism-gold-dark), var(--prism-gold));
+  border-radius: 1px; transition: width 0.5s ease; box-shadow: 0 0 8px rgba(232,185,81,0.3);
+}
+
+.prism-option-btn {
+  width: 100%; padding: 18px 20px;
+  background: rgba(27,42,74,0.4); border: 1px solid rgba(232,185,81,0.08);
+  border-radius: 14px; color: rgba(250,246,240,0.7);
+  font-size: 14px; line-height: 1.7; text-align: left;
+  cursor: pointer; transition: all 0.3s ease;
+  font-family: 'Noto Serif SC', serif;
+  backdrop-filter: blur(8px); position: relative; overflow: hidden;
+}
+.prism-option-btn:hover {
+  border-color: rgba(232,185,81,0.25); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.prism-option-btn.selected {
+  border-color: rgba(232,185,81,0.5); background: rgba(232,185,81,0.08);
+  color: var(--prism-gold-light); box-shadow: 0 0 25px rgba(232,185,81,0.08);
+}
+
+/* Birth form */
+.prism-birth-form {
+  width: 100%;
+  background: linear-gradient(165deg, rgba(27,42,74,0.5) 0%, rgba(13,27,42,0.7) 100%);
+  border: 1px solid rgba(232,185,81,0.1); border-radius: 20px;
+  padding: 32px 28px; backdrop-filter: blur(20px);
+  box-shadow: 0 0 50px rgba(232,185,81,0.03), 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.prism-input {
+  width: 100%; height: 48px;
+  background: rgba(13,27,42,0.5); border: 1px solid rgba(232,185,81,0.08);
+  border-radius: 10px; padding: 0 16px; color: var(--prism-cream);
+  font-size: 15px; font-family: 'Inter', sans-serif;
+  outline: none; transition: all 0.3s ease;
+}
+button.prism-input {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.prism-input::placeholder { color: rgba(250,246,240,0.2); }
+.prism-input:focus {
+  border-color: rgba(232,185,81,0.35); box-shadow: 0 0 20px rgba(232,185,81,0.06);
+  background: rgba(13,27,42,0.7);
+}
+.prism-input:hover { border-color: rgba(232,185,81,0.18); }
+.prism-input.error { border-color: rgba(217,79,79,0.5); box-shadow: 0 0 12px rgba(217,79,79,0.1); }
+
+.prism-gender-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+.prism-gender-opt label {
+  display: flex; align-items: center; justify-content: center; height: 48px;
+  background: rgba(13,27,42,0.5); border: 1px solid rgba(232,185,81,0.08);
+  border-radius: 10px; cursor: pointer; transition: all 0.3s ease;
+  font-size: 14px; color: rgba(250,246,240,0.45);
+}
+.prism-gender-opt label:hover { border-color: rgba(232,185,81,0.2); }
+.prism-gender-opt input:checked + label {
+  border-color: rgba(232,185,81,0.45); background: rgba(232,185,81,0.07); color: var(--prism-gold);
+}
+
+.prism-city-dropdown {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  max-height: 200px; overflow-y: auto;
+  background: rgba(13,27,42,0.95); border: 1px solid rgba(232,185,81,0.12);
+  border-radius: 10px; z-index: 100;
+}
+.prism-city-opt {
+  padding: 10px 16px; cursor: pointer; font-size: 14px;
+  color: rgba(250,246,240,0.65); transition: all 0.2s;
+  border-bottom: 1px solid rgba(232,185,81,0.04);
+}
+.prism-city-opt:hover { background: rgba(232,185,81,0.07); color: var(--prism-gold); }
+
+/* Analysis animation */
+.prism-analysis-ring {
+  position: absolute; inset: 0;
+  border: 1px solid rgba(232,185,81,0.1); border-radius: 50%;
+  animation: prismAnalysisSpin 6s linear infinite;
+}
+.prism-analysis-ring:nth-child(1) { inset: 0; border-color: rgba(232,185,81,0.15); }
+.prism-analysis-ring:nth-child(2) { inset: 15px; animation-direction: reverse; animation-duration: 4s; }
+.prism-analysis-ring:nth-child(3) { inset: 30px; animation-duration: 8s; }
+.prism-analysis-ring:nth-child(4) { inset: 45px; animation-direction: reverse; animation-duration: 3s; }
+.prism-analysis-ring::after {
+  content: ''; position: absolute; top: -3px; left: 50%; width: 6px; height: 6px;
+  background: var(--prism-gold); border-radius: 50%; box-shadow: 0 0 10px rgba(232,185,81,0.5);
+}
+@keyframes prismAnalysisSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.prism-fade-in { animation: prismFadeIn 0.8s ease forwards; }
+.prism-fade-d1 { animation-delay: 0.1s; opacity: 0; }
+.prism-fade-d2 { animation-delay: 0.25s; opacity: 0; }
+.prism-fade-d3 { animation-delay: 0.4s; opacity: 0; }
+.prism-fade-d4 { animation-delay: 0.55s; opacity: 0; }
+
+.prism-question-enter { animation: prismSlideIn 0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes prismSlideIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+input[type="date"].prism-input, input[type="time"].prism-input { color-scheme: dark; }
+input[type="date"].prism-input::-webkit-calendar-picker-indicator,
+input[type="time"].prism-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(3) hue-rotate(10deg); cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .prism-orbit-ring-1 { width: 350px; height: 350px; margin: -175px 0 0 -175px; }
+  .prism-orbit-ring-2 { width: 260px; height: 260px; margin: -130px 0 0 -130px; }
+  .prism-birth-form { padding: 24px 20px; }
+}

@@ -1,0 +1,813 @@
+[
+  {
+    "code": "CN",
+    "nameZh": "中国",
+    "nameEn": "China",
+    "provinces": [
+      {
+        "nameZh": "北京",
+        "nameEn": "Beijing",
+        "cities": [
+          {"nameZh": "北京", "nameEn": "Beijing", "lat": 39.9042, "lng": 116.4074, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "上海",
+        "nameEn": "Shanghai",
+        "cities": [
+          {"nameZh": "上海", "nameEn": "Shanghai", "lat": 31.2304, "lng": 121.4737, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "天津",
+        "nameEn": "Tianjin",
+        "cities": [
+          {"nameZh": "天津", "nameEn": "Tianjin", "lat": 39.3434, "lng": 117.3616, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "重庆",
+        "nameEn": "Chongqing",
+        "cities": [
+          {"nameZh": "重庆", "nameEn": "Chongqing", "lat": 29.4316, "lng": 106.9123, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "黑龙江",
+        "nameEn": "Heilongjiang",
+        "cities": [
+          {"nameZh": "哈尔滨", "nameEn": "Harbin", "lat": 45.8038, "lng": 126.5350, "tz": 8},
+          {"nameZh": "齐齐哈尔", "nameEn": "Qiqihar", "lat": 47.3543, "lng": 123.9182, "tz": 8},
+          {"nameZh": "牡丹江", "nameEn": "Mudanjiang", "lat": 44.5517, "lng": 129.6331, "tz": 8},
+          {"nameZh": "佳木斯", "nameEn": "Jiamusi", "lat": 46.7999, "lng": 130.3188, "tz": 8},
+          {"nameZh": "大庆", "nameEn": "Daqing", "lat": 46.5967, "lng": 125.1039, "tz": 8},
+          {"nameZh": "绥化", "nameEn": "Suihua", "lat": 46.6531, "lng": 126.9693, "tz": 8},
+          {"nameZh": "黑河", "nameEn": "Heihe", "lat": 50.2453, "lng": 127.5285, "tz": 8},
+          {"nameZh": "伊春", "nameEn": "Yichun", "lat": 47.7277, "lng": 128.8405, "tz": 8},
+          {"nameZh": "鸡西", "nameEn": "Jixi", "lat": 45.2953, "lng": 130.9660, "tz": 8},
+          {"nameZh": "双鸭山", "nameEn": "Shuangyashan", "lat": 46.6466, "lng": 131.1546, "tz": 8},
+          {"nameZh": "七台河", "nameEn": "Qitaihe", "lat": 45.7706, "lng": 131.0150, "tz": 8},
+          {"nameZh": "鹤岗", "nameEn": "Hegang", "lat": 47.3499, "lng": 130.2979, "tz": 8},
+          {"nameZh": "大兴安岭", "nameEn": "Daxing'anling", "lat": 51.9918, "lng": 124.7116, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "吉林",
+        "nameEn": "Jilin",
+        "cities": [
+          {"nameZh": "长春", "nameEn": "Changchun", "lat": 43.8965, "lng": 125.3265, "tz": 8},
+          {"nameZh": "吉林", "nameEn": "Jilin City", "lat": 43.8378, "lng": 126.5496, "tz": 8},
+          {"nameZh": "四平", "nameEn": "Siping", "lat": 43.1664, "lng": 124.3503, "tz": 8},
+          {"nameZh": "延边", "nameEn": "Yanbian", "lat": 42.8914, "lng": 129.5088, "tz": 8},
+          {"nameZh": "通化", "nameEn": "Tonghua", "lat": 41.7285, "lng": 125.9399, "tz": 8},
+          {"nameZh": "白城", "nameEn": "Baicheng", "lat": 45.6196, "lng": 122.8392, "tz": 8},
+          {"nameZh": "辽源", "nameEn": "Liaoyuan", "lat": 42.8879, "lng": 125.1453, "tz": 8},
+          {"nameZh": "松原", "nameEn": "Songyuan", "lat": 45.1411, "lng": 124.8258, "tz": 8},
+          {"nameZh": "白山", "nameEn": "Baishan", "lat": 41.9405, "lng": 126.4248, "tz": 8},
+          {"nameZh": "公主岭", "nameEn": "Gongzhuling", "lat": 43.5045, "lng": 124.8228, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "辽宁",
+        "nameEn": "Liaoning",
+        "cities": [
+          {"nameZh": "沈阳", "nameEn": "Shenyang", "lat": 41.8057, "lng": 123.4315, "tz": 8},
+          {"nameZh": "大连", "nameEn": "Dalian", "lat": 38.9140, "lng": 121.6147, "tz": 8},
+          {"nameZh": "鞍山", "nameEn": "Anshan", "lat": 41.1078, "lng": 122.9972, "tz": 8},
+          {"nameZh": "抚顺", "nameEn": "Fushun", "lat": 41.8805, "lng": 123.9572, "tz": 8},
+          {"nameZh": "本溪", "nameEn": "Benxi", "lat": 41.2945, "lng": 123.7608, "tz": 8},
+          {"nameZh": "丹东", "nameEn": "Dandong", "lat": 40.1291, "lng": 124.3826, "tz": 8},
+          {"nameZh": "锦州", "nameEn": "Jinzhou", "lat": 41.1309, "lng": 121.1205, "tz": 8},
+          {"nameZh": "营口", "nameEn": "Yingkou", "lat": 40.6674, "lng": 122.2353, "tz": 8},
+          {"nameZh": "阜新", "nameEn": "Fuxin", "lat": 42.0193, "lng": 121.6633, "tz": 8},
+          {"nameZh": "辽阳", "nameEn": "Liaoyang", "lat": 41.2695, "lng": 123.1730, "tz": 8},
+          {"nameZh": "铁岭", "nameEn": "Tieling", "lat": 42.2233, "lng": 123.8416, "tz": 8},
+          {"nameZh": "朝阳", "nameEn": "Chaoyang", "lat": 41.5736, "lng": 120.4503, "tz": 8},
+          {"nameZh": "盘锦", "nameEn": "Panjin", "lat": 41.1199, "lng": 122.0709, "tz": 8},
+          {"nameZh": "葫芦岛", "nameEn": "Huludao", "lat": 40.7110, "lng": 120.8373, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "河北",
+        "nameEn": "Hebei",
+        "cities": [
+          {"nameZh": "石家庄", "nameEn": "Shijiazhuang", "lat": 38.0428, "lng": 114.5149, "tz": 8},
+          {"nameZh": "保定", "nameEn": "Baoding", "lat": 38.8739, "lng": 115.4644, "tz": 8},
+          {"nameZh": "唐山", "nameEn": "Tangshan", "lat": 39.6307, "lng": 118.1803, "tz": 8},
+          {"nameZh": "秦皇岛", "nameEn": "Qinhuangdao", "lat": 39.9354, "lng": 119.5996, "tz": 8},
+          {"nameZh": "邯郸", "nameEn": "Handan", "lat": 36.6256, "lng": 114.5387, "tz": 8},
+          {"nameZh": "邢台", "nameEn": "Xingtai", "lat": 37.0706, "lng": 114.4862, "tz": 8},
+          {"nameZh": "张家口", "nameEn": "Zhangjiakou", "lat": 40.7684, "lng": 114.8863, "tz": 8},
+          {"nameZh": "承德", "nameEn": "Chengde", "lat": 40.9588, "lng": 117.9634, "tz": 8},
+          {"nameZh": "沧州", "nameEn": "Cangzhou", "lat": 38.3077, "lng": 116.8457, "tz": 8},
+          {"nameZh": "廊坊", "nameEn": "Langfang", "lat": 39.5380, "lng": 116.6838, "tz": 8},
+          {"nameZh": "衡水", "nameEn": "Hengshui", "lat": 37.7389, "lng": 115.6862, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "山东",
+        "nameEn": "Shandong",
+        "cities": [
+          {"nameZh": "济南", "nameEn": "Jinan", "lat": 36.6512, "lng": 116.9972, "tz": 8},
+          {"nameZh": "青岛", "nameEn": "Qingdao", "lat": 36.0671, "lng": 120.3826, "tz": 8},
+          {"nameZh": "烟台", "nameEn": "Yantai", "lat": 37.4645, "lng": 121.4479, "tz": 8},
+          {"nameZh": "潍坊", "nameEn": "Weifang", "lat": 36.7069, "lng": 119.1618, "tz": 8},
+          {"nameZh": "临沂", "nameEn": "Linyi", "lat": 35.1034, "lng": 118.3409, "tz": 8},
+          {"nameZh": "淄博", "nameEn": "Zibo", "lat": 36.8131, "lng": 118.0549, "tz": 8},
+          {"nameZh": "威海", "nameEn": "Weihai", "lat": 37.5135, "lng": 122.1204, "tz": 8},
+          {"nameZh": "泰安", "nameEn": "Tai'an", "lat": 36.2009, "lng": 117.0880, "tz": 8},
+          {"nameZh": "济宁", "nameEn": "Jining", "lat": 35.4147, "lng": 116.5872, "tz": 8},
+          {"nameZh": "德州", "nameEn": "Dezhou", "lat": 37.4355, "lng": 116.3593, "tz": 8},
+          {"nameZh": "枣庄", "nameEn": "Zaozhuang", "lat": 34.8107, "lng": 117.3231, "tz": 8},
+          {"nameZh": "东营", "nameEn": "Dongying", "lat": 37.4347, "lng": 118.6746, "tz": 8},
+          {"nameZh": "聊城", "nameEn": "Liaocheng", "lat": 36.4567, "lng": 115.9869, "tz": 8},
+          {"nameZh": "菏泽", "nameEn": "Heze", "lat": 35.2338, "lng": 115.4410, "tz": 8},
+          {"nameZh": "日照", "nameEn": "Rizhao", "lat": 35.4167, "lng": 119.5272, "tz": 8},
+          {"nameZh": "滨州", "nameEn": "Binzhou", "lat": 37.3833, "lng": 117.9702, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "山西",
+        "nameEn": "Shanxi",
+        "cities": [
+          {"nameZh": "太原", "nameEn": "Taiyuan", "lat": 37.8706, "lng": 112.5489, "tz": 8},
+          {"nameZh": "大同", "nameEn": "Datong", "lat": 40.0763, "lng": 113.3001, "tz": 8},
+          {"nameZh": "临汾", "nameEn": "Linfen", "lat": 36.0882, "lng": 111.5189, "tz": 8},
+          {"nameZh": "运城", "nameEn": "Yuncheng", "lat": 35.0205, "lng": 111.0065, "tz": 8},
+          {"nameZh": "晋中", "nameEn": "Jinzhong", "lat": 37.6871, "lng": 112.7527, "tz": 8},
+          {"nameZh": "长治", "nameEn": "Changzhi", "lat": 36.1956, "lng": 113.1165, "tz": 8},
+          {"nameZh": "晋城", "nameEn": "Jincheng", "lat": 35.4907, "lng": 112.8512, "tz": 8},
+          {"nameZh": "忻州", "nameEn": "Xinzhou", "lat": 38.4167, "lng": 112.7342, "tz": 8},
+          {"nameZh": "吕梁", "nameEn": "Lvliang", "lat": 37.5183, "lng": 111.1413, "tz": 8},
+          {"nameZh": "朔州", "nameEn": "Shuozhou", "lat": 39.3315, "lng": 112.4330, "tz": 8},
+          {"nameZh": "阳泉", "nameEn": "Yangquan", "lat": 37.8573, "lng": 113.5800, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "河南",
+        "nameEn": "Henan",
+        "cities": [
+          {"nameZh": "郑州", "nameEn": "Zhengzhou", "lat": 34.7466, "lng": 113.6253, "tz": 8},
+          {"nameZh": "洛阳", "nameEn": "Luoyang", "lat": 34.6181, "lng": 112.4539, "tz": 8},
+          {"nameZh": "开封", "nameEn": "Kaifeng", "lat": 34.7971, "lng": 114.3073, "tz": 8},
+          {"nameZh": "南阳", "nameEn": "Nanyang", "lat": 33.0093, "lng": 112.5283, "tz": 8},
+          {"nameZh": "新乡", "nameEn": "Xinxiang", "lat": 35.3030, "lng": 113.9267, "tz": 8},
+          {"nameZh": "安阳", "nameEn": "Anyang", "lat": 36.0976, "lng": 114.3286, "tz": 8},
+          {"nameZh": "许昌", "nameEn": "Xuchang", "lat": 34.0366, "lng": 113.8532, "tz": 8},
+          {"nameZh": "平顶山", "nameEn": "Pingdingshan", "lat": 33.7358, "lng": 113.1924, "tz": 8},
+          {"nameZh": "焦作", "nameEn": "Jiaozuo", "lat": 35.2159, "lng": 113.2420, "tz": 8},
+          {"nameZh": "商丘", "nameEn": "Shangqiu", "lat": 34.4135, "lng": 115.6564, "tz": 8},
+          {"nameZh": "信阳", "nameEn": "Xinyang", "lat": 32.1474, "lng": 114.0932, "tz": 8},
+          {"nameZh": "周口", "nameEn": "Zhoukou", "lat": 33.6261, "lng": 114.6968, "tz": 8},
+          {"nameZh": "驻马店", "nameEn": "Zhumadian", "lat": 33.0119, "lng": 114.0225, "tz": 8},
+          {"nameZh": "漯河", "nameEn": "Luohe", "lat": 33.5814, "lng": 114.0165, "tz": 8},
+          {"nameZh": "濮阳", "nameEn": "Puyang", "lat": 35.7622, "lng": 115.0292, "tz": 8},
+          {"nameZh": "三门峡", "nameEn": "Sanmenxia", "lat": 34.7730, "lng": 111.2001, "tz": 8},
+          {"nameZh": "鹤壁", "nameEn": "Hebi", "lat": 35.7482, "lng": 114.2954, "tz": 8},
+          {"nameZh": "济源", "nameEn": "Jiyuan", "lat": 35.0671, "lng": 112.6018, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "陕西",
+        "nameEn": "Shaanxi",
+        "cities": [
+          {"nameZh": "西安", "nameEn": "Xi'an", "lat": 34.3416, "lng": 108.9398, "tz": 8},
+          {"nameZh": "咸阳", "nameEn": "Xianyang", "lat": 34.3294, "lng": 108.7075, "tz": 8},
+          {"nameZh": "宝鸡", "nameEn": "Baoji", "lat": 34.3619, "lng": 107.2373, "tz": 8},
+          {"nameZh": "渭南", "nameEn": "Weinan", "lat": 34.5205, "lng": 109.4836, "tz": 8},
+          {"nameZh": "汉中", "nameEn": "Hanzhong", "lat": 33.0677, "lng": 107.0230, "tz": 8},
+          {"nameZh": "榆林", "nameEn": "Yulin", "lat": 38.2789, "lng": 109.7378, "tz": 8},
+          {"nameZh": "延安", "nameEn": "Yan'an", "lat": 36.6513, "lng": 109.4907, "tz": 8},
+          {"nameZh": "安康", "nameEn": "Ankang", "lat": 32.6849, "lng": 109.0292, "tz": 8},
+          {"nameZh": "商洛", "nameEn": "Shangluo", "lat": 33.8727, "lng": 109.9186, "tz": 8},
+          {"nameZh": "铜川", "nameEn": "Tongchuan", "lat": 34.8966, "lng": 108.9796, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "江苏",
+        "nameEn": "Jiangsu",
+        "cities": [
+          {"nameZh": "南京", "nameEn": "Nanjing", "lat": 32.0603, "lng": 118.7969, "tz": 8},
+          {"nameZh": "苏州", "nameEn": "Suzhou", "lat": 31.2990, "lng": 120.5853, "tz": 8},
+          {"nameZh": "无锡", "nameEn": "Wuxi", "lat": 31.4912, "lng": 120.3119, "tz": 8},
+          {"nameZh": "常州", "nameEn": "Changzhou", "lat": 31.8108, "lng": 119.9743, "tz": 8},
+          {"nameZh": "徐州", "nameEn": "Xuzhou", "lat": 34.2053, "lng": 117.2860, "tz": 8},
+          {"nameZh": "南通", "nameEn": "Nantong", "lat": 32.0303, "lng": 120.8736, "tz": 8},
+          {"nameZh": "扬州", "nameEn": "Yangzhou", "lat": 32.3942, "lng": 119.4126, "tz": 8},
+          {"nameZh": "盐城", "nameEn": "Yancheng", "lat": 33.3477, "lng": 120.1636, "tz": 8},
+          {"nameZh": "淮安", "nameEn": "Huai'an", "lat": 33.5515, "lng": 119.1132, "tz": 8},
+          {"nameZh": "镇江", "nameEn": "Zhenjiang", "lat": 32.1878, "lng": 119.4257, "tz": 8},
+          {"nameZh": "泰州", "nameEn": "Taizhou", "lat": 32.4569, "lng": 119.9251, "tz": 8},
+          {"nameZh": "宿迁", "nameEn": "Suqian", "lat": 33.9520, "lng": 118.2755, "tz": 8},
+          {"nameZh": "连云港", "nameEn": "Lianyungang", "lat": 34.5966, "lng": 119.2220, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "浙江",
+        "nameEn": "Zhejiang",
+        "cities": [
+          {"nameZh": "杭州", "nameEn": "Hangzhou", "lat": 30.2741, "lng": 120.1551, "tz": 8},
+          {"nameZh": "宁波", "nameEn": "Ningbo", "lat": 29.8683, "lng": 121.5440, "tz": 8},
+          {"nameZh": "温州", "nameEn": "Wenzhou", "lat": 28.0002, "lng": 120.6994, "tz": 8},
+          {"nameZh": "嘉兴", "nameEn": "Jiaxing", "lat": 30.7730, "lng": 120.7551, "tz": 8},
+          {"nameZh": "绍兴", "nameEn": "Shaoxing", "lat": 30.0300, "lng": 120.5800, "tz": 8},
+          {"nameZh": "金华", "nameEn": "Jinhua", "lat": 29.0916, "lng": 119.6474, "tz": 8},
+          {"nameZh": "台州", "nameEn": "Taizhou", "lat": 28.6563, "lng": 121.4208, "tz": 8},
+          {"nameZh": "湖州", "nameEn": "Huzhou", "lat": 30.8931, "lng": 120.0880, "tz": 8},
+          {"nameZh": "衢州", "nameEn": "Quzhou", "lat": 28.9370, "lng": 118.8743, "tz": 8},
+          {"nameZh": "丽水", "nameEn": "Lishui", "lat": 28.4677, "lng": 119.9228, "tz": 8},
+          {"nameZh": "舟山", "nameEn": "Zhoushan", "lat": 29.9854, "lng": 122.2072, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "安徽",
+        "nameEn": "Anhui",
+        "cities": [
+          {"nameZh": "合肥", "nameEn": "Hefei", "lat": 31.8206, "lng": 117.2272, "tz": 8},
+          {"nameZh": "芜湖", "nameEn": "Wuhu", "lat": 31.3529, "lng": 118.4329, "tz": 8},
+          {"nameZh": "蚌埠", "nameEn": "Bengbu", "lat": 32.9165, "lng": 117.3571, "tz": 8},
+          {"nameZh": "阜阳", "nameEn": "Fuyang", "lat": 32.8900, "lng": 115.8200, "tz": 8},
+          {"nameZh": "安庆", "nameEn": "Anqing", "lat": 30.5240, "lng": 117.0600, "tz": 8},
+          {"nameZh": "滁州", "nameEn": "Chuzhou", "lat": 32.3065, "lng": 118.3166, "tz": 8},
+          {"nameZh": "马鞍山", "nameEn": "Ma'anshan", "lat": 31.6708, "lng": 118.5061, "tz": 8},
+          {"nameZh": "宿州", "nameEn": "Suzhou", "lat": 33.6370, "lng": 116.9790, "tz": 8},
+          {"nameZh": "六安", "nameEn": "Lu'an", "lat": 31.7346, "lng": 116.4919, "tz": 8},
+          {"nameZh": "淮南", "nameEn": "Huainan", "lat": 32.6253, "lng": 117.0184, "tz": 8},
+          {"nameZh": "铜陵", "nameEn": "Tongling", "lat": 30.9492, "lng": 117.8111, "tz": 8},
+          {"nameZh": "淮北", "nameEn": "Huaibei", "lat": 33.9568, "lng": 116.7952, "tz": 8},
+          {"nameZh": "黄山", "nameEn": "Huangshan", "lat": 29.7152, "lng": 118.3155, "tz": 8},
+          {"nameZh": "亳州", "nameEn": "Bozhou", "lat": 33.8712, "lng": 115.7700, "tz": 8},
+          {"nameZh": "池州", "nameEn": "Chizhou", "lat": 30.6644, "lng": 117.4885, "tz": 8},
+          {"nameZh": "宣城", "nameEn": "Xuancheng", "lat": 30.9445, "lng": 118.7553, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "湖北",
+        "nameEn": "Hubei",
+        "cities": [
+          {"nameZh": "武汉", "nameEn": "Wuhan", "lat": 30.5928, "lng": 114.3055, "tz": 8},
+          {"nameZh": "宜昌", "nameEn": "Yichang", "lat": 30.6919, "lng": 111.2865, "tz": 8},
+          {"nameZh": "襄阳", "nameEn": "Xiangyang", "lat": 32.0090, "lng": 112.1225, "tz": 8},
+          {"nameZh": "荆州", "nameEn": "Jingzhou", "lat": 30.3322, "lng": 112.2396, "tz": 8},
+          {"nameZh": "十堰", "nameEn": "Shiyan", "lat": 32.6294, "lng": 110.7964, "tz": 8},
+          {"nameZh": "黄石", "nameEn": "Huangshi", "lat": 30.2018, "lng": 115.0792, "tz": 8},
+          {"nameZh": "孝感", "nameEn": "Xiaogan", "lat": 30.9178, "lng": 113.9129, "tz": 8},
+          {"nameZh": "黄冈", "nameEn": "Huanggang", "lat": 30.4467, "lng": 114.8720, "tz": 8},
+          {"nameZh": "恩施", "nameEn": "Enshi", "lat": 30.2950, "lng": 109.4882, "tz": 8},
+          {"nameZh": "荆门", "nameEn": "Jingmen", "lat": 31.0338, "lng": 112.2041, "tz": 8},
+          {"nameZh": "咸宁", "nameEn": "Xianning", "lat": 29.8413, "lng": 114.3224, "tz": 8},
+          {"nameZh": "鄂州", "nameEn": "Ezhou", "lat": 30.3966, "lng": 114.8908, "tz": 8},
+          {"nameZh": "随州", "nameEn": "Suizhou", "lat": 31.7176, "lng": 113.3834, "tz": 8},
+          {"nameZh": "潜江", "nameEn": "Qianjiang", "lat": 30.4023, "lng": 112.9001, "tz": 8},
+          {"nameZh": "天门", "nameEn": "Tianmen", "lat": 30.6536, "lng": 113.1663, "tz": 8},
+          {"nameZh": "仙桃", "nameEn": "Xiantao", "lat": 30.3625, "lng": 113.4421, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "湖南",
+        "nameEn": "Hunan",
+        "cities": [
+          {"nameZh": "长沙", "nameEn": "Changsha", "lat": 28.2282, "lng": 112.9388, "tz": 8},
+          {"nameZh": "株洲", "nameEn": "Zhuzhou", "lat": 27.8281, "lng": 113.1340, "tz": 8},
+          {"nameZh": "衡阳", "nameEn": "Hengyang", "lat": 26.8932, "lng": 112.5721, "tz": 8},
+          {"nameZh": "湘潭", "nameEn": "Xiangtan", "lat": 27.8351, "lng": 112.9441, "tz": 8},
+          {"nameZh": "岳阳", "nameEn": "Yueyang", "lat": 29.3568, "lng": 113.1289, "tz": 8},
+          {"nameZh": "常德", "nameEn": "Changde", "lat": 29.0316, "lng": 111.6985, "tz": 8},
+          {"nameZh": "邵阳", "nameEn": "Shaoyang", "lat": 27.2389, "lng": 111.4694, "tz": 8},
+          {"nameZh": "益阳", "nameEn": "Yiyang", "lat": 28.5881, "lng": 112.3551, "tz": 8},
+          {"nameZh": "永州", "nameEn": "Yongzhou", "lat": 26.4240, "lng": 111.6180, "tz": 8},
+          {"nameZh": "张家界", "nameEn": "Zhangjiajie", "lat": 29.1167, "lng": 110.4862, "tz": 8},
+          {"nameZh": "怀化", "nameEn": "Huaihua", "lat": 27.5693, "lng": 110.0016, "tz": 8},
+          {"nameZh": "娄底", "nameEn": "Loudi", "lat": 27.7281, "lng": 111.9941, "tz": 8},
+          {"nameZh": "郴州", "nameEn": "Chenzhou", "lat": 25.7826, "lng": 113.0153, "tz": 8},
+          {"nameZh": "湘西", "nameEn": "Xiangxi", "lat": 28.3113, "lng": 109.7383, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "江西",
+        "nameEn": "Jiangxi",
+        "cities": [
+          {"nameZh": "南昌", "nameEn": "Nanchang", "lat": 28.6829, "lng": 115.8582, "tz": 8},
+          {"nameZh": "赣州", "nameEn": "Ganzhou", "lat": 25.8310, "lng": 114.9345, "tz": 8},
+          {"nameZh": "九江", "nameEn": "Jiujiang", "lat": 29.7050, "lng": 115.9992, "tz": 8},
+          {"nameZh": "上饶", "nameEn": "Shangrao", "lat": 28.4526, "lng": 117.9435, "tz": 8},
+          {"nameZh": "宜春", "nameEn": "Yichun", "lat": 27.8150, "lng": 114.4160, "tz": 8},
+          {"nameZh": "吉安", "nameEn": "Ji'an", "lat": 27.1138, "lng": 114.9930, "tz": 8},
+          {"nameZh": "景德镇", "nameEn": "Jingdezhen", "lat": 29.2689, "lng": 117.1840, "tz": 8},
+          {"nameZh": "萍乡", "nameEn": "Pingxiang", "lat": 27.6330, "lng": 113.8544, "tz": 8},
+          {"nameZh": "抚州", "nameEn": "Fuzhou", "lat": 27.9489, "lng": 116.3581, "tz": 8},
+          {"nameZh": "新余", "nameEn": "Xinyu", "lat": 27.8108, "lng": 114.9171, "tz": 8},
+          {"nameZh": "鹰潭", "nameEn": "Yingtan", "lat": 28.2602, "lng": 117.0351, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "四川",
+        "nameEn": "Sichuan",
+        "cities": [
+          {"nameZh": "成都", "nameEn": "Chengdu", "lat": 30.5728, "lng": 104.0668, "tz": 8},
+          {"nameZh": "绵阳", "nameEn": "Mianyang", "lat": 31.4704, "lng": 104.7530, "tz": 8},
+          {"nameZh": "德阳", "nameEn": "Deyang", "lat": 31.1268, "lng": 104.3980, "tz": 8},
+          {"nameZh": "宜宾", "nameEn": "Yibin", "lat": 28.7690, "lng": 104.6225, "tz": 8},
+          {"nameZh": "南充", "nameEn": "Nanchong", "lat": 30.8380, "lng": 106.1107, "tz": 8},
+          {"nameZh": "泸州", "nameEn": "Luzhou", "lat": 28.8716, "lng": 105.4418, "tz": 8},
+          {"nameZh": "乐山", "nameEn": "Leshan", "lat": 29.5784, "lng": 103.7664, "tz": 8},
+          {"nameZh": "达州", "nameEn": "Dazhou", "lat": 31.2091, "lng": 107.4679, "tz": 8},
+          {"nameZh": "自贡", "nameEn": "Zigong", "lat": 29.3412, "lng": 104.7764, "tz": 8},
+          {"nameZh": "内江", "nameEn": "Neijiang", "lat": 29.5935, "lng": 105.0584, "tz": 8},
+          {"nameZh": "眉山", "nameEn": "Meishan", "lat": 30.0790, "lng": 103.8469, "tz": 8},
+          {"nameZh": "广安", "nameEn": "Guang'an", "lat": 30.4560, "lng": 106.6332, "tz": 8},
+          {"nameZh": "攀枝花", "nameEn": "Panzhihua", "lat": 26.5823, "lng": 101.7185, "tz": 8},
+          {"nameZh": "广元", "nameEn": "Guangyuan", "lat": 32.4356, "lng": 105.8430, "tz": 8},
+          {"nameZh": "遂宁", "nameEn": "Suining", "lat": 30.5333, "lng": 105.5730, "tz": 8},
+          {"nameZh": "资阳", "nameEn": "Ziyang", "lat": 30.1333, "lng": 104.6275, "tz": 8},
+          {"nameZh": "雅安", "nameEn": "Ya'an", "lat": 30.0133, "lng": 103.0094, "tz": 8},
+          {"nameZh": "阿坝", "nameEn": "Aba", "lat": 31.8995, "lng": 102.2214, "tz": 8},
+          {"nameZh": "甘孜", "nameEn": "Garze", "lat": 30.0506, "lng": 101.9625, "tz": 8},
+          {"nameZh": "凉山", "nameEn": "Liangshan", "lat": 27.8923, "lng": 102.2603, "tz": 8},
+          {"nameZh": "巴中", "nameEn": "Bazhong", "lat": 31.8674, "lng": 106.7466, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "贵州",
+        "nameEn": "Guizhou",
+        "cities": [
+          {"nameZh": "贵阳", "nameEn": "Guiyang", "lat": 26.6470, "lng": 106.6302, "tz": 8},
+          {"nameZh": "遵义", "nameEn": "Zunyi", "lat": 27.7000, "lng": 106.9200, "tz": 8},
+          {"nameZh": "六盘水", "nameEn": "Liupanshui", "lat": 26.5928, "lng": 104.8300, "tz": 8},
+          {"nameZh": "安顺", "nameEn": "Anshun", "lat": 26.2459, "lng": 105.9465, "tz": 8},
+          {"nameZh": "毕节", "nameEn": "Bijie", "lat": 27.3019, "lng": 105.3032, "tz": 8},
+          {"nameZh": "铜仁", "nameEn": "Tongren", "lat": 27.7311, "lng": 109.1881, "tz": 8},
+          {"nameZh": "黔南", "nameEn": "Qiannan", "lat": 26.2540, "lng": 107.5166, "tz": 8},
+          {"nameZh": "黔东南", "nameEn": "Qiandongnan", "lat": 26.5835, "lng": 107.9836, "tz": 8},
+          {"nameZh": "黔西南", "nameEn": "Qianxinan", "lat": 25.0876, "lng": 104.9014, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "云南",
+        "nameEn": "Yunnan",
+        "cities": [
+          {"nameZh": "昆明", "nameEn": "Kunming", "lat": 25.0389, "lng": 102.7183, "tz": 8},
+          {"nameZh": "曲靖", "nameEn": "Qujing", "lat": 25.4900, "lng": 103.7980, "tz": 8},
+          {"nameZh": "大理", "nameEn": "Dali", "lat": 25.5916, "lng": 100.2300, "tz": 8},
+          {"nameZh": "红河", "nameEn": "Honghe", "lat": 23.3692, "lng": 103.3785, "tz": 8},
+          {"nameZh": "玉溪", "nameEn": "Yuxi", "lat": 24.3523, "lng": 102.5437, "tz": 8},
+          {"nameZh": "丽江", "nameEn": "Lijiang", "lat": 26.8721, "lng": 100.2299, "tz": 8},
+          {"nameZh": "昭通", "nameEn": "Zhaotong", "lat": 27.3382, "lng": 103.7170, "tz": 8},
+          {"nameZh": "保山", "nameEn": "Baoshan", "lat": 25.1120, "lng": 99.1618, "tz": 8},
+          {"nameZh": "楚雄", "nameEn": "Chuxiong", "lat": 25.0322, "lng": 101.5280, "tz": 8},
+          {"nameZh": "普洱", "nameEn": "Pu'er", "lat": 22.8250, "lng": 100.9710, "tz": 8},
+          {"nameZh": "临沧", "nameEn": "Lincang", "lat": 23.8868, "lng": 100.0890, "tz": 8},
+          {"nameZh": "西双版纳", "nameEn": "Xishuangbanna", "lat": 22.0017, "lng": 100.7980, "tz": 8},
+          {"nameZh": "文山", "nameEn": "Wenshan", "lat": 23.3704, "lng": 104.2500, "tz": 8},
+          {"nameZh": "德宏", "nameEn": "Dehong", "lat": 24.4334, "lng": 98.5852, "tz": 8},
+          {"nameZh": "怒江", "nameEn": "Nujiang", "lat": 25.8171, "lng": 98.8567, "tz": 8},
+          {"nameZh": "迪庆", "nameEn": "Diqing", "lat": 27.8260, "lng": 99.7025, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "广东",
+        "nameEn": "Guangdong",
+        "cities": [
+          {"nameZh": "广州", "nameEn": "Guangzhou", "lat": 23.1291, "lng": 113.2644, "tz": 8},
+          {"nameZh": "深圳", "nameEn": "Shenzhen", "lat": 22.5431, "lng": 114.0579, "tz": 8},
+          {"nameZh": "佛山", "nameEn": "Foshan", "lat": 23.0219, "lng": 113.1216, "tz": 8},
+          {"nameZh": "东莞", "nameEn": "Dongguan", "lat": 23.0208, "lng": 113.7518, "tz": 8},
+          {"nameZh": "惠州", "nameEn": "Huizhou", "lat": 23.1134, "lng": 114.4168, "tz": 8},
+          {"nameZh": "中山", "nameEn": "Zhongshan", "lat": 22.5196, "lng": 113.3928, "tz": 8},
+          {"nameZh": "珠海", "nameEn": "Zhuhai", "lat": 22.2710, "lng": 113.5767, "tz": 8},
+          {"nameZh": "汕头", "nameEn": "Shantou", "lat": 23.3541, "lng": 116.6822, "tz": 8},
+          {"nameZh": "湛江", "nameEn": "Zhanjiang", "lat": 21.2707, "lng": 110.3594, "tz": 8},
+          {"nameZh": "江门", "nameEn": "Jiangmen", "lat": 22.5804, "lng": 113.0818, "tz": 8},
+          {"nameZh": "肇庆", "nameEn": "Zhaoqing", "lat": 23.0473, "lng": 112.4660, "tz": 8},
+          {"nameZh": "茂名", "nameEn": "Maoming", "lat": 21.6630, "lng": 110.9312, "tz": 8},
+          {"nameZh": "揭阳", "nameEn": "Jieyang", "lat": 23.5499, "lng": 116.3727, "tz": 8},
+          {"nameZh": "清远", "nameEn": "Qingyuan", "lat": 23.6820, "lng": 113.0563, "tz": 8},
+          {"nameZh": "韶关", "nameEn": "Shaoguan", "lat": 24.8103, "lng": 113.5975, "tz": 8},
+          {"nameZh": "阳江", "nameEn": "Yangjiang", "lat": 21.8583, "lng": 111.9826, "tz": 8},
+          {"nameZh": "梅州", "nameEn": "Meizhou", "lat": 24.2886, "lng": 116.1226, "tz": 8},
+          {"nameZh": "潮州", "nameEn": "Chaozhou", "lat": 23.6567, "lng": 116.6230, "tz": 8},
+          {"nameZh": "汕尾", "nameEn": "Shanwei", "lat": 22.7870, "lng": 115.3660, "tz": 8},
+          {"nameZh": "河源", "nameEn": "Heyuan", "lat": 23.7438, "lng": 114.7012, "tz": 8},
+          {"nameZh": "云浮", "nameEn": "Yunfu", "lat": 22.9169, "lng": 112.0447, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "广西",
+        "nameEn": "Guangxi",
+        "cities": [
+          {"nameZh": "南宁", "nameEn": "Nanning", "lat": 22.8170, "lng": 108.3665, "tz": 8},
+          {"nameZh": "柳州", "nameEn": "Liuzhou", "lat": 24.3263, "lng": 109.4280, "tz": 8},
+          {"nameZh": "桂林", "nameEn": "Guilin", "lat": 25.2736, "lng": 110.2900, "tz": 8},
+          {"nameZh": "玉林", "nameEn": "Yulin", "lat": 22.6311, "lng": 110.1579, "tz": 8},
+          {"nameZh": "北海", "nameEn": "Beihai", "lat": 21.4812, "lng": 109.1191, "tz": 8},
+          {"nameZh": "梧州", "nameEn": "Wuzhou", "lat": 23.4769, "lng": 111.2788, "tz": 8},
+          {"nameZh": "钦州", "nameEn": "Qinzhou", "lat": 21.9795, "lng": 108.6538, "tz": 8},
+          {"nameZh": "百色", "nameEn": "Baise", "lat": 23.9021, "lng": 106.6166, "tz": 8},
+          {"nameZh": "贵港", "nameEn": "Guigang", "lat": 23.1034, "lng": 109.5982, "tz": 8},
+          {"nameZh": "贺州", "nameEn": "Hezhou", "lat": 24.4035, "lng": 111.5668, "tz": 8},
+          {"nameZh": "河池", "nameEn": "Hechi", "lat": 24.6931, "lng": 108.0850, "tz": 8},
+          {"nameZh": "来宾", "nameEn": "Laibin", "lat": 23.7513, "lng": 109.2310, "tz": 8},
+          {"nameZh": "崇左", "nameEn": "Chongzuo", "lat": 22.3773, "lng": 107.3654, "tz": 8},
+          {"nameZh": "防城港", "nameEn": "Fangchenggang", "lat": 21.6860, "lng": 108.3536, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "海南",
+        "nameEn": "Hainan",
+        "cities": [
+          {"nameZh": "海口", "nameEn": "Haikou", "lat": 20.0440, "lng": 110.2000, "tz": 8},
+          {"nameZh": "三亚", "nameEn": "Sanya", "lat": 18.2528, "lng": 109.5120, "tz": 8},
+          {"nameZh": "儋州", "nameEn": "Danzhou", "lat": 19.5211, "lng": 109.5808, "tz": 8},
+          {"nameZh": "三沙", "nameEn": "Sansha", "lat": 16.8357, "lng": 112.3323, "tz": 8},
+          {"nameZh": "琼海", "nameEn": "Qionghai", "lat": 19.2583, "lng": 110.4669, "tz": 8},
+          {"nameZh": "文昌", "nameEn": "Wenchang", "lat": 19.5433, "lng": 110.7976, "tz": 8},
+          {"nameZh": "万宁", "nameEn": "Wanning", "lat": 18.7951, "lng": 110.3898, "tz": 8},
+          {"nameZh": "东方", "nameEn": "Dongfang", "lat": 19.0957, "lng": 108.6472, "tz": 8},
+          {"nameZh": "五指山", "nameEn": "Wuzhishan", "lat": 18.7750, "lng": 109.5169, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "福建",
+        "nameEn": "Fujian",
+        "cities": [
+          {"nameZh": "福州", "nameEn": "Fuzhou", "lat": 26.0745, "lng": 119.2965, "tz": 8},
+          {"nameZh": "厦门", "nameEn": "Xiamen", "lat": 24.4798, "lng": 118.0894, "tz": 8},
+          {"nameZh": "泉州", "nameEn": "Quanzhou", "lat": 24.8741, "lng": 118.6007, "tz": 8},
+          {"nameZh": "漳州", "nameEn": "Zhangzhou", "lat": 24.5135, "lng": 117.6472, "tz": 8},
+          {"nameZh": "莆田", "nameEn": "Putian", "lat": 25.4539, "lng": 119.0078, "tz": 8},
+          {"nameZh": "宁德", "nameEn": "Ningde", "lat": 26.6650, "lng": 119.5480, "tz": 8},
+          {"nameZh": "龙岩", "nameEn": "Longyan", "lat": 25.0751, "lng": 117.0171, "tz": 8},
+          {"nameZh": "三明", "nameEn": "Sanming", "lat": 26.2634, "lng": 117.6390, "tz": 8},
+          {"nameZh": "南平", "nameEn": "Nanping", "lat": 26.6415, "lng": 118.1777, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "台湾",
+        "nameEn": "Taiwan",
+        "cities": [
+          {"nameZh": "台北", "nameEn": "Taipei", "lat": 25.0330, "lng": 121.5654, "tz": 8},
+          {"nameZh": "高雄", "nameEn": "Kaohsiung", "lat": 22.6273, "lng": 120.3014, "tz": 8},
+          {"nameZh": "台中", "nameEn": "Taichung", "lat": 24.1477, "lng": 120.6736, "tz": 8},
+          {"nameZh": "台南", "nameEn": "Tainan", "lat": 22.9997, "lng": 120.2270, "tz": 8},
+          {"nameZh": "基隆", "nameEn": "Keelung", "lat": 25.1276, "lng": 121.7392, "tz": 8},
+          {"nameZh": "新竹", "nameEn": "Hsinchu", "lat": 24.8138, "lng": 120.9675, "tz": 8},
+          {"nameZh": "嘉义", "nameEn": "Chiayi", "lat": 23.4800, "lng": 120.4491, "tz": 8},
+          {"nameZh": "花莲", "nameEn": "Hualien", "lat": 23.9937, "lng": 121.6019, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "内蒙古",
+        "nameEn": "Inner Mongolia",
+        "cities": [
+          {"nameZh": "呼和浩特", "nameEn": "Hohhot", "lat": 40.8422, "lng": 111.7490, "tz": 8},
+          {"nameZh": "包头", "nameEn": "Baotou", "lat": 40.6570, "lng": 109.8400, "tz": 8},
+          {"nameZh": "赤峰", "nameEn": "Chifeng", "lat": 42.2568, "lng": 118.8860, "tz": 8},
+          {"nameZh": "鄂尔多斯", "nameEn": "Ordos", "lat": 39.6080, "lng": 109.7810, "tz": 8},
+          {"nameZh": "通辽", "nameEn": "Tongliao", "lat": 43.6525, "lng": 122.2433, "tz": 8},
+          {"nameZh": "呼伦贝尔", "nameEn": "Hulunbuir", "lat": 49.2120, "lng": 119.7600, "tz": 8},
+          {"nameZh": "巴彦淖尔", "nameEn": "Bayan Nur", "lat": 40.7433, "lng": 107.3875, "tz": 8},
+          {"nameZh": "乌兰察布", "nameEn": "Ulanqab", "lat": 40.9946, "lng": 113.1322, "tz": 8},
+          {"nameZh": "锡林郭勒", "nameEn": "Xilingol", "lat": 43.9334, "lng": 116.0700, "tz": 8},
+          {"nameZh": "兴安", "nameEn": "Hinggan", "lat": 46.0818, "lng": 122.0370, "tz": 8},
+          {"nameZh": "阿拉善", "nameEn": "Alxa", "lat": 38.8515, "lng": 105.6873, "tz": 8},
+          {"nameZh": "乌海", "nameEn": "Wuhai", "lat": 39.6536, "lng": 106.7996, "tz": 8},
+          {"nameZh": "满洲里", "nameEn": "Manzhouli", "lat": 49.5976, "lng": 117.4359, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "新疆",
+        "nameEn": "Xinjiang",
+        "cities": [
+          {"nameZh": "乌鲁木齐", "nameEn": "Urumqi", "lat": 43.8256, "lng": 87.6168, "tz": 6},
+          {"nameZh": "喀什", "nameEn": "Kashgar", "lat": 39.4700, "lng": 75.9900, "tz": 6},
+          {"nameZh": "伊犁", "nameEn": "Ili", "lat": 43.9149, "lng": 81.3221, "tz": 6},
+          {"nameZh": "克拉玛依", "nameEn": "Karamay", "lat": 45.5790, "lng": 84.8823, "tz": 6},
+          {"nameZh": "阿克苏", "nameEn": "Aksu", "lat": 41.1670, "lng": 80.2510, "tz": 6},
+          {"nameZh": "哈密", "nameEn": "Hami", "lat": 42.8190, "lng": 93.5150, "tz": 6},
+          {"nameZh": "和田", "nameEn": "Hotan", "lat": 37.1140, "lng": 79.9225, "tz": 6},
+          {"nameZh": "昌吉", "nameEn": "Changji", "lat": 44.0041, "lng": 87.2672, "tz": 6},
+          {"nameZh": "吐鲁番", "nameEn": "Turpan", "lat": 42.9480, "lng": 89.1780, "tz": 6},
+          {"nameZh": "塔城", "nameEn": "Tacheng", "lat": 46.7460, "lng": 82.9749, "tz": 6},
+          {"nameZh": "阿勒泰", "nameEn": "Altay", "lat": 47.8470, "lng": 88.1390, "tz": 6},
+          {"nameZh": "库尔勒", "nameEn": "Korla", "lat": 41.7260, "lng": 86.1450, "tz": 6},
+          {"nameZh": "石河子", "nameEn": "Shihezi", "lat": 44.3069, "lng": 86.0736, "tz": 6},
+          {"nameZh": "博尔塔拉", "nameEn": "Bortala", "lat": 44.8980, "lng": 82.0730, "tz": 6},
+          {"nameZh": "巴音郭楞", "nameEn": "Bayingolin", "lat": 41.7310, "lng": 86.1360, "tz": 6}
+        ]
+      },
+      {
+        "nameZh": "西藏",
+        "nameEn": "Tibet",
+        "cities": [
+          {"nameZh": "拉萨", "nameEn": "Lhasa", "lat": 29.6500, "lng": 91.1000, "tz": 6},
+          {"nameZh": "日喀则", "nameEn": "Shigatse", "lat": 29.2556, "lng": 88.8927, "tz": 6},
+          {"nameZh": "林芝", "nameEn": "Nyingchi", "lat": 29.6496, "lng": 94.3614, "tz": 6},
+          {"nameZh": "昌都", "nameEn": "Qamdo", "lat": 31.1365, "lng": 97.1728, "tz": 6},
+          {"nameZh": "山南", "nameEn": "Shannan", "lat": 29.2370, "lng": 91.7700, "tz": 6},
+          {"nameZh": "那曲", "nameEn": "Nagqu", "lat": 31.4763, "lng": 92.0542, "tz": 6},
+          {"nameZh": "阿里", "nameEn": "Ngari", "lat": 32.5000, "lng": 80.1000, "tz": 6}
+        ]
+      },
+      {
+        "nameZh": "宁夏",
+        "nameEn": "Ningxia",
+        "cities": [
+          {"nameZh": "银川", "nameEn": "Yinchuan", "lat": 38.4664, "lng": 106.2782, "tz": 8},
+          {"nameZh": "石嘴山", "nameEn": "Shizuishan", "lat": 39.0208, "lng": 106.3763, "tz": 8},
+          {"nameZh": "吴忠", "nameEn": "Wuzhong", "lat": 37.9802, "lng": 106.2000, "tz": 8},
+          {"nameZh": "中卫", "nameEn": "Zhongwei", "lat": 37.5151, "lng": 105.1967, "tz": 8},
+          {"nameZh": "固原", "nameEn": "Guyuan", "lat": 36.0167, "lng": 106.2850, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "青海",
+        "nameEn": "Qinghai",
+        "cities": [
+          {"nameZh": "西宁", "nameEn": "Xining", "lat": 36.6171, "lng": 101.7782, "tz": 8},
+          {"nameZh": "海东", "nameEn": "Haidong", "lat": 36.4780, "lng": 102.1040, "tz": 8},
+          {"nameZh": "海西", "nameEn": "Haixi", "lat": 37.3736, "lng": 97.3690, "tz": 8},
+          {"nameZh": "海南", "nameEn": "Hainan", "lat": 36.2855, "lng": 100.6200, "tz": 8},
+          {"nameZh": "海北", "nameEn": "Haibei", "lat": 36.9580, "lng": 100.9010, "tz": 8},
+          {"nameZh": "黄南", "nameEn": "Huangnan", "lat": 35.5200, "lng": 102.0200, "tz": 8},
+          {"nameZh": "果洛", "nameEn": "Golog", "lat": 34.4680, "lng": 100.2380, "tz": 8},
+          {"nameZh": "玉树", "nameEn": "Yushu", "lat": 33.0060, "lng": 97.0070, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "甘肃",
+        "nameEn": "Gansu",
+        "cities": [
+          {"nameZh": "兰州", "nameEn": "Lanzhou", "lat": 36.0611, "lng": 103.8343, "tz": 8},
+          {"nameZh": "天水", "nameEn": "Tianshui", "lat": 34.5810, "lng": 105.7250, "tz": 8},
+          {"nameZh": "酒泉", "nameEn": "Jiuquan", "lat": 39.7328, "lng": 98.4900, "tz": 8},
+          {"nameZh": "张掖", "nameEn": "Zhangye", "lat": 38.9340, "lng": 100.4550, "tz": 8},
+          {"nameZh": "武威", "nameEn": "Wuwei", "lat": 37.9280, "lng": 102.6370, "tz": 8},
+          {"nameZh": "白银", "nameEn": "Baiyin", "lat": 36.5450, "lng": 104.1880, "tz": 8},
+          {"nameZh": "平凉", "nameEn": "Pingliang", "lat": 35.5420, "lng": 106.6650, "tz": 8},
+          {"nameZh": "陇南", "nameEn": "Longnan", "lat": 33.4010, "lng": 104.9220, "tz": 8},
+          {"nameZh": "定西", "nameEn": "Dingxi", "lat": 35.5810, "lng": 104.6260, "tz": 8},
+          {"nameZh": "庆阳", "nameEn": "Qingyang", "lat": 35.7350, "lng": 107.6430, "tz": 8},
+          {"nameZh": "临夏", "nameEn": "Linxia", "lat": 35.5960, "lng": 103.2110, "tz": 8},
+          {"nameZh": "嘉峪关", "nameEn": "Jiayuguan", "lat": 39.7716, "lng": 98.2897, "tz": 8},
+          {"nameZh": "金昌", "nameEn": "Jinchang", "lat": 38.5200, "lng": 102.1880, "tz": 8},
+          {"nameZh": "甘南", "nameEn": "Gannan", "lat": 34.9830, "lng": 102.9110, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "香港",
+        "nameEn": "Hong Kong",
+        "cities": [
+          {"nameZh": "香港", "nameEn": "Hong Kong", "lat": 22.3193, "lng": 114.1694, "tz": 8}
+        ]
+      },
+      {
+        "nameZh": "澳门",
+        "nameEn": "Macau",
+        "cities": [
+          {"nameZh": "澳门", "nameEn": "Macau", "lat": 22.1987, "lng": 113.5439, "tz": 8}
+        ]
+      }
+    ]
+  },
+  {
+    "code": "US",
+    "nameZh": "美国",
+    "nameEn": "United States",
+    "provinces": [
+      {"nameZh": "阿拉巴马", "nameEn": "Alabama", "cities": [{"nameZh": "伯明翰", "nameEn": "Birmingham", "lat": 33.5207, "lng": -86.8025, "tz": -6}]},
+      {"nameZh": "阿拉斯加", "nameEn": "Alaska", "cities": [{"nameZh": "安克雷奇", "nameEn": "Anchorage", "lat": 61.2181, "lng": -149.9003, "tz": -9}]},
+      {"nameZh": "亚利桑那", "nameEn": "Arizona", "cities": [{"nameZh": "菲尼克斯", "nameEn": "Phoenix", "lat": 33.4484, "lng": -112.0740, "tz": -7}]},
+      {"nameZh": "阿肯色", "nameEn": "Arkansas", "cities": [{"nameZh": "小石城", "nameEn": "Little Rock", "lat": 34.7465, "lng": -92.2896, "tz": -6}]},
+      {"nameZh": "加利福尼亚", "nameEn": "California", "cities": [{"nameZh": "洛杉矶", "nameEn": "Los Angeles", "lat": 34.0522, "lng": -118.2437, "tz": -8}, {"nameZh": "旧金山", "nameEn": "San Francisco", "lat": 37.7749, "lng": -122.4194, "tz": -8}, {"nameZh": "圣地亚哥", "nameEn": "San Diego", "lat": 32.7157, "lng": -117.1611, "tz": -8}]},
+      {"nameZh": "科罗拉多", "nameEn": "Colorado", "cities": [{"nameZh": "丹佛", "nameEn": "Denver", "lat": 39.7392, "lng": -104.9903, "tz": -7}]},
+      {"nameZh": "康涅狄格", "nameEn": "Connecticut", "cities": [{"nameZh": "哈特福德", "nameEn": "Hartford", "lat": 41.7658, "lng": -72.6734, "tz": -5}]},
+      {"nameZh": "特拉华", "nameEn": "Delaware", "cities": [{"nameZh": "多佛", "nameEn": "Dover", "lat": 39.1582, "lng": -75.5244, "tz": -5}]},
+      {"nameZh": "佛罗里达", "nameEn": "Florida", "cities": [{"nameZh": "迈阿密", "nameEn": "Miami", "lat": 25.7617, "lng": -80.1918, "tz": -5}, {"nameZh": "奥兰多", "nameEn": "Orlando", "lat": 28.5383, "lng": -81.3792, "tz": -5}]},
+      {"nameZh": "佐治亚", "nameEn": "Georgia", "cities": [{"nameZh": "亚特兰大", "nameEn": "Atlanta", "lat": 33.7490, "lng": -84.3880, "tz": -5}]},
+      {"nameZh": "夏威夷", "nameEn": "Hawaii", "cities": [{"nameZh": "檀香山", "nameEn": "Honolulu", "lat": 21.3069, "lng": -157.8583, "tz": -10}]},
+      {"nameZh": "爱达荷", "nameEn": "Idaho", "cities": [{"nameZh": "博伊西", "nameEn": "Boise", "lat": 43.6150, "lng": -116.2023, "tz": -7}]},
+      {"nameZh": "伊利诺伊", "nameEn": "Illinois", "cities": [{"nameZh": "芝加哥", "nameEn": "Chicago", "lat": 41.8781, "lng": -87.6298, "tz": -6}]},
+      {"nameZh": "印第安纳", "nameEn": "Indiana", "cities": [{"nameZh": "印第安纳波利斯", "nameEn": "Indianapolis", "lat": 39.7684, "lng": -86.1581, "tz": -5}]},
+      {"nameZh": "爱荷华", "nameEn": "Iowa", "cities": [{"nameZh": "得梅因", "nameEn": "Des Moines", "lat": 41.5868, "lng": -93.6250, "tz": -6}]},
+      {"nameZh": "堪萨斯", "nameEn": "Kansas", "cities": [{"nameZh": "威奇托", "nameEn": "Wichita", "lat": 37.6872, "lng": -97.3301, "tz": -6}]},
+      {"nameZh": "肯塔基", "nameEn": "Kentucky", "cities": [{"nameZh": "路易维尔", "nameEn": "Louisville", "lat": 38.2527, "lng": -85.7585, "tz": -5}]},
+      {"nameZh": "路易斯安那", "nameEn": "Louisiana", "cities": [{"nameZh": "新奥尔良", "nameEn": "New Orleans", "lat": 29.9511, "lng": -90.0715, "tz": -6}]},
+      {"nameZh": "缅因", "nameEn": "Maine", "cities": [{"nameZh": "波特兰", "nameEn": "Portland", "lat": 43.6591, "lng": -70.2568, "tz": -5}]},
+      {"nameZh": "马里兰", "nameEn": "Maryland", "cities": [{"nameZh": "巴尔的摩", "nameEn": "Baltimore", "lat": 39.2904, "lng": -76.6122, "tz": -5}]},
+      {"nameZh": "马萨诸塞", "nameEn": "Massachusetts", "cities": [{"nameZh": "波士顿", "nameEn": "Boston", "lat": 42.3601, "lng": -71.0589, "tz": -5}]},
+      {"nameZh": "密歇根", "nameEn": "Michigan", "cities": [{"nameZh": "底特律", "nameEn": "Detroit", "lat": 42.3314, "lng": -83.0458, "tz": -5}]},
+      {"nameZh": "明尼苏达", "nameEn": "Minnesota", "cities": [{"nameZh": "明尼阿波利斯", "nameEn": "Minneapolis", "lat": 44.9778, "lng": -93.2650, "tz": -6}]},
+      {"nameZh": "密西西比", "nameEn": "Mississippi", "cities": [{"nameZh": "杰克逊", "nameEn": "Jackson", "lat": 32.2988, "lng": -90.1848, "tz": -6}]},
+      {"nameZh": "密苏里", "nameEn": "Missouri", "cities": [{"nameZh": "圣路易斯", "nameEn": "St. Louis", "lat": 38.6270, "lng": -90.1994, "tz": -6}]},
+      {"nameZh": "蒙大拿", "nameEn": "Montana", "cities": [{"nameZh": "比灵斯", "nameEn": "Billings", "lat": 45.7833, "lng": -108.5007, "tz": -7}]},
+      {"nameZh": "内布拉斯加", "nameEn": "Nebraska", "cities": [{"nameZh": "奥马哈", "nameEn": "Omaha", "lat": 41.2565, "lng": -95.9345, "tz": -6}]},
+      {"nameZh": "内华达", "nameEn": "Nevada", "cities": [{"nameZh": "拉斯维加斯", "nameEn": "Las Vegas", "lat": 36.1699, "lng": -115.1398, "tz": -8}]},
+      {"nameZh": "新罕布什尔", "nameEn": "New Hampshire", "cities": [{"nameZh": "曼彻斯特", "nameEn": "Manchester", "lat": 42.9956, "lng": -71.4548, "tz": -5}]},
+      {"nameZh": "新泽西", "nameEn": "New Jersey", "cities": [{"nameZh": "纽瓦克", "nameEn": "Newark", "lat": 40.7357, "lng": -74.1724, "tz": -5}]},
+      {"nameZh": "新墨西哥", "nameEn": "New Mexico", "cities": [{"nameZh": "阿尔伯克基", "nameEn": "Albuquerque", "lat": 35.0853, "lng": -106.6056, "tz": -7}]},
+      {"nameZh": "纽约", "nameEn": "New York", "cities": [{"nameZh": "纽约", "nameEn": "New York City", "lat": 40.7128, "lng": -74.0060, "tz": -5}, {"nameZh": "水牛城", "nameEn": "Buffalo", "lat": 42.8864, "lng": -78.8784, "tz": -5}]},
+      {"nameZh": "北卡罗来纳", "nameEn": "North Carolina", "cities": [{"nameZh": "夏洛特", "nameEn": "Charlotte", "lat": 35.2271, "lng": -80.8431, "tz": -5}]},
+      {"nameZh": "北达科他", "nameEn": "North Dakota", "cities": [{"nameZh": "法戈", "nameEn": "Fargo", "lat": 46.8772, "lng": -96.7898, "tz": -6}]},
+      {"nameZh": "俄亥俄", "nameEn": "Ohio", "cities": [{"nameZh": "哥伦布", "nameEn": "Columbus", "lat": 39.9612, "lng": -82.9988, "tz": -5}]},
+      {"nameZh": "俄克拉荷马", "nameEn": "Oklahoma", "cities": [{"nameZh": "俄克拉荷马城", "nameEn": "Oklahoma City", "lat": 35.4676, "lng": -97.5164, "tz": -6}]},
+      {"nameZh": "俄勒冈", "nameEn": "Oregon", "cities": [{"nameZh": "波特兰", "nameEn": "Portland", "lat": 45.5152, "lng": -122.6784, "tz": -8}]},
+      {"nameZh": "宾夕法尼亚", "nameEn": "Pennsylvania", "cities": [{"nameZh": "费城", "nameEn": "Philadelphia", "lat": 39.9526, "lng": -75.1652, "tz": -5}, {"nameZh": "匹兹堡", "nameEn": "Pittsburgh", "lat": 40.4406, "lng": -79.9959, "tz": -5}]},
+      {"nameZh": "罗德岛", "nameEn": "Rhode Island", "cities": [{"nameZh": "普罗维登斯", "nameEn": "Providence", "lat": 41.8240, "lng": -71.4128, "tz": -5}]},
+      {"nameZh": "南卡罗来纳", "nameEn": "South Carolina", "cities": [{"nameZh": "查尔斯顿", "nameEn": "Charleston", "lat": 32.7765, "lng": -79.9311, "tz": -5}]},
+      {"nameZh": "南达科他", "nameEn": "South Dakota", "cities": [{"nameZh": "苏福尔斯", "nameEn": "Sioux Falls", "lat": 43.5446, "lng": -96.7311, "tz": -6}]},
+      {"nameZh": "田纳西", "nameEn": "Tennessee", "cities": [{"nameZh": "纳什维尔", "nameEn": "Nashville", "lat": 36.1627, "lng": -86.7816, "tz": -6}]},
+      {"nameZh": "德克萨斯", "nameEn": "Texas", "cities": [{"nameZh": "休斯顿", "nameEn": "Houston", "lat": 29.7604, "lng": -95.3698, "tz": -6}, {"nameZh": "达拉斯", "nameEn": "Dallas", "lat": 32.7767, "lng": -96.7970, "tz": -6}, {"nameZh": "奥斯汀", "nameEn": "Austin", "lat": 30.2672, "lng": -97.7431, "tz": -6}]},
+      {"nameZh": "犹他", "nameEn": "Utah", "cities": [{"nameZh": "盐湖城", "nameEn": "Salt Lake City", "lat": 40.7608, "lng": -111.8910, "tz": -7}]},
+      {"nameZh": "佛蒙特", "nameEn": "Vermont", "cities": [{"nameZh": "伯灵顿", "nameEn": "Burlington", "lat": 44.4759, "lng": -73.2121, "tz": -5}]},
+      {"nameZh": "弗吉尼亚", "nameEn": "Virginia", "cities": [{"nameZh": "里士满", "nameEn": "Richmond", "lat": 37.5407, "lng": -77.4360, "tz": -5}]},
+      {"nameZh": "华盛顿", "nameEn": "Washington", "cities": [{"nameZh": "西雅图", "nameEn": "Seattle", "lat": 47.6062, "lng": -122.3321, "tz": -8}]},
+      {"nameZh": "西弗吉尼亚", "nameEn": "West Virginia", "cities": [{"nameZh": "查尔斯顿", "nameEn": "Charleston", "lat": 38.3498, "lng": -81.6326, "tz": -5}]},
+      {"nameZh": "威斯康星", "nameEn": "Wisconsin", "cities": [{"nameZh": "密尔沃基", "nameEn": "Milwaukee", "lat": 43.0389, "lng": -87.9065, "tz": -6}]},
+      {"nameZh": "怀俄明", "nameEn": "Wyoming", "cities": [{"nameZh": "夏延", "nameEn": "Cheyenne", "lat": 41.1399, "lng": -104.8202, "tz": -7}]},
+      {"nameZh": "华盛顿特区", "nameEn": "Washington D.C.", "cities": [{"nameZh": "华盛顿", "nameEn": "Washington D.C.", "lat": 38.9072, "lng": -77.0369, "tz": -5}]}
+    ]
+  },
+  {
+    "code": "JP",
+    "nameZh": "日本",
+    "nameEn": "Japan",
+    "provinces": [
+      {"nameZh": "北海道", "nameEn": "Hokkaido", "cities": [{"nameZh": "札幌", "nameEn": "Sapporo", "lat": 43.0618, "lng": 141.3545, "tz": 9}, {"nameZh": "函馆", "nameEn": "Hakodate", "lat": 41.7687, "lng": 140.7288, "tz": 9}]},
+      {"nameZh": "东京", "nameEn": "Tokyo", "cities": [{"nameZh": "东京", "nameEn": "Tokyo", "lat": 35.6762, "lng": 139.6503, "tz": 9}]},
+      {"nameZh": "大阪", "nameEn": "Osaka", "cities": [{"nameZh": "大阪", "nameEn": "Osaka", "lat": 34.6937, "lng": 135.5023, "tz": 9}]},
+      {"nameZh": "京都", "nameEn": "Kyoto", "cities": [{"nameZh": "京都", "nameEn": "Kyoto", "lat": 35.0116, "lng": 135.7681, "tz": 9}]},
+      {"nameZh": "神奈川", "nameEn": "Kanagawa", "cities": [{"nameZh": "横滨", "nameEn": "Yokohama", "lat": 35.4437, "lng": 139.6380, "tz": 9}]},
+      {"nameZh": "爱知", "nameEn": "Aichi", "cities": [{"nameZh": "名古屋", "nameEn": "Nagoya", "lat": 35.1814, "lng": 136.9064, "tz": 9}]},
+      {"nameZh": "福冈", "nameEn": "Fukuoka", "cities": [{"nameZh": "福冈", "nameEn": "Fukuoka", "lat": 33.5904, "lng": 130.4017, "tz": 9}]},
+      {"nameZh": "冲绳", "nameEn": "Okinawa", "cities": [{"nameZh": "那霸", "nameEn": "Naha", "lat": 26.2124, "lng": 127.6809, "tz": 9}]}
+    ]
+  },
+  {
+    "code": "KR",
+    "nameZh": "韩国",
+    "nameEn": "South Korea",
+    "provinces": [
+      {"nameZh": "首尔", "nameEn": "Seoul", "cities": [{"nameZh": "首尔", "nameEn": "Seoul", "lat": 37.5665, "lng": 126.9780, "tz": 9}]},
+      {"nameZh": "釜山", "nameEn": "Busan", "cities": [{"nameZh": "釜山", "nameEn": "Busan", "lat": 35.1796, "lng": 129.0756, "tz": 9}]},
+      {"nameZh": "仁川", "nameEn": "Incheon", "cities": [{"nameZh": "仁川", "nameEn": "Incheon", "lat": 37.4563, "lng": 126.7052, "tz": 9}]},
+      {"nameZh": "济州", "nameEn": "Jeju", "cities": [{"nameZh": "济州", "nameEn": "Jeju", "lat": 33.4996, "lng": 126.5312, "tz": 9}]}
+    ]
+  },
+  {
+    "code": "GB",
+    "nameZh": "英国",
+    "nameEn": "United Kingdom",
+    "provinces": [
+      {"nameZh": "英格兰", "nameEn": "England", "cities": [{"nameZh": "伦敦", "nameEn": "London", "lat": 51.5074, "lng": -0.1278, "tz": 0}, {"nameZh": "曼彻斯特", "nameEn": "Manchester", "lat": 53.4808, "lng": -2.2426, "tz": 0}, {"nameZh": "伯明翰", "nameEn": "Birmingham", "lat": 52.4862, "lng": -1.8904, "tz": 0}, {"nameZh": "利物浦", "nameEn": "Liverpool", "lat": 53.4084, "lng": -2.9916, "tz": 0}]},
+      {"nameZh": "苏格兰", "nameEn": "Scotland", "cities": [{"nameZh": "爱丁堡", "nameEn": "Edinburgh", "lat": 55.9533, "lng": -3.1883, "tz": 0}, {"nameZh": "格拉斯哥", "nameEn": "Glasgow", "lat": 55.8642, "lng": -4.2518, "tz": 0}]},
+      {"nameZh": "威尔士", "nameEn": "Wales", "cities": [{"nameZh": "卡迪夫", "nameEn": "Cardiff", "lat": 51.4816, "lng": -3.1791, "tz": 0}]},
+      {"nameZh": "北爱尔兰", "nameEn": "Northern Ireland", "cities": [{"nameZh": "贝尔法斯特", "nameEn": "Belfast", "lat": 54.5973, "lng": -5.9301, "tz": 0}]}
+    ]
+  },
+  {
+    "code": "FR",
+    "nameZh": "法国",
+    "nameEn": "France",
+    "provinces": [
+      {"nameZh": "法兰西岛", "nameEn": "Ile-de-France", "cities": [{"nameZh": "巴黎", "nameEn": "Paris", "lat": 48.8566, "lng": 2.3522, "tz": 1}]},
+      {"nameZh": "普罗旺斯", "nameEn": "Provence", "cities": [{"nameZh": "马赛", "nameEn": "Marseille", "lat": 43.2965, "lng": 5.3698, "tz": 1}, {"nameZh": "尼斯", "nameEn": "Nice", "lat": 43.7102, "lng": 7.2620, "tz": 1}]},
+      {"nameZh": "奥弗涅-罗讷-阿尔卑斯", "nameEn": "Auvergne-Rhone-Alpes", "cities": [{"nameZh": "里昂", "nameEn": "Lyon", "lat": 45.7640, "lng": 4.8357, "tz": 1}]},
+      {"nameZh": "新阿基坦", "nameEn": "Nouvelle-Aquitaine", "cities": [{"nameZh": "波尔多", "nameEn": "Bordeaux", "lat": 44.8378, "lng": -0.5792, "tz": 1}]},
+      {"nameZh": "奥克西塔尼", "nameEn": "Occitanie", "cities": [{"nameZh": "图卢兹", "nameEn": "Toulouse", "lat": 43.6047, "lng": 1.4442, "tz": 1}]}
+    ]
+  },
+  {
+    "code": "DE",
+    "nameZh": "德国",
+    "nameEn": "Germany",
+    "provinces": [
+      {"nameZh": "柏林", "nameEn": "Berlin", "cities": [{"nameZh": "柏林", "nameEn": "Berlin", "lat": 52.5200, "lng": 13.4050, "tz": 1}]},
+      {"nameZh": "巴伐利亚", "nameEn": "Bavaria", "cities": [{"nameZh": "慕尼黑", "nameEn": "Munich", "lat": 48.1351, "lng": 11.5820, "tz": 1}]},
+      {"nameZh": "汉堡", "nameEn": "Hamburg", "cities": [{"nameZh": "汉堡", "nameEn": "Hamburg", "lat": 53.5511, "lng": 9.9937, "tz": 1}]},
+      {"nameZh": "黑森", "nameEn": "Hesse", "cities": [{"nameZh": "法兰克福", "nameEn": "Frankfurt", "lat": 50.1109, "lng": 8.6821, "tz": 1}]},
+      {"nameZh": "北莱茵-威斯特法伦", "nameEn": "North Rhine-Westphalia", "cities": [{"nameZh": "科隆", "nameEn": "Cologne", "lat": 50.9375, "lng": 6.9603, "tz": 1}, {"nameZh": "杜塞尔多夫", "nameEn": "Dusseldorf", "lat": 51.2277, "lng": 6.7735, "tz": 1}]},
+      {"nameZh": "巴登-符腾堡", "nameEn": "Baden-Wurttemberg", "cities": [{"nameZh": "斯图加特", "nameEn": "Stuttgart", "lat": 48.7758, "lng": 9.1829, "tz": 1}]}
+    ]
+  },
+  {
+    "code": "AU",
+    "nameZh": "澳大利亚",
+    "nameEn": "Australia",
+    "provinces": [
+      {"nameZh": "新南威尔士", "nameEn": "New South Wales", "cities": [{"nameZh": "悉尼", "nameEn": "Sydney", "lat": -33.8688, "lng": 151.2093, "tz": 11}]},
+      {"nameZh": "维多利亚", "nameEn": "Victoria", "cities": [{"nameZh": "墨尔本", "nameEn": "Melbourne", "lat": -37.8136, "lng": 144.9631, "tz": 11}]},
+      {"nameZh": "昆士兰", "nameEn": "Queensland", "cities": [{"nameZh": "布里斯班", "nameEn": "Brisbane", "lat": -27.4698, "lng": 153.0251, "tz": 10}, {"nameZh": "黄金海岸", "nameEn": "Gold Coast", "lat": -28.0167, "lng": 153.4000, "tz": 10}]},
+      {"nameZh": "西澳大利亚", "nameEn": "Western Australia", "cities": [{"nameZh": "珀斯", "nameEn": "Perth", "lat": -31.9505, "lng": 115.8605, "tz": 8}]},
+      {"nameZh": "南澳大利亚", "nameEn": "South Australia", "cities": [{"nameZh": "阿德莱德", "nameEn": "Adelaide", "lat": -34.9285, "lng": 138.6007, "tz": 9.5}]},
+      {"nameZh": "澳大利亚首都领地", "nameEn": "Australian Capital Territory", "cities": [{"nameZh": "堪培拉", "nameEn": "Canberra", "lat": -35.2809, "lng": 149.1300, "tz": 11}]},
+      {"nameZh": "北领地", "nameEn": "Northern Territory", "cities": [{"nameZh": "达尔文", "nameEn": "Darwin", "lat": -12.4634, "lng": 130.8456, "tz": 9.5}]},
+      {"nameZh": "塔斯马尼亚", "nameEn": "Tasmania", "cities": [{"nameZh": "霍巴特", "nameEn": "Hobart", "lat": -42.8821, "lng": 147.3272, "tz": 11}]}
+    ]
+  },
+  {
+    "code": "CA",
+    "nameZh": "加拿大",
+    "nameEn": "Canada",
+    "provinces": [
+      {"nameZh": "安大略", "nameEn": "Ontario", "cities": [{"nameZh": "多伦多", "nameEn": "Toronto", "lat": 43.7001, "lng": -79.4163, "tz": -5}, {"nameZh": "渥太华", "nameEn": "Ottawa", "lat": 45.4215, "lng": -75.6972, "tz": -5}]},
+      {"nameZh": "不列颠哥伦比亚", "nameEn": "British Columbia", "cities": [{"nameZh": "温哥华", "nameEn": "Vancouver", "lat": 49.2827, "lng": -123.1207, "tz": -8}]},
+      {"nameZh": "魁北克", "nameEn": "Quebec", "cities": [{"nameZh": "蒙特利尔", "nameEn": "Montreal", "lat": 45.5017, "lng": -73.5673, "tz": -5}]},
+      {"nameZh": "阿尔伯塔", "nameEn": "Alberta", "cities": [{"nameZh": "卡尔加里", "nameEn": "Calgary", "lat": 51.0447, "lng": -114.0719, "tz": -7}]},
+      {"nameZh": "马尼托巴", "nameEn": "Manitoba", "cities": [{"nameZh": "温尼伯", "nameEn": "Winnipeg", "lat": 49.8951, "lng": -97.1384, "tz": -6}]}
+    ]
+  },
+  {
+    "code": "SG",
+    "nameZh": "新加坡",
+    "nameEn": "Singapore",
+    "provinces": [
+      {"nameZh": "新加坡", "nameEn": "Singapore", "cities": [{"nameZh": "新加坡", "nameEn": "Singapore", "lat": 1.3521, "lng": 103.8198, "tz": 8}]}
+    ]
+  },
+  {
+    "code": "MY",
+    "nameZh": "马来西亚",
+    "nameEn": "Malaysia",
+    "provinces": [
+      {"nameZh": "吉隆坡", "nameEn": "Kuala Lumpur", "cities": [{"nameZh": "吉隆坡", "nameEn": "Kuala Lumpur", "lat": 3.1390, "lng": 101.6869, "tz": 8}]},
+      {"nameZh": "槟城", "nameEn": "Penang", "cities": [{"nameZh": "乔治市", "nameEn": "George Town", "lat": 5.4141, "lng": 100.3288, "tz": 8}]},
+      {"nameZh": "柔佛", "nameEn": "Johor", "cities": [{"nameZh": "新山", "nameEn": "Johor Bahru", "lat": 1.4927, "lng": 103.7414, "tz": 8}]},
+      {"nameZh": "沙巴", "nameEn": "Sabah", "cities": [{"nameZh": "亚庇", "nameEn": "Kota Kinabalu", "lat": 5.9804, "lng": 116.0735, "tz": 8}]},
+      {"nameZh": "砂拉越", "nameEn": "Sarawak", "cities": [{"nameZh": "古晋", "nameEn": "Kuching", "lat": 1.5533, "lng": 110.3592, "tz": 8}]}
+    ]
+  },
+  {
+    "code": "ID",
+    "nameZh": "印度尼西亚",
+    "nameEn": "Indonesia",
+    "provinces": [
+      {"nameZh": "雅加达", "nameEn": "Jakarta", "cities": [{"nameZh": "雅加达", "nameEn": "Jakarta", "lat": -6.2088, "lng": 106.8456, "tz": 7}]},
+      {"nameZh": "巴厘岛", "nameEn": "Bali", "cities": [{"nameZh": "登巴萨", "nameEn": "Denpasar", "lat": -8.6500, "lng": 115.2167, "tz": 8}]},
+      {"nameZh": "东爪哇", "nameEn": "East Java", "cities": [{"nameZh": "泗水", "nameEn": "Surabaya", "lat": -7.2504, "lng": 112.7688, "tz": 7}]},
+      {"nameZh": "北苏门答腊", "nameEn": "North Sumatra", "cities": [{"nameZh": "棉兰", "nameEn": "Medan", "lat": 3.5952, "lng": 98.6722, "tz": 7}]}
+    ]
+  },
+  {
+    "code": "TH",
+    "nameZh": "泰国",
+    "nameEn": "Thailand",
+    "provinces": [
+      {"nameZh": "曼谷", "nameEn": "Bangkok", "cities": [{"nameZh": "曼谷", "nameEn": "Bangkok", "lat": 13.7563, "lng": 100.5018, "tz": 7}]},
+      {"nameZh": "清迈", "nameEn": "Chiang Mai", "cities": [{"nameZh": "清迈", "nameEn": "Chiang Mai", "lat": 18.7883, "lng": 98.9853, "tz": 7}]},
+      {"nameZh": "普吉", "nameEn": "Phuket", "cities": [{"nameZh": "普吉", "nameEn": "Phuket", "lat": 7.8804, "lng": 98.3923, "tz": 7}]},
+      {"nameZh": "春武里", "nameEn": "Chon Buri", "cities": [{"nameZh": "芭堤雅", "nameEn": "Pattaya", "lat": 12.9236, "lng": 100.8825, "tz": 7}]}
+    ]
+  },
+  {
+    "code": "VN",
+    "nameZh": "越南",
+    "nameEn": "Vietnam",
+    "provinces": [
+      {"nameZh": "河内", "nameEn": "Hanoi", "cities": [{"nameZh": "河内", "nameEn": "Hanoi", "lat": 21.0278, "lng": 105.8342, "tz": 7}]},
+      {"nameZh": "胡志明市", "nameEn": "Ho Chi Minh City", "cities": [{"nameZh": "胡志明市", "nameEn": "Ho Chi Minh City", "lat": 10.8231, "lng": 106.6297, "tz": 7}]},
+      {"nameZh": "岘港", "nameEn": "Da Nang", "cities": [{"nameZh": "岘港", "nameEn": "Da Nang", "lat": 16.0544, "lng": 108.2022, "tz": 7}]}
+    ]
+  },
+  {
+    "code": "PH",
+    "nameZh": "菲律宾",
+    "nameEn": "Philippines",
+    "provinces": [
+      {"nameZh": "马尼拉", "nameEn": "Manila", "cities": [{"nameZh": "马尼拉", "nameEn": "Manila", "lat": 14.5995, "lng": 120.9842, "tz": 8}]},
+      {"nameZh": "宿务", "nameEn": "Cebu", "cities": [{"nameZh": "宿务", "nameEn": "Cebu", "lat": 10.3157, "lng": 123.8854, "tz": 8}]}
+    ]
+  },
+  {
+    "code": "IN",
+    "nameZh": "印度",
+    "nameEn": "India",
+    "provinces": [
+      {"nameZh": "德里", "nameEn": "Delhi", "cities": [{"nameZh": "新德里", "nameEn": "New Delhi", "lat": 28.6139, "lng": 77.2090, "tz": 5.5}]},
+      {"nameZh": "马哈拉施特拉", "nameEn": "Maharashtra", "cities": [{"nameZh": "孟买", "nameEn": "Mumbai", "lat": 19.0760, "lng": 72.8777, "tz": 5.5}]},
+      {"nameZh": "卡纳塔克", "nameEn": "Karnataka", "cities": [{"nameZh": "班加罗尔", "nameEn": "Bangalore", "lat": 12.9716, "lng": 77.5946, "tz": 5.5}]},
+      {"nameZh": "泰米尔纳德", "nameEn": "Tamil Nadu", "cities": [{"nameZh": "金奈", "nameEn": "Chennai", "lat": 13.0827, "lng": 80.2707, "tz": 5.5}]},
+      {"nameZh": "西孟加拉", "nameEn": "West Bengal", "cities": [{"nameZh": "加尔各答", "nameEn": "Kolkata", "lat": 22.5726, "lng": 88.3639, "tz": 5.5}]}
+    ]
+  },
+  {
+    "code": "RU",
+    "nameZh": "俄罗斯",
+    "nameEn": "Russia",
+    "provinces": [
+      {"nameZh": "莫斯科", "nameEn": "Moscow", "cities": [{"nameZh": "莫斯科", "nameEn": "Moscow", "lat": 55.7558, "lng": 37.6173, "tz": 3}]},
+      {"nameZh": "圣彼得堡", "nameEn": "Saint Petersburg", "cities": [{"nameZh": "圣彼得堡", "nameEn": "Saint Petersburg", "lat": 59.9343, "lng": 30.3351, "tz": 3}]},
+      {"nameZh": "新西伯利亚", "nameEn": "Novosibirsk", "cities": [{"nameZh": "新西伯利亚", "nameEn": "Novosibirsk", "lat": 55.0084, "lng": 82.9357, "tz": 7}]},
+      {"nameZh": "滨海边疆区", "nameEn": "Primorsky Krai", "cities": [{"nameZh": "海参崴", "nameEn": "Vladivostok", "lat": 43.1155, "lng": 131.8854, "tz": 10}]}
+    ]
+  },
+  {
+    "code": "NZ",
+    "nameZh": "新西兰",
+    "nameEn": "New Zealand",
+    "provinces": [
+      {"nameZh": "奥克兰", "nameEn": "Auckland", "cities": [{"nameZh": "奥克兰", "nameEn": "Auckland", "lat": -36.8485, "lng": 174.7633, "tz": 13}]},
+      {"nameZh": "惠灵顿", "nameEn": "Wellington", "cities": [{"nameZh": "惠灵顿", "nameEn": "Wellington", "lat": -41.2865, "lng": 174.7762, "tz": 13}]},
+      {"nameZh": "坎特伯雷", "nameEn": "Canterbury", "cities": [{"nameZh": "基督城", "nameEn": "Christchurch", "lat": -43.5320, "lng": 172.6306, "tz": 13}]}
+    ]
+  }
+]
