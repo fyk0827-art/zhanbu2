@@ -105,16 +105,20 @@ public class PayPalService {
 
         HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange(
-                paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders",
-                HttpMethod.POST,
-                request,
-                JsonNode.class
-        );
+        ResponseEntity<JsonNode> response;
+        try {
+            response = restTemplate.exchange(
+                    paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders",
+                    HttpMethod.POST,
+                    request,
+                    JsonNode.class
+            );
+        } catch (Exception e) {
+            throw new IllegalStateException("PayPal 创建订单失败: " + e.getMessage());
+        }
 
         if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
-            throw new IllegalStateException("PayPal 创建订单失败: " +
-                    (response.getBody() != null ? response.getBody().toString() : response.getStatusCode()));
+            throw new IllegalStateException("PayPal 创建订单失败: HTTP " + response.getStatusCode());
         }
 
         JsonNode createdOrder = response.getBody();
@@ -148,31 +152,43 @@ public class PayPalService {
 
         HttpEntity<String> request = new HttpEntity<>("", headers);
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange(
-                paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders/" + paypalOrderId + "/capture",
-                HttpMethod.POST,
-                request,
-                JsonNode.class
-        );
+        ResponseEntity<JsonNode> response;
+        try {
+            response = restTemplate.exchange(
+                    paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders/" + paypalOrderId + "/capture",
+                    HttpMethod.POST,
+                    request,
+                    JsonNode.class
+            );
+        } catch (Exception e) {
+            return Optional.empty();
+        }
 
         if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
             return Optional.empty();
         }
 
         JsonNode captureResult = response.getBody();
-        String status = captureResult.get("status").asText();
-        if (!"COMPLETED".equals(status)) {
+        JsonNode statusNode = captureResult.get("status");
+        if (statusNode == null || !"COMPLETED".equals(statusNode.asText())) {
             return Optional.empty();
         }
 
         // 从 capture 结果中获取 PayPal 交易 ID
         String captureId = null;
-        JsonNode purchaseUnits = captureResult.get("purchase_units");
-        if (purchaseUnits != null && purchaseUnits.isArray() && purchaseUnits.size() > 0) {
-            JsonNode captures = purchaseUnits.get(0).get("payments").get("captures");
-            if (captures != null && captures.isArray() && captures.size() > 0) {
-                captureId = captures.get(0).get("id").asText();
+        try {
+            JsonNode purchaseUnits = captureResult.get("purchase_units");
+            if (purchaseUnits != null && purchaseUnits.isArray() && purchaseUnits.size() > 0) {
+                JsonNode payments = purchaseUnits.get(0).get("payments");
+                if (payments != null) {
+                    JsonNode captures = payments.get("captures");
+                    if (captures != null && captures.isArray() && captures.size() > 0) {
+                        captureId = captures.get(0).get("id").asText();
+                    }
+                }
             }
+        } catch (Exception e) {
+            // ignore parse errors
         }
 
         // 根据 paypalOrderId 找到内部订单
@@ -206,19 +222,28 @@ public class PayPalService {
 
         HttpEntity<String> request = new HttpEntity<>("", headers);
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange(
-                paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders/" + paypalOrderId,
-                HttpMethod.GET,
-                request,
-                JsonNode.class
-        );
+        ResponseEntity<JsonNode> response;
+        try {
+            response = restTemplate.exchange(
+                    paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders/" + paypalOrderId,
+                    HttpMethod.GET,
+                    request,
+                    JsonNode.class
+            );
+        } catch (Exception e) {
+            return Optional.empty();
+        }
 
         if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
             return Optional.empty();
         }
 
         JsonNode orderInfo = response.getBody();
-        String status = orderInfo.get("status").asText();
+        JsonNode statusNode = orderInfo.get("status");
+        if (statusNode == null) {
+            return Optional.empty();
+        }
+        String status = statusNode.asText();
         if (!"APPROVED".equals(status) && !"COMPLETED".equals(status)) {
             return Optional.empty();
         }
@@ -230,12 +255,19 @@ public class PayPalService {
 
         // COMPLETED：直接标记已支付
         String captureId = null;
-        JsonNode purchaseUnits = orderInfo.get("purchase_units");
-        if (purchaseUnits != null && purchaseUnits.isArray() && purchaseUnits.size() > 0) {
-            JsonNode captures = purchaseUnits.get(0).get("payments").get("captures");
-            if (captures != null && captures.isArray() && captures.size() > 0) {
-                captureId = captures.get(0).get("id").asText();
+        try {
+            JsonNode purchaseUnits = orderInfo.get("purchase_units");
+            if (purchaseUnits != null && purchaseUnits.isArray() && purchaseUnits.size() > 0) {
+                JsonNode payments = purchaseUnits.get(0).get("payments");
+                if (payments != null) {
+                    JsonNode captures = payments.get("captures");
+                    if (captures != null && captures.isArray() && captures.size() > 0) {
+                        captureId = captures.get(0).get("id").asText();
+                    }
+                }
             }
+        } catch (Exception e) {
+            // ignore
         }
         return repo.markOrderPaid(internalOrderId, captureId != null ? captureId : paypalOrderId);
     }
@@ -252,18 +284,22 @@ public class PayPalService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange(
-                paypalProps.getSandboxBaseUrl() + "/v1/oauth2/token",
-                HttpMethod.POST,
-                request,
-                JsonNode.class
-        );
+        try {
+            ResponseEntity<JsonNode> response = restTemplate.exchange(
+                    paypalProps.getSandboxBaseUrl() + "/v1/oauth2/token",
+                    HttpMethod.POST,
+                    request,
+                    JsonNode.class
+            );
 
-        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
-            throw new IllegalStateException("PayPal OAuth2 认证失败");
+            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+                throw new IllegalStateException("PayPal OAuth2 认证失败");
+            }
+
+            return response.getBody().get("access_token").asText();
+        } catch (Exception e) {
+            throw new IllegalStateException("PayPal OAuth2 认证失败: " + e.getMessage());
         }
-
-        return response.getBody().get("access_token").asText();
     }
 
     private String resolveReturnUrl(OrderRecord order) {
