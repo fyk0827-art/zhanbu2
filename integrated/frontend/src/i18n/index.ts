@@ -341,6 +341,15 @@ const translations: Record<string, Record<string, string>> = {
     reportCareerLabel: "Career & Wealth Report",
     reportMarriageLabel: "Love & Marriage Report",
 
+    // Home (Quiz landing)
+    homeLifeBlueprint: "L I F E  B L U E P R I N T",
+    homeSoulBlueprint1: "Your soul's blueprint",
+    homeSoulBlueprint2: "is more",
+    homeSoulBlueprint3: "precise",
+    homeCalibration: "{{count}} calibrations, 5-dimension decoding",
+    homeStarsConfirm: "Then, let the stars confirm everything",
+    homeBeginReading: "B E G I N",
+
     // Generator - Paywall
     paywallTitle: "Unlock Full Report",
     paywallDesc: "You've seen the preview. Pay to unlock permanent access to the complete {{name}} (bound to birth info, not a membership).",
@@ -810,6 +819,15 @@ const translations: Record<string, Record<string, string>> = {
     reportPersonalRef: "仅供个人参考",
     reportCareerLabel: "事业财富专属报告",
     reportMarriageLabel: "感情婚姻专属报告",
+
+    // Home (Quiz landing)
+    homeLifeBlueprint: "人 生 剧 本",
+    homeSoulBlueprint1: "你的灵魂蓝图",
+    homeSoulBlueprint2: "比你以为的",
+    homeSoulBlueprint3: "更精确",
+    homeCalibration: "{{count}}道灵魂校准，五维度深度解码",
+    homeStarsConfirm: "然后，让星盘印证一切",
+    homeBeginReading: "开 启 解 读",
 
     // Generator - Paywall
     paywallTitle: "解锁完整内容",

@@ -59,37 +59,37 @@ export default function Home() {
             >
               PRISM
             </div>
-            <div
+             <div
               className="prism-font-serif text-[11px] tracking-[5px] mb-10 prism-fade-in prism-fade-d2"
               style={{ color: "rgba(232,185,81,0.45)" }}
             >
-              人 生 剧 本
+              {t('homeLifeBlueprint')}
             </div>
             <h1
               className="prism-font-serif text-[26px] font-bold leading-relaxed mb-4 prism-fade-in prism-fade-d2"
               style={{ color: "var(--prism-cream)" }}
             >
-              你的灵魂蓝图
+              {t('homeSoulBlueprint1')}
               <br />
-              比你以为的
+              {t('homeSoulBlueprint2')}
               <span style={{ color: "var(--prism-gold)", textShadow: "0 0 30px rgba(232,185,81,0.25)" }}>
-                更精确
+                {t('homeSoulBlueprint3')}
               </span>
             </h1>
             <p
               className="text-sm leading-loose mb-12 prism-fade-in prism-fade-d3"
               style={{ color: "rgba(250,246,240,0.5)" }}
             >
-              {questionCount}道灵魂校准，五维度深度解码
+              {t('homeCalibration', { count: questionCount })}
               <br />
-              然后，让星盘印证一切
+              {t('homeStarsConfirm')}
             </p>
             <button
               className="prism-btn-gold prism-fade-in prism-fade-d4"
               onClick={() => setShowQuiz(true)}
               disabled={!ageGroups?.length}
             >
-              开 启 解 读
+              {t('homeBeginReading')}
             </button>
             <p className="mt-6 text-xs prism-fade-in prism-fade-d4" style={{ color: "rgba(250,246,240,0.2)" }}>
               {t("quizQuestionCountHint", { count: questionCount })}
