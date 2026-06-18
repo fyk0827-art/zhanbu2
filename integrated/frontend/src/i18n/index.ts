@@ -176,7 +176,7 @@ const translations: Record<string, Record<string, string>> = {
     // Payment result flow
     unlockFee: "Unlock full results for a small fee after completing",
     answersSaved: "All Answers Saved!",
-    resultPreviewDesc: "You answered {{count}} questions. Unlock your full report to see detailed insights.",
+    resultPreviewDesc: "You answered {{{count}}} questions. Unlock your full report to see detailed insights.",
     yourSelections: "Your Selections",
     unlockFullReport: "Unlock Full Report",
     unlockDesc: "Get detailed analysis of your answers matched to your age group.",
@@ -204,7 +204,7 @@ const translations: Record<string, Record<string, string>> = {
     settingsDesc: "Configure quiz and payment behavior. Stored securely in the database.",
     quizQuestionCount: "Quiz question count",
     quizQuestionCountHelp: "How many questions each user answers (1–20). Enforced on the server.",
-    quizQuestionCountHint: "You will answer {{count}} questions matched to your age group.",
+    quizQuestionCountHint: "You will answer {{{count}}} questions matched to your age group.",
     paymentMode: "Payment mode",
     paymentModeMock: "Mock (auto success + redirect to report)",
     paymentModeLive: "Live (real gateway — coming soon)",
@@ -252,11 +252,11 @@ const translations: Record<string, Record<string, string>> = {
     textReportStep: "Step 2/3: Review Report Text",
     textReportGenerating: "AI is generating {wordCount} report, please review",
     textReportCalculating: "Calculating natal chart (11-dimension scoring)...",
-    textReportCharCount: "Received {count} characters",
+    textReportCharCount: "Received {{count}} characters",
     textReportCheckSettings: "Check Settings",
     textReportRetry: "Retry",
     textReportGenerated: "AI Generated Report",
-    textReportChars: "{count} characters",
+    textReportChars: "{{count}} characters",
     textReportRegenerate: "Regenerate",
     textReportEnterFinal: "Enter Visual Report",
     textReportFinalHint: "Once confirmed, the final illustrated report will be generated",
@@ -269,7 +269,7 @@ const translations: Record<string, Record<string, string>> = {
 
     // Generator - Star Review
     starReviewStep: "Step 1/3: Chart Data Review",
-    starReviewTitle: "{name}'s Chart Data",
+    starReviewTitle: "{{name}}'s Chart Data",
     starReviewHint: "Please carefully verify the chart data below before generating",
     starReviewPlanets: "Planet Positions",
     starReviewPlanet: "Planet",
@@ -317,7 +317,7 @@ const translations: Record<string, Record<string, string>> = {
     settingsPromptsSourceDb: "Current: Database config",
     settingsPromptsSourceDefault: "Current: Code default (not saved to DB)",
     settingsPromptsReset: "Reset to default",
-    settingsPromptsChars: "{count} characters",
+    settingsPromptsChars: "{{count}} characters",
     settingsSaved: "Saved",
     settingsSave: "Save Settings",
     settingsSaveHint: "Prompts saved in server database · API Key saved locally",
@@ -328,7 +328,7 @@ const translations: Record<string, Record<string, string>> = {
     reportPrintSave: "Print / Save Report",
     reportPrintFree: "Print Free Section",
     reportDownload: "Download",
-    reportUnlockSuccess: "Unlocked {name} full report",
+    reportUnlockSuccess: "Unlocked {{name}} full report",
     reportOrderNo: "Order No:",
     reportPaymentRef: "Payment Ref:",
     reportPaymentTime: "Payment Time:",
@@ -343,7 +343,7 @@ const translations: Record<string, Record<string, string>> = {
 
     // Generator - Paywall
     paywallTitle: "Unlock Full Report",
-    paywallDesc: "You've seen the preview. Pay to unlock permanent access to the complete {name} (bound to birth info, not a membership).",
+    paywallDesc: "You've seen the preview. Pay to unlock permanent access to the complete {{name}} (bound to birth info, not a membership).",
     paywallWechatHint: "Currently opened in WeChat. Please tap the top-right menu and open in browser to complete payment.",
     paywallFooter: "Free preview · Unlock full text after payment",
 
@@ -446,15 +446,15 @@ const translations: Record<string, Record<string, string>> = {
 
     // Generator - Birth Date Picker
     datePickerTitle: "Select birth date",
-    datePickerYear: "{year}年",
-    datePickerMonth: "{month}月",
-    datePickerDay: "{day}日",
+    datePickerYear: "{{year}}年",
+    datePickerMonth: "{{month}}月",
+    datePickerDay: "{{day}}日",
     datePickerCancel: "Cancel",
     datePickerConfirm: "Confirm",
 
     // Generator - Error/Status messages
     errorNoApiKey: "API Key not configured. Please go to Settings page first.",
-    errorNetworkFailed: "Report generation failed: {msg}\n\nIf the issue persists, check:\n1. Is API Key configured in Settings?\n2. Is the network connection normal?",
+    errorNetworkFailed: "Report generation failed: {{msg}}\n\nIf the issue persists, check:\n1. Is API Key configured in Settings?\n2. Is the network connection normal?",
     errorSyncFailed: "[report] Failed to sync to server, please confirm payment API is running",
     errorPaymentReturnFailed: "Payment return confirmation failed, please confirm backend is running and PAYMENT_MODE is correct",
     errorPaymentConnectFailed: "Cannot connect to payment service, please confirm backend is running",
@@ -463,7 +463,7 @@ const translations: Record<string, Record<string, string>> = {
     errorNoPayUrl: "No payment URL received",
     errorCreateOrderFailed: "Order creation failed, please confirm payment service is running",
     errorWechatAlipay: "Alipay cannot be opened inside WeChat. Please tap the top-right menu and open in browser.",
-    errorSchemaFailed: "Schema creation failed with status {status}",
+    errorSchemaFailed: "Schema creation failed with status {{status}}",
   },
   zh: {
     appName: "问答收集器",
@@ -633,7 +633,7 @@ const translations: Record<string, Record<string, string>> = {
     selectAgeGroup: "选择年龄段...",
     unlockFee: "完成后支付少量费用即可解锁完整结果",
     answersSaved: "答案已保存！",
-    resultPreviewDesc: "你回答了 {{count}} 道题。解锁完整报告查看详细分析。",
+    resultPreviewDesc: "你回答了 {{{count}}} 道题。解锁完整报告查看详细分析。",
     yourSelections: "你的选择",
     unlockFullReport: "解锁完整报告",
     unlockDesc: "获取与你年龄段匹配的详细答案分析。",
@@ -661,7 +661,7 @@ const translations: Record<string, Record<string, string>> = {
     settingsDesc: "配置答题数量与支付模式，设置保存在数据库中，由服务端强制执行。",
     quizQuestionCount: "答题数量",
     quizQuestionCountHelp: "每位用户需回答的题目数（1–20），由服务端控制，前端无法篡改。",
-    quizQuestionCountHint: "你将回答 {{count}} 道与年龄段匹配的题目。",
+    quizQuestionCountHint: "你将回答 {{{count}}} 道与年龄段匹配的题目。",
     paymentMode: "支付模式",
     paymentModeMock: "模拟支付（自动成功并跳转报告页）",
     paymentModeLive: "真实支付（对接网关，敬请期待）",
@@ -709,11 +709,11 @@ const translations: Record<string, Record<string, string>> = {
     textReportStep: "步骤 2/3：文字报告确认",
     textReportGenerating: "AI 正在生成 {wordCount} 文字报告，请确认内容",
     textReportCalculating: "正在进行星盘计算（11维度评分）...",
-    textReportCharCount: "已接收 {count} 字符",
+    textReportCharCount: "已接收 {{count}} 字符",
     textReportCheckSettings: "检查设置",
     textReportRetry: "重试",
     textReportGenerated: "AI 生成的文字报告",
-    textReportChars: "{count} 字符",
+    textReportChars: "{{count}} 字符",
     textReportRegenerate: "重新生成",
     textReportEnterFinal: "正在进入图文报告…",
     textReportFinalHint: "文字内容确认无误，生成图文报告",
@@ -726,7 +726,7 @@ const translations: Record<string, Record<string, string>> = {
 
     // Generator - Star Review
     starReviewStep: "步骤 1/3：星盘数据确认",
-    starReviewTitle: "{name} 的星盘数据",
+    starReviewTitle: "{{name}} 的星盘数据",
     starReviewHint: "请仔细核对以下星盘信息，确认无误后再生成报告",
     starReviewPlanets: "行星位置",
     starReviewPlanet: "行星",
@@ -774,7 +774,7 @@ const translations: Record<string, Record<string, string>> = {
     settingsPromptsSourceDb: "当前：数据库配置",
     settingsPromptsSourceDefault: "当前：代码默认（未保存到数据库）",
     settingsPromptsReset: "恢复默认",
-    settingsPromptsChars: "{count} 字",
+    settingsPromptsChars: "{{count}} 字",
     settingsSaved: "已保存",
     settingsSave: "保存设置",
     settingsSaveHint: "提示词保存在服务器数据库 · API Key 保存在浏览器本地",
@@ -785,7 +785,7 @@ const translations: Record<string, Record<string, string>> = {
     reportPrintSave: "打印 / 保存报告",
     reportPrintFree: "打印免费部分",
     reportDownload: "下载",
-    reportUnlockSuccess: "已解锁{name}全文",
+    reportUnlockSuccess: "已解锁{{name}}全文",
     reportOrderNo: "订单号：",
     reportPaymentRef: "支付流水：",
     reportPaymentTime: "支付时间：",
@@ -800,7 +800,7 @@ const translations: Record<string, Record<string, string>> = {
 
     // Generator - Paywall
     paywallTitle: "解锁完整内容",
-    paywallDesc: "你已看完报告前半部分。付费解锁后，可永久查看本份{name}的完整内容（按出生信息绑定，非会员制）。",
+    paywallDesc: "你已看完报告前半部分。付费解锁后，可永久查看本份{{name}}的完整内容（按出生信息绑定，非会员制）。",
     paywallWechatHint: "当前在微信内打开。请点右上角「在浏览器中打开」后，使用支付宝完成支付。",
     paywallFooter: "前半免费预览 · 支付成功后解锁全文",
 
@@ -903,15 +903,15 @@ const translations: Record<string, Record<string, string>> = {
 
     // Generator - Birth Date Picker
     datePickerTitle: "选择出生日期",
-    datePickerYear: "{year}年",
-    datePickerMonth: "{month}月",
-    datePickerDay: "{day}日",
+    datePickerYear: "{{year}}年",
+    datePickerMonth: "{{month}}月",
+    datePickerDay: "{{day}}日",
     datePickerCancel: "取消",
     datePickerConfirm: "确定",
 
     // Generator - Error/Status messages
     errorNoApiKey: "未配置 API Key，请先去设置页面配置",
-    errorNetworkFailed: "报告生成出错: {msg}\n\n如果问题持续，请检查：\n1. 设置页是否已配置 API Key\n2. 网络连接是否正常",
+    errorNetworkFailed: "报告生成出错: {{msg}}\n\n如果问题持续，请检查：\n1. 设置页是否已配置 API Key\n2. 网络连接是否正常",
     errorSyncFailed: "[report] 同步到服务器失败，请确认 payment API 已启动",
     errorPaymentReturnFailed: "支付回跳确认失败，请确认后端已启动且 PAYMENT_MODE 配置正确",
     errorPaymentConnectFailed: "无法连接支付服务，请确认后端（端口 3001）已启动",
@@ -920,7 +920,7 @@ const translations: Record<string, Record<string, string>> = {
     errorNoPayUrl: "未获取支付链接",
     errorCreateOrderFailed: "创建订单失败，请确认支付服务已启动",
     errorWechatAlipay: "微信内无法直接唤起支付宝。请点击右上角「···」→「在浏览器中打开」，再点击支付。",
-    errorSchemaFailed: "建表失败 {status}",
+    errorSchemaFailed: "建表失败 {{status}}",
   },
   es: {
     appName: "Colector de Preguntas",
