@@ -17,7 +17,7 @@ function wasmMimeType(): Plugin {
 }
 
 export default defineConfig({
-  base: "./",
+  base: "/",
   plugins: [wasmMimeType(), react()],
   server: {
     host: true,
