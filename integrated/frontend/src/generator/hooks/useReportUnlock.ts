@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useLocation } from "react-router";
 import {
   checkUnlock,
   checkHealth,
@@ -26,6 +27,7 @@ export function useReportUnlock(
   reportId: string | null,
   options?: { reportType?: ReportTypeId }
 ) {
+  const location = useLocation();
   const [isUnlocked, setIsUnlocked] = useState(PAYMENT_DISABLED);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [paidAt, setPaidAt] = useState<number | null>(null);
@@ -39,6 +41,7 @@ export function useReportUnlock(
   const [paymentMode, setPaymentMode] = useState<PaymentMode | null>(
     PAYMENT_DISABLED ? "disabled" : null
   );
+  const processedRef = useRef(false);
 
   const isWeChatInApp = typeof navigator !== "undefined" && /MicroMessenger/i.test(navigator.userAgent);
 
@@ -88,7 +91,12 @@ export function useReportUnlock(
     if (PAYMENT_DISABLED) return;
     const params = getRouterSearchParams();
     const pendingOrderId = params.get("orderId") || params.get("out_trade_no");
-    if (!pendingOrderId) return;
+    if (!pendingOrderId) {
+      processedRef.current = false;
+      return;
+    }
+    if (processedRef.current) return;
+    processedRef.current = true;
 
     let cancelled = false;
     setPollExhausted(false);
@@ -194,7 +202,7 @@ export function useReportUnlock(
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [location.search, location.hash]);
 
   const startPay = useCallback(async () => {
     if (PAYMENT_DISABLED) return;

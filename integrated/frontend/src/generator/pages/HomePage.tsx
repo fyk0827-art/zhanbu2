@@ -39,7 +39,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   const [countries, setCountries] = useState<CountryOption[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("US");
   const [provinces, setProvinces] = useState<ProvinceOption[]>([]);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [cities, setCities] = useState<CityOption[]>([]);
@@ -85,10 +85,15 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
     setSelectedCity(null);
     setCities([]);
     if (!selectedCountry) return;
+    const countryExists = countries.some((c) => c.code === selectedCountry);
+    if (countries.length > 0 && !countryExists) {
+      setSelectedCountry("");
+      return;
+    }
     fetch(`${API_BASE}/api/world/provinces?countryCode=${encodeURIComponent(selectedCountry)}`)
       .then((r) => r.json())
       .then((res) => setProvinces(res?.data ?? res ?? []));
-  }, [selectedCountry]);
+  }, [selectedCountry, countries]);
 
   useEffect(() => {
     setSelectedCity(null);
