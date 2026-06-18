@@ -1,4 +1,5 @@
 import { type ElementType } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
   Settings,
@@ -225,6 +226,7 @@ export function MarriageReportView({
   paymentPayingLabel,
   paymentButtonColor,
 }: MarriageReportViewProps) {
+  const { t, i18n } = useTranslation();
   const profilePart = findPart(parts, ["感情画像"]);
   const lovePart = findPart(parts, ["恋爱全景"]);
   const marriagePart = findPart(parts, ["婚姻全景"]);
@@ -272,7 +274,7 @@ export function MarriageReportView({
           style={{ background: "rgba(255,255,255,0.15)", color: "#fff", zIndex: 20 }}
         >
           <ArrowLeft size={16} />
-          <span className="text-xs">返回</span>
+          <span className="text-xs">{t('reportBack')}</span>
         </button>
         <button
           type="button"
@@ -291,7 +293,7 @@ export function MarriageReportView({
         style={{ background: PRIMARY, bottom: hasPremium && !showPremium ? "5.5rem" : undefined }}
       >
         <Download size={18} />
-        <span className="font-medium">{showPremium || !hasPremium ? "打印 / 保存报告" : "打印免费部分"}</span>
+        <span className="font-medium">{showPremium || !hasPremium ? t('reportPrintSave') : t('reportPrintFree')}</span>
       </button>
 
       {hasPremium && !showPremium && !unlockLoading && (
@@ -363,21 +365,21 @@ export function MarriageReportView({
           <div className="rounded-xl px-4 py-3 text-sm" style={{ background: LIGHT, color: PRIMARY }}>
             <div className="flex items-center gap-2">
               <CheckCircle2 size={18} />
-              <span>已解锁本份{reportMeta.name}全文</span>
+              <span>{t('reportUnlockSuccess', { name: reportMeta.name })}</span>
             </div>
             {orderId && (
               <p className="text-[11px] mt-2 leading-relaxed opacity-80" style={{ color: DARK }}>
-                订单号：<span className="font-mono">{orderId}</span>
+                {t('reportOrderNo')}<span className="font-mono">{orderId}</span>
                 {tradeNo ? (
                   <>
                     <br />
-                    支付流水：<span className="font-mono">{tradeNo}</span>
+                    {t('reportPaymentRef')}<span className="font-mono">{tradeNo}</span>
                   </>
                 ) : null}
                 {paidAtLabel ? (
                   <>
                     <br />
-                    支付时间：{paidAtLabel}
+                    {t('reportPaymentTime')}{paidAtLabel}
                   </>
                 ) : null}
               </p>
@@ -421,7 +423,7 @@ export function MarriageReportView({
 
       <div className="py-6 px-6 max-w-[414px] mx-auto pb-24 text-center">
         <p className="text-xs text-gray-400">
-          感情婚姻专属报告 · {new Date().toLocaleDateString("zh-CN")} · 仅供个人参考
+           {t('reportMarriageLabel')} · {new Date().toLocaleDateString(i18n.language)} · {t('reportPersonalRef')}
         </p>
       </div>
 

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft, KeyRound, Thermometer, Hash, Save, Check, FileText, Lock, RotateCcw } from "lucide-react";
 import { OrnateDivider } from "../components/CelestialDecorations";
 import { P } from "../theme/prismColors";
@@ -21,6 +22,7 @@ const PROMPT_TABS: { key: ReportPromptType; label: string }[] = [
 ];
 
 export default function SettingsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem("settings_auth") === "1";
@@ -170,7 +172,7 @@ export default function SettingsPage() {
             style={{ color: 'var(--color-text-muted)' }}>
             <ArrowLeft className="w-4 h-4" />
           </button>
-          <h1 className="text-sm font-medium gold-text tracking-[0.15em] uppercase">设置</h1>
+          <h1 className="text-sm font-medium gold-text tracking-[0.15em] uppercase">{t('generatorSettings')}</h1>
         </div>
       </header>
 
@@ -181,8 +183,8 @@ export default function SettingsPage() {
               style={{ background: 'rgba(196,162,101,0.08)', border: '1px solid rgba(196,162,101,0.2)' }}>
               <Lock className="w-7 h-7" style={{ color: 'var(--color-gold)' }} />
             </div>
-            <h2 className="text-lg font-light tracking-wider mb-2" style={{ color: 'var(--color-text)' }}>请输入访问密码</h2>
-            <p className="text-xs mb-6" style={{ color: 'var(--color-text-muted)' }}>此页面受密码保护</p>
+            <h2 className="text-lg font-light tracking-wider mb-2" style={{ color: 'var(--color-text)' }}>{t('settingsPasswordPrompt')}</h2>
+            <p className="text-xs mb-6" style={{ color: 'var(--color-text-muted)' }}>{t('settingsPasswordHint')}</p>
 
             <div className="flex justify-center gap-2.5 mb-4">
               {passwordDigits.map((digit, i) => (
@@ -208,12 +210,12 @@ export default function SettingsPage() {
             </div>
 
             {passwordError && (
-              <p className="text-xs mb-3" style={{ color: 'var(--color-rose)' }}>密码错误，请重新输入</p>
+              <p className="text-xs mb-3" style={{ color: 'var(--color-rose)' }}>{t('settingsPasswordError')}</p>
             )}
             {verifying && (
-              <p className="text-xs mb-3" style={{ color: 'var(--color-text-muted)' }}>验证中…</p>
+              <p className="text-xs mb-3" style={{ color: 'var(--color-text-muted)' }}>{t('settingsVerifying')}</p>
             )}
-            <p className="text-[10px]" style={{ color: 'var(--color-text-dim)' }}>输入6位数字密码自动验证</p>
+            <p className="text-[10px]" style={{ color: 'var(--color-text-dim)' }}>{t('settingsPasswordHelp')}</p>
           </div>
         </main>
       ) : (
@@ -221,17 +223,17 @@ export default function SettingsPage() {
         {/* API Key */}
         <div className="glass-card rounded-2xl p-4 sm:p-5">
           <label className="flex items-center gap-2 text-[11px] sm:text-xs tracking-[0.2em] uppercase mb-3" style={{ color: 'var(--color-text-muted)' }}>
-            <KeyRound className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> 火山方舟 API Key
+            <KeyRound className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> {t('settingsApiKey')}
           </label>
           <input type="password" value={settings.apiKey}
             onChange={e => setSettings({ ...settings, apiKey: e.target.value })}
             placeholder="ark-xxxxxxxxxxxxxxxx"
             className="w-full crystal-input rounded-xl px-4 py-3 text-sm" />
           <p className="text-[10px] sm:text-[11px] mt-2 leading-relaxed" style={{ color: 'var(--color-text-dim)' }}>
-            从{" "}
-            <a href="https://console.volcengine.com/ark/" target="_blank" rel="noopener noreferrer"
-              className="hover:underline" style={{ color: 'var(--color-gold)' }}>火山方舟控制台</a>{" "}
-            获取 API Key。用于生成"人生剧本"章节的个性化文案。
+            {t('settingsApiKeyDesc', {
+              link: <a href="https://console.volcengine.com/ark/" target="_blank" rel="noopener noreferrer"
+                className="hover:underline" style={{ color: 'var(--color-gold)' }}>火山方舟控制台</a>,
+            })}
           </p>
         </div>
 
@@ -240,7 +242,7 @@ export default function SettingsPage() {
         {/* Model */}
         <div className="glass-card rounded-2xl p-4 sm:p-5">
           <label className="flex items-center gap-2 text-[11px] sm:text-xs tracking-[0.2em] uppercase mb-3" style={{ color: 'var(--color-text-muted)' }}>
-            <Hash className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> AI 模型
+            <Hash className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> {t('settingsModel')}
           </label>
           <div className="grid grid-cols-2 gap-2">
             {AVAILABLE_MODELS.map(m => (
@@ -260,7 +262,7 @@ export default function SettingsPage() {
               onChange={e => setSettings({ ...settings, model: e.target.value })}
               className="flex-1 rounded-xl px-3 py-2 text-xs border"
               style={{ borderColor: 'var(--color-border)', background: 'rgba(27,42,74,0.5)', color: 'var(--color-text)' }}
-              placeholder="或手动输入模型ID如 ep-20250115xxxx-yyyyy"
+              placeholder={t('settingsModelCustom')}
             />
           </div>
         </div>
@@ -271,7 +273,7 @@ export default function SettingsPage() {
         <div className="glass-card rounded-2xl p-4 sm:p-5">
           <div className="flex items-center justify-between mb-3">
             <label className="flex items-center gap-2 text-[11px] sm:text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-              <Thermometer className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> 创作温度
+              <Thermometer className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> {t('settingsTemperature')}
             </label>
             <span className="text-sm font-medium" style={{ color: 'var(--color-gold)' }}>{settings.temperature.toFixed(1)}</span>
           </div>
@@ -279,7 +281,7 @@ export default function SettingsPage() {
             onChange={e => setSettings({ ...settings, temperature: parseFloat(e.target.value) })}
             className="w-full accent-[var(--color-gold)]" />
           <div className="flex justify-between text-[10px] mt-1" style={{ color: 'var(--color-text-dim)' }}>
-            <span>严谨（可复现）</span><span>平衡</span><span>创意（随机）</span>
+            <span>{t('settingsTempLow')}</span><span>{t('settingsTempMid')}</span><span>{t('settingsTempHigh')}</span>
           </div>
         </div>
 
@@ -287,7 +289,7 @@ export default function SettingsPage() {
         <div className="glass-card rounded-2xl p-4 sm:p-5">
           <div className="flex items-center justify-between mb-3">
             <label className="flex items-center gap-2 text-[11px] sm:text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-              <Hash className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> 最大长度
+              <Hash className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> {t('settingsMaxTokens')}
             </label>
             <span className="text-sm font-medium" style={{ color: 'var(--color-gold)' }}>{settings.maxTokens}</span>
           </div>
@@ -301,10 +303,10 @@ export default function SettingsPage() {
         {/* Report prompts - stored in DB */}
         <div className="glass-card rounded-2xl p-4 sm:p-5">
           <label className="flex items-center gap-2 text-[11px] sm:text-xs tracking-[0.2em] uppercase mb-3" style={{ color: 'var(--color-text-muted)' }}>
-            <FileText className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> 报告生成提示词
+            <FileText className="w-3.5 h-3.5" style={{ color: 'var(--color-gold)' }} /> {t('settingsPrompts')}
           </label>
           <p className="text-[10px] sm:text-[11px] mb-3 leading-relaxed" style={{ color: 'var(--color-text-dim)' }}>
-            按报告类型分别配置 System Prompt，保存后写入数据库，生成报告时自动读取。
+            {t('settingsPromptsDesc')}
           </p>
 
           <div className="flex gap-2 mb-3">
@@ -322,7 +324,7 @@ export default function SettingsPage() {
           </div>
 
           {loadingPrompts ? (
-            <p className="text-xs py-8 text-center" style={{ color: 'var(--color-text-muted)' }}>加载提示词…</p>
+            <p className="text-xs py-8 text-center" style={{ color: 'var(--color-text-muted)' }}>{t('settingsPromptsLoading')}</p>
           ) : (
             <>
               <textarea
@@ -334,17 +336,17 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center gap-2">
                   <span className="text-[10px]" style={{ color: 'var(--color-text-dim)' }}>
-                    {activeSource === "db" ? "当前：数据库配置" : "当前：代码默认（未保存到数据库）"}
+                    {activeSource === "db" ? t('settingsPromptsSourceDb') : t('settingsPromptsSourceDefault')}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleResetPrompt(promptTab)}
                     className="flex items-center gap-1 text-[10px] px-2 py-1 rounded-lg border transition-colors"
                     style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}>
-                    <RotateCcw className="w-3 h-3" /> 恢复默认
+                    <RotateCcw className="w-3 h-3" /> {t('settingsPromptsReset')}
                   </button>
                 </div>
-                <span className="text-[10px]" style={{ color: 'var(--color-text-dim)' }}>{activePrompt.length} 字</span>
+                <span className="text-[10px]" style={{ color: 'var(--color-text-dim)' }}>{t('settingsPromptsChars', { count: activePrompt.length })}</span>
               </div>
             </>
           )}
@@ -362,13 +364,13 @@ export default function SettingsPage() {
           style={saved
             ? { borderColor: 'rgba(34,197,94,0.4)', color: '#16a34a', background: 'rgba(34,197,94,0.06)' }
             : { borderColor: 'rgba(196,162,101,0.4)', color: 'var(--color-gold)', background: 'rgba(196,162,101,0.04)' }}>
-          {saved ? <><Check className="w-4 h-4" /> 已保存</> : <><Save className="w-4 h-4" /> 保存设置</>}
+          {saved ? <><Check className="w-4 h-4" /> {t('settingsSaved')}</> : <><Save className="w-4 h-4" /> {t('settingsSave')}</>}
         </button>
 
         <div className="flex items-center justify-center gap-3">
           <div className="h-px w-8 sm:w-12" style={{ background: 'linear-gradient(to right, transparent, rgba(196,162,101,0.2))' }} />
           <p className="text-center text-[10px] tracking-[0.15em]" style={{ color: 'var(--color-text-dim)' }}>
-            提示词保存在服务器数据库 · API Key 保存在浏览器本地
+            {t('settingsSaveHint')}
           </p>
           <div className="h-px w-8 sm:w-12" style={{ background: 'linear-gradient(to left, transparent, rgba(196,162,101,0.2))' }} />
         </div>

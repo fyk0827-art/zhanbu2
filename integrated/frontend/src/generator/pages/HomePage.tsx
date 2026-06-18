@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router";
 import { Settings, ChevronDown } from "lucide-react";
 import PrismBackground from "@/components/prism/PrismBackground";
@@ -26,6 +27,7 @@ const API_BASE = (import.meta as any).env?.VITE_API_BASE ?? "";
 export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const [prepaidBanner, setPrepaidBanner] = useState<string | null>(null);
   const [prepaidError, setPrepaidError] = useState("");
   const [name, setName] = useState("");
@@ -177,7 +179,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
           onClick={() => navigate(generatorPath("settings"))}
           className="p-2.5 rounded-full transition-all"
           style={{ border: "1px solid rgba(232,185,81,0.2)", background: "rgba(13,27,42,0.6)", color: "var(--prism-gold)" }}
-          title="设置"
+          title={t('generatorSettings')}
         >
           <Settings className="w-4 h-4" />
         </button>
@@ -196,10 +198,10 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
             人 生 剧 本
           </div>
           <h1 className="prism-font-serif text-[22px] font-bold leading-relaxed mb-2" style={{ color: "var(--prism-cream)" }}>
-            你的答案已揭示了<span style={{ color: "var(--prism-gold)" }}>灵魂的轮廓</span>
+            {t('generatorTitle').split('\\n').map((line, i) => <span key={i}>{line}<br/></span>)}
           </h1>
           <p className="text-[13px] leading-loose" style={{ color: "rgba(250,246,240,0.4)" }}>
-            现在，请交出你降临人间的时刻<br />让星盘印证一切
+            {t('generatorSubtitle').split('\\n').map((line, i) => <span key={i}>{line}<br/></span>)}
           </p>
         </div>
 
@@ -222,15 +224,15 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
           <div className="mb-5 text-left">
             <div className="flex items-baseline gap-2 mb-2 flex-wrap">
               <span className="prism-font-serif text-[13px] font-semibold tracking-wide" style={{ color: "rgba(250,246,240,0.7)" }}>
-                你的名字
+                {t('generatorName')}
               </span>
-              <span className="text-[11px] italic" style={{ color: "rgba(232,185,81,0.35)" }}>可选</span>
+              <span className="text-[11px] italic" style={{ color: "rgba(232,185,81,0.35)" }}>{t('generatorNameOptional')}</span>
             </div>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="输入你的名字…"
+              placeholder={t('generatorNamePlaceholder')}
               className="prism-input"
             />
           </div>
@@ -239,15 +241,15 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
           <div className="mb-5 text-left">
             <div className="flex items-baseline gap-2 mb-2">
               <span className="prism-font-serif text-[13px] font-semibold tracking-wide" style={{ color: "rgba(250,246,240,0.7)" }}>
-                你是
+                {t('generatorGender')}
               </span>
-              <span className="text-[11px] italic" style={{ color: "rgba(232,185,81,0.35)" }}>决定解读视角</span>
+              <span className="text-[11px] italic" style={{ color: "rgba(232,185,81,0.35)" }}>{t('generatorGenderHint')}</span>
             </div>
             <div className="flex gap-3">
               {(["female", "male"] as const).map((g) => (
                 <div key={g} className="prism-gender-opt flex-1 relative">
                   <input type="radio" name="gender" id={`g-${g}`} value={g} checked={gender === g} onChange={() => setGender(g)} />
-                  <label htmlFor={`g-${g}`}>{g === "female" ? "♀ 女" : "♂ 男"}</label>
+                  <label htmlFor={`g-${g}`}>{g === "female" ? t('generatorGenderFemale') : t('generatorGenderMale')}</label>
                 </div>
               ))}
             </div>
@@ -258,7 +260,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
             <div className="flex-1 text-left">
               <div className="mb-2">
                 <span className="prism-font-serif text-[13px] font-semibold" style={{ color: "rgba(250,246,240,0.7)" }}>
-                  你降临人间的日期 <span style={{ color: "var(--prism-gold)" }}>*</span>
+                  {t('generatorBirthDate')} <span style={{ color: "var(--prism-gold)" }}>*</span>
                 </span>
               </div>
               <BirthDatePicker
@@ -266,13 +268,13 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                 onChange={(v) => { setBirthDate(v); setFieldErrors((p) => ({ ...p, birthDate: false })); }}
                 className="prism-input"
                 error={fieldErrors.birthDate}
-                placeholder="年 / 月 / 日"
+                placeholder={t('generatorBirthDatePlaceholder')}
               />
             </div>
             <div className="flex-1 text-left">
               <div className="mb-2">
                 <span className="prism-font-serif text-[13px] font-semibold" style={{ color: "rgba(250,246,240,0.7)" }}>
-                  降临时刻 <span style={{ color: "var(--prism-gold)" }}>*</span>
+                  {t('generatorBirthTime')} <span style={{ color: "var(--prism-gold)" }}>*</span>
                 </span>
               </div>
               <input
@@ -281,7 +283,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                 onChange={(e) => setBirthTime(e.target.value)}
                 className="prism-input"
               />
-              <p className="text-[10px] mt-1 italic" style={{ color: "rgba(232,185,81,0.35)" }}>精确到分钟，决定上升星座</p>
+              <p className="text-[10px] mt-1 italic" style={{ color: "rgba(232,185,81,0.35)" }}>{t('generatorBirthTimeHint')}</p>
             </div>
           </div>
 
@@ -289,9 +291,9 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
           <div className="mb-2 text-left">
             <div className="flex items-baseline gap-2 mb-3 flex-wrap">
               <span className="prism-font-serif text-[13px] font-semibold" style={{ color: "rgba(250,246,240,0.7)" }}>
-                降临之地 <span style={{ color: "var(--prism-gold)" }}>*</span>
+                {t('generatorBirthPlace')} <span style={{ color: "var(--prism-gold)" }}>*</span>
               </span>
-              <span className="text-[11px] italic" style={{ color: "rgba(232,185,81,0.35)" }}>经纬度决定你的宫位</span>
+              <span className="text-[11px] italic" style={{ color: "rgba(232,185,81,0.35)" }}>{t('generatorBirthPlaceHint')}</span>
             </div>
 
             {!useCustomCoords ? (
@@ -300,16 +302,16 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                   <button type="button" onClick={() => setOpenDropdown(openDropdown === "country" ? null : "country")}
                     className={`prism-input w-full text-left flex items-center justify-between ${fieldErrors.city ? "error" : ""}`}>
                     <span style={{ color: selectedCountry ? "var(--prism-cream)" : "rgba(250,246,240,0.25)" }}>
-                      {selectedCountry ? countries.find((c) => c.code === selectedCountry)?.nameZh || selectedCountry : "1. 选择国家"}
+                      {selectedCountry ? countries.find((c) => c.code === selectedCountry)?.nameZh || selectedCountry : t('generatorSelectCountry')}
                     </span>
                     <ChevronDown size={14} style={{ color: "rgba(232,185,81,0.25)" }} />
                   </button>
                   {openDropdown === "country" && (
                     <div className="prism-city-dropdown mt-1 max-h-[32vh] overflow-y-auto">
                       {loadingCountries ? (
-                        <div className="px-4 py-3 text-sm text-center" style={{ color: "rgba(250,246,240,0.3)" }}>加载中…</div>
+                        <div className="px-4 py-3 text-sm text-center" style={{ color: "rgba(250,246,240,0.3)" }}>{t('generatorLoading')}</div>
                       ) : countries.length === 0 ? (
-                        <div className="px-4 py-3 text-sm text-center" style={{ color: "rgba(250,246,240,0.3)" }}>暂无数据</div>
+                        <div className="px-4 py-3 text-sm text-center" style={{ color: "rgba(250,246,240,0.3)" }}>{t('generatorNoData')}</div>
                       ) : (
                         countries.map((c) => (
                           <div key={c.code} className="prism-city-opt" onClick={() => { setSelectedCountry(c.code); setOpenDropdown(null); setFieldErrors((p) => ({ ...p, city: false })); }}>
@@ -326,7 +328,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                   <button type="button" onClick={() => { if (provinces.length > 0) setOpenDropdown(openDropdown === "province" ? null : "province"); }}
                     className="prism-input w-full text-left flex items-center justify-between">
                     <span style={{ color: selectedProvince ? "var(--prism-cream)" : "rgba(250,246,240,0.25)" }}>
-                      {selectedProvince || "2. 选择省份/州"}
+                      {selectedProvince || t('generatorSelectProvince')}
                     </span>
                     <ChevronDown size={14} style={{ color: "rgba(232,185,81,0.25)" }} />
                   </button>
@@ -346,14 +348,14 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                   <button type="button" onClick={() => { if (cities.length > 0) setOpenDropdown(openDropdown === "city" ? null : "city"); }}
                     className={`prism-input w-full text-left flex items-center justify-between ${fieldErrors.city ? "error" : ""}`}>
                     <span style={{ color: selectedCity ? "var(--prism-cream)" : "rgba(250,246,240,0.25)" }}>
-                      {selectedCity ? `${selectedCity.nameZh}` : "3. 选择城市"}
+                      {selectedCity ? `${selectedCity.nameZh}` : t('generatorSelectCity')}
                     </span>
                     <ChevronDown size={14} style={{ color: "rgba(232,185,81,0.25)" }} />
                   </button>
                   {openDropdown === "city" && (
                     <div className="prism-city-dropdown mt-1 max-h-[32vh] overflow-y-auto">
                       {cities.length === 0 ? (
-                        <div className="px-4 py-3 text-sm text-center" style={{ color: "rgba(250,246,240,0.3)" }}>请先选择国家与省份</div>
+                        <div className="px-4 py-3 text-sm text-center" style={{ color: "rgba(250,246,240,0.3)" }}>{t('generatorSelectProvinceFirst')}</div>
                       ) : (
                         cities.map((c) => (
                           <div key={c.id} className="prism-city-opt" onClick={() => { setSelectedCity(c); setOpenDropdown(null); setFieldErrors((p) => ({ ...p, city: false })); }}>
@@ -370,12 +372,12 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
               <div className="space-y-3">
                 <div className="flex gap-3">
                   <input type="number" step="0.01" value={customLat} onChange={(e) => setCustomLat(e.target.value)}
-                    placeholder="纬度" className={`prism-input ${fieldErrors.coords ? "error" : ""}`} />
+                    placeholder={t('generatorLatitude')} className={`prism-input ${fieldErrors.coords ? "error" : ""}`} />
                   <input type="number" step="0.01" value={customLng} onChange={(e) => setCustomLng(e.target.value)}
-                    placeholder="经度" className={`prism-input ${fieldErrors.coords ? "error" : ""}`} />
+                    placeholder={t('generatorLongitude')} className={`prism-input ${fieldErrors.coords ? "error" : ""}`} />
                 </div>
                 <input type="number" step="0.5" value={customTz} onChange={(e) => setCustomTz(e.target.value)}
-                  placeholder="时区" className="prism-input" />
+                  placeholder={t('generatorTimezone')} className="prism-input" />
               </div>
             )}
 
@@ -385,7 +387,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
               className="text-[11px] mt-3 hover:underline"
               style={{ color: "var(--prism-gold)" }}
             >
-              {useCustomCoords ? "使用城市列表" : "手动输入经纬度"}
+              {useCustomCoords ? t('generatorUseCityList') : t('generatorManualCoords')}
             </button>
           </div>
 
@@ -394,12 +396,12 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
             className="prism-btn-gold w-full mt-7"
             onClick={handleSubmit}
           >
-            连 接 星 盘
+            {t('generatorConnect')}
           </button>
         </div>
 
         <p className="text-center text-[10px] tracking-[3px] mt-6" style={{ color: "rgba(250,246,240,0.2)" }}>
-          瑞士星历 · 高精度天文计算
+          {t('generatorSwissEphemeris')}
         </p>
       </div>
     </div>

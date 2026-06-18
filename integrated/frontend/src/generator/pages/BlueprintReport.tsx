@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef, type ElementType } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   ArrowLeft, Settings, Download, Star, Heart, AlertTriangle, Users, Wallet, Home,
   Briefcase, Compass, KeyRound, Moon, Sparkles, Zap, CheckCircle2,
@@ -35,28 +36,12 @@ const CARD_BORDER = "#f0e6d3";
 const PURPLE_MID = "#7C4FB8";
 const PURPLE_LIGHT = "#A78BDB";
 
-const PLANET_LABELS: Record<string, string> = {
-  太阳: "开拓者", 月亮: "共情者", 水星: "思辨者", 金星: "调和者",
-  火星: "行动派", 木星: "远见家", 土星: "建构者", 天王星: "颠覆者",
-  海王星: "织梦人", 冥王星: "蜕变者",
-};
 const PLANET_ICONS: Record<string, ElementType> = {
   太阳: Star, 月亮: Moon, 水星: Sparkles, 金星: Star, 火星: Zap,
   木星: Sparkles, 土星: Compass, 天王星: Zap, 海王星: Moon, 冥王星: Star,
 };
 const TALENT_COLORS = [PRIMARY, PURPLE_MID, PURPLE_LIGHT];
 const PHASE_COLORS = [PRIMARY, PURPLE_MID, DARK];
-
-const LIFE_AREA_META: { keys: string[]; title: string; icon: ElementType }[] = [
-  { keys: ["恋爱", "亲密"], title: "恋爱与亲密关系", icon: Heart },
-  { keys: ["正财", "价值"], title: "正财与自我价值", icon: Wallet },
-  { keys: ["婚姻", "合作"], title: "婚姻与合作关系", icon: Users },
-  { keys: ["人生钥匙", "钥匙", "命主"], title: "人生关键钥匙", icon: KeyRound },
-  { keys: ["家庭", "根基"], title: "家庭与根基", icon: Home },
-  { keys: ["事业", "名声"], title: "事业与社会名声", icon: Briefcase },
-  { keys: ["工作", "健康"], title: "工作与日常健康", icon: Compass },
-  { keys: ["偏财", "深层"], title: "偏财与深层资源", icon: Star },
-];
 
 // ===== SECTION SPLITTER =====
 function splitChineseSections(text: string): { heading: string; content: string }[] {
@@ -513,6 +498,26 @@ function parseLifeTimeline(content: string): {
 // ===== MAIN =====
 export default function BlueprintReport({ chart }: Props) {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
+  const PLANET_LABELS: Record<string, string> = {
+    太阳: t('planetExplorer'), 月亮: t('planetEmpath'), 水星: t('planetThinker'),
+    金星: t('planetHarmonizer'), 火星: t('planetActionTaker'), 木星: t('planetVisionary'),
+    土星: t('planetBuilder'), 天王星: t('planetDisruptor'), 海王星: t('planetDreamweaver'),
+    冥王星: t('planetTransformer'),
+  };
+
+  const LIFE_AREA_META: { keys: string[]; title: string; icon: ElementType }[] = [
+    { keys: ["恋爱", "亲密"], title: t('areaLove'), icon: Heart },
+    { keys: ["正财", "价值"], title: t('areaWealth'), icon: Wallet },
+    { keys: ["婚姻", "合作"], title: t('areaMarriage'), icon: Users },
+    { keys: ["人生钥匙", "钥匙", "命主"], title: t('areaLifeKey'), icon: KeyRound },
+    { keys: ["家庭", "根基"], title: t('areaFamily'), icon: Home },
+    { keys: ["事业", "名声"], title: t('areaCareer'), icon: Briefcase },
+    { keys: ["工作", "健康"], title: t('areaWorkHealth'), icon: Compass },
+    { keys: ["偏财", "深层"], title: t('areaDeepResources'), icon: Star },
+  ];
+
   const [restoredChart, setRestoredChart] = useState<NatalChart | null>(null);
   const activeChart = chart ?? restoredChart;
   const [restoring, setRestoring] = useState(false);
@@ -683,13 +688,12 @@ export default function BlueprintReport({ chart }: Props) {
     let statusText: string;
     if (payError) statusText = payError;
     else if (pollExhausted && !isUnlocked)
-      statusText =
-        "支付结果未确认：请确认后端已启动（端口 3001），或等待支付通知同步后刷新重试";
-    else if (waitingPay) statusText = "支付确认中，正在恢复报告…";
-    else if (restoring) statusText = "正在恢复报告…";
+      statusText = t('errorPaymentReturnFailed');
+    else if (waitingPay) statusText = t('reportRestoring');
+    else if (restoring) statusText = t('reportRestoring');
     else if (reportId)
-      statusText = "报告恢复失败，请确认支付服务已启动后刷新页面";
-    else statusText = "请先输入出生信息，或从支付页带 reportId 回跳";
+      statusText = t('reportRestoreFailed');
+    else statusText = t('reportNoReportId');
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-6 text-center" style={{ background: "#0D1B2A", color: "#9CA3AF" }}>
         <p>{statusText}</p>
@@ -700,7 +704,7 @@ export default function BlueprintReport({ chart }: Props) {
             style={{ background: PRIMARY }}
             onClick={() => refreshUnlock()}
           >
-            重新确认支付
+            {t('reportConfirmPayment')}
           </button>
         )}
       </div>
@@ -720,10 +724,10 @@ export default function BlueprintReport({ chart }: Props) {
           <p>{genError}</p>
           <div className="flex gap-3">
             <button type="button" className="px-4 py-2 rounded-lg text-sm border" style={{ borderColor: "rgba(232,185,81,0.3)", color: "#E8B951" }} onClick={() => navigate(generatorPath())}>
-              返回首页
+              {t('reportBackHome')}
             </button>
             <button type="button" className="px-4 py-2 rounded-lg text-sm text-white" style={{ background: PRIMARY }} onClick={() => navigate(generatorPath("settings"))}>
-              检查设置
+              {t('textReportCheckSettings')}
             </button>
           </div>
         </div>
@@ -731,7 +735,7 @@ export default function BlueprintReport({ chart }: Props) {
     }
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#0D1B2A", color: "#9CA3AF" }}>
-        正在准备报告…
+        {t('reportPreparing')}
       </div>
     );
   }
@@ -746,7 +750,7 @@ export default function BlueprintReport({ chart }: Props) {
       score: p.score,
       sign: pd?.sign || "",
       house: pd?.house || 0,
-      label: PLANET_LABELS[p.name] || "探索者",
+      label: PLANET_LABELS[p.name] || t('planetExplorer'),
       color: TALENT_COLORS[i] || PRIMARY,
       value: pd ? `${pd.sign} ${pd.house}宫` : "",
     };
@@ -1007,7 +1011,7 @@ export default function BlueprintReport({ chart }: Props) {
           </div>
         </div>
         <button type="button" onClick={() => navigate(generatorPath())} className="no-print absolute top-4 left-4 p-2 rounded-full flex items-center gap-1" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", zIndex: 20 }}>
-          <ArrowLeft size={16} /><span className="text-xs">返回</span>
+          <ArrowLeft size={16} /><span className="text-xs">{t('reportBack')}</span>
         </button>
         <button type="button" onClick={() => navigate(generatorPath("settings"))} className="no-print absolute top-4 right-4 p-2 rounded-full" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", zIndex: 20 }}>
           <Settings size={16} />
@@ -1020,7 +1024,7 @@ export default function BlueprintReport({ chart }: Props) {
         className="no-print fixed bottom-6 right-6 z-50 flex items-center gap-2 text-white px-6 py-3 rounded-full shadow-lg hover:opacity-90"
         style={{ background: PRIMARY, bottom: hasPremium && !showPremium ? "5.5rem" : undefined }}
       >
-        <Download size={18} /><span className="font-medium">{showPremium || !hasPremium ? "打印 / 保存报告" : "打印免费部分"}</span>
+        <Download size={18} /><span className="font-medium">{showPremium || !hasPremium ? t('reportPrintSave') : t('reportPrintFree')}</span>
       </button>
 
       {hasPremium && !showPremium && !unlockLoading && (
@@ -1182,18 +1186,18 @@ export default function BlueprintReport({ chart }: Props) {
           <div className="rounded-xl px-4 py-3 text-sm" style={{ background: LIGHT, color: PRIMARY }}>
             <div className="flex items-center gap-2">
               <CheckCircle2 size={18} />
-              <span>已解锁本份{reportMeta.name}全文</span>
+              <span>{t('reportUnlockSuccess', { name: reportMeta.name })}</span>
             </div>
             {orderId && (
               <p className="text-[11px] mt-2 leading-relaxed opacity-80" style={{ color: DARK }}>
-                订单号：<span className="font-mono">{orderId}</span>
+                {t('reportOrderNo')}<span className="font-mono">{orderId}</span>
                 {tradeNo ? (
                   <>
                     <br />
-                    支付流水：<span className="font-mono">{tradeNo}</span>
+                    {t('reportPaymentRef')}<span className="font-mono">{tradeNo}</span>
                   </>
                 ) : null}
-                {paidAtLabel ? <><br />支付时间：{paidAtLabel}</> : null}
+                {paidAtLabel ? <><br />{t('reportPaymentTime')}{paidAtLabel}</> : null}
               </p>
             )}
           </div>
@@ -1343,7 +1347,7 @@ export default function BlueprintReport({ chart }: Props) {
             </div>
           </div>
           <div className="mt-6 text-center">
-            <p className="text-xs text-gray-400">出生图人生蓝图报告 · {new Date().toLocaleDateString("zh-CN")} · 仅供个人参考</p>
+            <p className="text-xs text-gray-400">{t('reportLifeBlueprint')} · {new Date().toLocaleDateString(i18n.language)} · {t('reportPersonalRef')}</p>
           </div>
         </section>
       )}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   checkUnlock,
   checkHealth,
@@ -27,6 +28,7 @@ export function useReportUnlock(
   reportId: string | null,
   options?: { reportType?: ReportTypeId }
 ) {
+  const { t } = useTranslation();
   const location = useLocation();
   const [isUnlocked, setIsUnlocked] = useState(PAYMENT_DISABLED);
   const [orderId, setOrderId] = useState<string | null>(null);
@@ -128,7 +130,7 @@ export function useReportUnlock(
             setError(
               e instanceof Error
                 ? e.message
-                : "支付回跳确认失败，请确认后端已启动且 PAYMENT_MODE=alipay"
+                : t("errorPaymentReturnFailed")
             );
           }
         } finally {
@@ -190,7 +192,7 @@ export function useReportUnlock(
             setError(
               e instanceof Error
                 ? e.message
-                : "无法连接支付服务，请确认后端（端口 3001）已启动"
+                : t("errorPaymentConnectFailed")
             );
           }
         }
@@ -202,12 +204,12 @@ export function useReportUnlock(
     return () => {
       cancelled = true;
     };
-  }, [location.search, location.hash]);
+  }, [location.search, location.hash, t]);
 
   const startPay = useCallback(async () => {
     if (PAYMENT_DISABLED) return;
     if (!reportId) {
-      setError("无法识别报告，请返回「文字报告确认」页重新进入，或重新填写出生信息");
+      setError(t("errorNoReportId"));
       return;
     }
     setPaying(true);
@@ -239,11 +241,11 @@ export function useReportUnlock(
       const channel = res.channel ?? mode;
       if (res.wechatInApp && channel === "alipay") {
         setWechatHint(
-          res.hint ?? "微信内无法直接唤起支付宝。请点击右上角「···」→「在浏览器中打开」，再点击支付。"
+          res.hint ?? t("errorWechatAlipay")
         );
         return;
       }
-      if (!res.orderId) throw new Error("未获取订单号");
+      if (!res.orderId) throw new Error(t("errorNoOrderId"));
 
       // 模拟模式：直接完成支付，无需跳转 localhost:8880 收银台
       if (mode === "mock") {
@@ -256,14 +258,14 @@ export function useReportUnlock(
         return;
       }
 
-      if (!res.payUrl) throw new Error("未获取支付链接");
+      if (!res.payUrl) throw new Error(t("errorNoPayUrl"));
       window.location.href = res.payUrl;
     } catch (e) {
-      setError(e instanceof Error ? e.message : "创建订单失败，请确认支付服务已启动");
+      setError(e instanceof Error ? e.message : t("errorCreateOrderFailed"));
     } finally {
       setPaying(false);
     }
-  }, [reportId, paymentMode, options?.reportType, refresh]);
+  }, [reportId, paymentMode, options?.reportType, refresh, t]);
 
   return {
     isUnlocked,

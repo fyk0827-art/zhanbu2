@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { Lock, ExternalLink, Sparkles } from "lucide-react";
 import { getPaymentLabels, type PaymentMode } from "../services/paymentApi";
 import type { ReportTypeMeta } from "../types/reportTypes";
@@ -28,6 +29,7 @@ export function PaywallCard({
   paymentMode = null,
   reportMeta,
 }: PaywallCardProps) {
+  const { t } = useTranslation();
   const labels = getPaymentLabels(paymentMode);
   const price = amountYuan ?? reportMeta.priceYuan;
 
@@ -42,9 +44,7 @@ export function PaywallCard({
           <Lock size={20} className="text-amber-300" />
           <h3 className="text-lg font-bold text-white">{reportMeta.paywallTitle}</h3>
         </div>
-        <p className="text-sm text-white/75 mb-4 leading-relaxed">
-          你已看完报告前半部分。付费解锁后，可永久查看<strong className="text-amber-200">本份{reportMeta.name}</strong>的完整内容（按出生信息绑定，非会员制）。
-        </p>
+        <p className="text-sm text-white/75 mb-4 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('paywallDesc', { name: reportMeta.name }) }} />
         <ul className="space-y-2 mb-5">
           {reportMeta.paywallItems.map((item) => (
             <li key={item} className="flex items-start gap-2 text-sm text-white/85">
@@ -57,7 +57,7 @@ export function PaywallCard({
         {isWeChatInApp && paymentMode === "alipay" && (
           <div className="mb-4 rounded-lg p-3 text-xs leading-relaxed flex gap-2" style={{ background: "rgba(232,200,122,0.15)", color: "#fde68a" }}>
             <ExternalLink size={16} className="flex-shrink-0 mt-0.5" />
-            <span>当前在微信内打开。请点右上角「在浏览器中打开」后，使用支付宝完成支付。</span>
+            <span>{t('paywallWechatHint')}</span>
           </div>
         )}
         {wechatHint && (
@@ -74,7 +74,7 @@ export function PaywallCard({
         >
           {paying ? labels.paying : `${labels.button} · ¥${price}`}
         </button>
-        <p className="text-[10px] text-white/50 text-center mt-3">前半免费预览 · 支付成功后解锁全文</p>
+        <p className="text-[10px] text-white/50 text-center mt-3">{t('paywallFooter')}</p>
       </div>
     </div>
   );

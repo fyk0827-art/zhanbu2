@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { DEEP_REPORT_MODULE_COUNT, INTERPRETER_WHATSAPP_URL } from "../config/reportCta";
 
 interface Props {
@@ -5,6 +6,8 @@ interface Props {
 }
 
 export function ReportDeepReadingCTA({ moduleCount = DEEP_REPORT_MODULE_COUNT }: Props) {
+  const { t } = useTranslation();
+
   return (
     <section className="px-6 py-8 max-w-[414px] mx-auto no-print">
       <div
@@ -29,19 +32,19 @@ export function ReportDeepReadingCTA({ moduleCount = DEEP_REPORT_MODULE_COUNT }:
             className="prism-font-display text-[10px] font-semibold tracking-[0.4em] uppercase mb-5"
             style={{ color: "var(--prism-gold)" }}
           >
-            DEEP READING
+            {t('deepReadingLabel')}
           </p>
           <h3 className="prism-font-serif text-[17px] font-bold leading-relaxed" style={{ color: "var(--prism-cream)" }}>
-            这只是你命运蓝图的
+            {t('deepReadingTitle1')}
           </h3>
           <h3 className="prism-font-serif text-[22px] font-bold mb-4" style={{ color: "var(--prism-gold)" }}>
-            冰山一角
+            {t('deepReadingTitle2')}
           </h3>
           <p className="text-[12px] leading-relaxed mb-1" style={{ color: "rgba(250,246,240,0.42)" }}>
-            你看到的只是五维校准的概览
+            {t('deepReadingDesc1')}
           </p>
           <p className="text-[12px] leading-relaxed mb-7" style={{ color: "rgba(250,246,240,0.42)" }}>
-            完整星盘深度解读，由你的专属解读师一对一交付
+            {t('deepReadingDesc2')}
           </p>
           <a
             href={INTERPRETER_WHATSAPP_URL}

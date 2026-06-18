@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { ArrowLeft, Settings, ChevronRight, CheckCircle } from "lucide-react";
 import type { NatalChart } from "../services/astrologyEngine";
@@ -8,14 +9,15 @@ import { P } from "../theme/prismColors";
 interface Props { chart: NatalChart | null; }
 
 export default function StarDataReview({ chart }: Props) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   if (!chart) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center" style={{ background: "transparent" }}>
-        <p className="text-sm mb-4" style={{ color: P.muted }}>请先输入出生信息</p>
+        <p className="text-sm mb-4" style={{ color: P.muted }}>{t('textReportNoData')}</p>
         <button onClick={() => navigate(generatorPath())} className="px-4 py-2 rounded-lg text-xs border" style={{ borderColor: P.cardBorder, color: P.text2 }}>
-          返回首页
+          {t('textReportBackHome')}
         </button>
       </div>
     );
@@ -36,9 +38,9 @@ export default function StarDataReview({ chart }: Props) {
       <header className="sticky top-0 z-50 backdrop-blur-xl border-b" style={{ background: P.headerBg, borderColor: P.cardBorder }}>
         <div className="max-w-2xl mx-auto px-4 h-12 flex items-center justify-between">
           <button onClick={() => navigate(generatorPath())} className="flex items-center gap-1.5 text-sm p-2 -ml-2" style={{ color: P.muted }}>
-            <ArrowLeft size={16} /><span className="hidden sm:inline">返回</span>
+            <ArrowLeft size={16} /><span className="hidden sm:inline">{t('textReportBack')}</span>
           </button>
-          <h1 className="text-sm font-bold" style={{ color: P.text }}>步骤 1/3：星盘数据确认</h1>
+          <h1 className="text-sm font-bold" style={{ color: P.text }}>{t('starReviewStep')}</h1>
           <button onClick={() => navigate(generatorPath("settings"))} className="p-2 rounded-lg" style={{ color: P.muted }}><Settings size={16} /></button>
         </div>
       </header>
@@ -46,8 +48,8 @@ export default function StarDataReview({ chart }: Props) {
       <main className="max-w-2xl mx-auto px-4 pt-4 pb-24">
         <div className="text-center mb-6">
           <p className="text-[10px] tracking-[0.3em] uppercase mb-2" style={{ color: P.muted }}>Step 1 of 3</p>
-          <h2 className="text-xl font-bold mb-1" style={{ color: P.text }}>{name} 的星盘数据</h2>
-          <p className="text-xs" style={{ color: P.muted }}>请仔细核对以下星盘信息，确认无误后再生成报告</p>
+          <h2 className="text-xl font-bold mb-1" style={{ color: P.text }}>{t('starReviewTitle', { name })}</h2>
+          <p className="text-xs" style={{ color: P.muted }}>{t('starReviewHint')}</p>
         </div>
 
         <div className="flex items-center gap-2 mb-6 px-4">
@@ -58,16 +60,16 @@ export default function StarDataReview({ chart }: Props) {
 
         <div className="flex justify-center mb-6"><StarChartView chart={chart} size={280} /></div>
 
-        <SectionTitle icon="☉" title="行星位置" />
+        <SectionTitle icon="☉" title={t('starReviewPlanets')} />
         <div className="rounded-2xl overflow-hidden mb-6" style={{ background: P.cardBg, border: `1px solid ${P.cardBorder}` }}>
           <table className="w-full text-xs">
             <thead>
               <tr style={{ background: "rgba(232,185,81,0.08)" }}>
-                <th className="text-left py-2.5 px-3 font-semibold" style={{ color: P.text }}>行星</th>
-                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>星座</th>
-                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>度数</th>
-                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>宫位</th>
-                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>状态</th>
+                <th className="text-left py-2.5 px-3 font-semibold" style={{ color: P.text }}>{t('starReviewPlanet')}</th>
+                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>{t('starReviewSign')}</th>
+                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>{t('starReviewDegree')}</th>
+                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>{t('starReviewHouse')}</th>
+                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>{t('starReviewStatus')}</th>
               </tr>
             </thead>
             <tbody>
@@ -78,10 +80,10 @@ export default function StarDataReview({ chart }: Props) {
                   <td className="py-2.5 px-2" style={{ color: P.text2 }}>
                     {Math.floor(p.signDegree)}°{Math.floor((p.signDegree % 1) * 60).toString().padStart(2, "0")}′
                   </td>
-                  <td className="py-2.5 px-2" style={{ color: P.text2 }}>第{p.house}宫</td>
+                  <td className="py-2.5 px-2" style={{ color: P.text2 }}>{t('starReviewHouseLabel')}{p.house}</td>
                   <td className="py-2.5 px-2">
-                    {p.isRetrograde ? <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(180,80,80,0.08)", color: "#B07070" }}>逆行</span> :
-                      <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(74,138,90,0.08)", color: "#4A8A5A" }}>顺行</span>}
+                    {p.isRetrograde ? <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(180,80,80,0.08)", color: "#B07070" }}>{t('starReviewRetrograde')}</span> :
+                      <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(74,138,90,0.08)", color: "#4A8A5A" }}>{t('starReviewDirect')}</span>}
                   </td>
                 </tr>
               ))}
@@ -89,13 +91,13 @@ export default function StarDataReview({ chart }: Props) {
           </table>
         </div>
 
-        <SectionTitle icon="↗" title="四轴" />
+        <SectionTitle icon="↗" title={t('starReviewAxes')} />
         <div className="rounded-2xl overflow-hidden mb-6" style={{ background: P.cardBg, border: `1px solid ${P.cardBorder}` }}>
           <table className="w-full text-xs">
             <tbody>
               {[
-                { name: "上升", sign: chart.angles.ascendantSign, deg: chart.angles.ascendant },
-                { name: "天顶", sign: chart.angles.mcSign, deg: chart.angles.mc },
+                { name: t('starReviewAsc'), sign: chart.angles.ascendantSign, deg: chart.angles.ascendant },
+                { name: t('starReviewMc'), sign: chart.angles.mcSign, deg: chart.angles.mc },
               ].map((a, i) => {
                 const deg = a.deg;
                 const d = Math.floor(deg % 30);
@@ -112,21 +114,21 @@ export default function StarDataReview({ chart }: Props) {
           </table>
         </div>
 
-        <SectionTitle icon="⌂" title="各宫位置" />
+        <SectionTitle icon="⌂" title={t('starReviewHouses')} />
         <div className="rounded-2xl overflow-hidden mb-6" style={{ background: P.cardBg, border: `1px solid ${P.cardBorder}` }}>
           <table className="w-full text-xs">
             <thead>
               <tr style={{ background: "rgba(232,185,81,0.08)" }}>
-                <th className="text-left py-2.5 px-3 font-semibold" style={{ color: P.text }}>宫位</th>
-                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>星座</th>
-                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>度数</th>
-                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>备注</th>
+                <th className="text-left py-2.5 px-3 font-semibold" style={{ color: P.text }}>{t('starReviewHouse')}</th>
+                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>{t('starReviewSign')}</th>
+                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>{t('starReviewDegree')}</th>
+                <th className="text-left py-2.5 px-2 font-semibold" style={{ color: P.text }}>{t('starReviewNote')}</th>
               </tr>
             </thead>
             <tbody>
               {chart.houses.map((h, i) => (
                 <tr key={i} className="border-t" style={{ borderColor: P.cardBorder }}>
-                  <td className="py-2.5 px-3 font-medium" style={{ color: P.text }}>第{h.house}宫</td>
+                  <td className="py-2.5 px-3 font-medium" style={{ color: P.text }}>{t('starReviewHouseLabel')}{h.house}</td>
                   <td className="py-2.5 px-2" style={{ color: P.text2 }}>{h.sign}</td>
                   <td className="py-2.5 px-2" style={{ color: P.text2 }}>
                     {Math.floor(h.signDegree)}°{Math.floor((h.signDegree % 1) * 60).toString().padStart(2, "0")}′
@@ -140,7 +142,7 @@ export default function StarDataReview({ chart }: Props) {
           </table>
         </div>
 
-        <SectionTitle icon="◎" title="行星相位" />
+        <SectionTitle icon="◎" title={t('starReviewAspects')} />
         <div className="rounded-2xl overflow-hidden mb-6" style={{ background: P.cardBg, border: `1px solid ${P.cardBorder}` }}>
           {Object.entries(aspectsByPlanet).map(([planet, aspects], idx) => (
             <div key={planet} className={idx > 0 ? "border-t" : ""} style={{ borderColor: P.cardBorder }}>
@@ -149,7 +151,7 @@ export default function StarDataReview({ chart }: Props) {
                 <span className="text-[10px]" style={{ color: P.text2 }}>
                   {aspects.map((a, i) => (
                     <span key={i}>
-                      {formatAspectLabel(a)}
+                      {formatAspectLabel(a, t)}
                       {i < aspects.length - 1 ? "、" : ""}
                     </span>
                   ))}
@@ -167,10 +169,10 @@ export default function StarDataReview({ chart }: Props) {
               style={{ background: P.gold, color: P.onGold }}
             >
               <CheckCircle size={16} />
-              数据核对无误，生成文字报告
+              {t('starReviewConfirm')}
               <ChevronRight size={16} />
             </button>
-            <p className="text-center text-[10px] mt-2" style={{ color: P.muted }}>点击后将调用 AI 生成文字版人生蓝图报告</p>
+            <p className="text-center text-[10px] mt-2" style={{ color: P.muted }}>{t('starReviewConfirmHint')}</p>
           </div>
         </div>
       </main>
@@ -178,13 +180,13 @@ export default function StarDataReview({ chart }: Props) {
   );
 }
 
-function formatAspectLabel(raw: string): string {
+function formatAspectLabel(raw: string, t: (key: string) => string): string {
   const symbols: [string, string][] = [
-    ["合相", "○"],
-    ["六合", "△"],
-    ["刑克", "□"],
-    ["拱相", "◇"],
-    ["冲相", "☍"],
+    [t('starReviewConjunction'), "○"],
+    [t('starReviewSextile'), "△"],
+    [t('starReviewSquare'), "□"],
+    [t('starReviewTrine'), "◇"],
+    [t('starReviewOpposition'), "☍"],
   ];
   for (const [type, symbol] of symbols) {
     if (raw.startsWith(type)) return symbol + raw.slice(type.length);

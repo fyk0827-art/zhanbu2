@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Calendar } from "lucide-react";
 import {
   Drawer,
@@ -136,14 +137,16 @@ export default function BirthDatePicker({
   maxYear,
   className = "crystal-input rounded-xl px-4 py-2.5 sm:py-3 text-sm",
   error = false,
-  placeholder = "选择出生日期",
+  placeholder: placeholderProp,
 }: BirthDatePickerProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const upperYear = maxYear ?? new Date().getFullYear();
   const parsed = parseValue(value);
   const [draftYear, setDraftYear] = useState(parsed.year);
   const [draftMonth, setDraftMonth] = useState(parsed.month);
   const [draftDay, setDraftDay] = useState(parsed.day);
+  const placeholder = placeholderProp ?? t('datePickerTitle');
 
   const years = useMemo(
     () => Array.from({ length: upperYear - MIN_YEAR + 1 }, (_, i) => MIN_YEAR + i),
@@ -203,19 +206,19 @@ export default function BirthDatePicker({
               items={years}
               value={draftYear}
               onChange={setDraftYear}
-              formatItem={(y) => `${y}年`}
+              formatItem={(y) => t('datePickerYear', { year: y })}
             />
             <WheelColumn
               items={months}
               value={draftMonth}
               onChange={setDraftMonth}
-              formatItem={(m) => `${m}月`}
+              formatItem={(m) => t('datePickerMonth', { month: m })}
             />
             <WheelColumn
               items={days}
               value={draftDay}
               onChange={setDraftDay}
-              formatItem={(d) => `${d}日`}
+              formatItem={(d) => t('datePickerDay', { day: d })}
             />
           </div>
 
@@ -226,7 +229,7 @@ export default function BirthDatePicker({
                 className="flex-1 rounded-xl border px-4 py-3 text-sm"
                 style={{ borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}
               >
-                取消
+                {t('datePickerCancel')}
               </button>
             </DrawerClose>
             <button
@@ -235,7 +238,7 @@ export default function BirthDatePicker({
               className="flex-1 rounded-xl px-4 py-3 text-sm font-medium"
               style={{ background: "var(--color-gold)", color: "#fff" }}
             >
-              确定
+              {t('datePickerConfirm')}
             </button>
           </DrawerFooter>
         </DrawerContent>
