@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import type { NatalChart } from "../services/astrologyEngine";
 import { getGlobalReportText, setGlobalReportText, getGlobalReportType } from "../App";
-import { getReportTypeMeta, parseReportTypeId } from "../types/reportTypes";
+import { getTranslatedReportMeta, parseReportTypeId } from "../types/reportTypes";
 import { loadReportText, saveReportText, loadReportId, saveReportId, loadBirthData } from "../services/reportStore";
 import { fetchReportFromServer, saveReportToServer } from "../services/reportApi";
 import { runV2Calculations } from "../services/v2ScoringEngine";
@@ -524,7 +524,7 @@ export default function BlueprintReport({ chart }: Props) {
   const reportType = parseReportTypeId(
     getRouterSearchParams().get("reportType") || getGlobalReportType()
   );
-  const reportMeta = getReportTypeMeta(reportType);
+  const reportMeta = getTranslatedReportMeta(t, reportType);
   const [unifiedPriceYuan, setUnifiedPriceYuan] = useState(reportMeta.priceYuan);
   useEffect(() => {
     const apiBase = (import.meta as any).env?.VITE_API_BASE ?? "";
@@ -676,7 +676,7 @@ export default function BlueprintReport({ chart }: Props) {
     return splitChineseSections(reportText);
   }, [reportText]);
 
-  const paymentLabels = getPaymentLabels(paymentMode);
+  const paymentLabels = getPaymentLabels(paymentMode, t);
 
   const paymentReturnOrderId =
     getRouterSearchParams().get("orderId") || getRouterSearchParams().get("out_trade_no");

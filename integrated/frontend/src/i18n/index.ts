@@ -347,6 +347,19 @@ const translations: Record<string, Record<string, string>> = {
     paywallWechatHint: "Currently opened in WeChat. Please tap the top-right menu and open in browser to complete payment.",
     paywallFooter: "Free preview · Unlock full text after payment",
 
+    // Generator - Payment Labels
+    paymentWechat: "WeChat",
+    paymentWechatPaying: "Redirecting to WeChat Pay…",
+    paymentWechatButton: "Unlock with WeChat Pay",
+    paymentAlipay: "Alipay",
+    paymentAlipayPaying: "Redirecting to Alipay…",
+    paymentAlipayButton: "Unlock with Alipay",
+    paymentPaypalPaying: "Redirecting to PayPal…",
+    paymentPaypalButton: "Unlock with PayPal",
+    paymentMock: "Mock",
+    paymentMockPaying: "Processing mock payment…",
+    paymentMockButton: "Unlock (Mock)",
+
     // Generator - Deep Reading CTA
     deepReadingLabel: "DEEP READING",
     deepReadingTitle1: "This is just the",
@@ -908,6 +921,19 @@ const translations: Record<string, Record<string, string>> = {
     datePickerDay: "{{day}}日",
     datePickerCancel: "取消",
     datePickerConfirm: "确定",
+
+    // Generator - Payment Labels
+    paymentWechat: "微信",
+    paymentWechatPaying: "正在跳转微信支付…",
+    paymentWechatButton: "微信支付解锁",
+    paymentAlipay: "支付宝",
+    paymentAlipayPaying: "正在跳转支付宝…",
+    paymentAlipayButton: "支付宝解锁",
+    paymentPaypalPaying: "正在跳转 PayPal…",
+    paymentPaypalButton: "PayPal 解锁",
+    paymentMock: "模拟",
+    paymentMockPaying: "正在模拟支付…",
+    paymentMockButton: "模拟支付解锁",
 
     // Generator - Error/Status messages
     errorNoApiKey: "未配置 API Key，请先去设置页面配置",

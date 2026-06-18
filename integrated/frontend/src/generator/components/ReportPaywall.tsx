@@ -30,7 +30,7 @@ export function PaywallCard({
   reportMeta,
 }: PaywallCardProps) {
   const { t } = useTranslation();
-  const labels = getPaymentLabels(paymentMode);
+  const labels = getPaymentLabels(paymentMode, t);
   const price = amountYuan ?? reportMeta.priceYuan;
 
   return (

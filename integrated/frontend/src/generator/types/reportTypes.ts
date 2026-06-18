@@ -16,6 +16,45 @@ export interface ReportTypeMeta {
   paywallItems: string[];
 }
 
+export interface ReportTypeI18n {
+  nameKey: string;
+  subtitleKey: string;
+  wordCountKey: string;
+  paywallTitleKey: string;
+  paywallItemKeys: string[];
+}
+
+export const REPORT_TYPE_i18n: Record<ReportTypeId, ReportTypeI18n> = {
+  simple: {
+    nameKey: "reportSimpleName",
+    subtitleKey: "reportSimpleSubtitle",
+    wordCountKey: "reportSimpleWords",
+    paywallTitleKey: "reportSimplePaywall",
+    paywallItemKeys: ["reportSimpleItem1", "reportSimpleItem2"],
+  },
+  full: {
+    nameKey: "reportFullName",
+    subtitleKey: "reportFullSubtitle",
+    wordCountKey: "reportFullWords",
+    paywallTitleKey: "reportFullPaywall",
+    paywallItemKeys: ["reportFullItem1", "reportFullItem2", "reportFullItem3", "reportFullItem4"],
+  },
+  marriage: {
+    nameKey: "reportMarriageName",
+    subtitleKey: "reportMarriageSubtitle",
+    wordCountKey: "reportMarriageWords",
+    paywallTitleKey: "reportMarriagePaywall",
+    paywallItemKeys: ["reportMarriageItem1", "reportMarriageItem2", "reportMarriageItem3", "reportMarriageItem4"],
+  },
+  career: {
+    nameKey: "reportCareerName",
+    subtitleKey: "reportCareerSubtitle",
+    wordCountKey: "reportCareerWords",
+    paywallTitleKey: "reportCareerPaywall",
+    paywallItemKeys: ["reportCareerItem1", "reportCareerItem2", "reportCareerItem3", "reportCareerItem4"],
+  },
+};
+
 export const REPORT_TYPES: ReportTypeMeta[] = [
   {
     id: "simple",
@@ -83,6 +122,20 @@ export const REPORT_TYPES: ReportTypeMeta[] = [
 
 export function getReportTypeMeta(id: ReportTypeId): ReportTypeMeta {
   return REPORT_TYPES.find((t) => t.id === id) ?? REPORT_TYPES[1];
+}
+
+export function getTranslatedReportMeta(t: (key: string) => string, id: ReportTypeId): ReportTypeMeta {
+  const base = getReportTypeMeta(id);
+  const i18n = REPORT_TYPE_i18n[id];
+  if (!i18n) return base;
+  return {
+    ...base,
+    name: t(i18n.nameKey),
+    subtitle: t(i18n.subtitleKey),
+    wordCount: t(i18n.wordCountKey),
+    paywallTitle: t(i18n.paywallTitleKey),
+    paywallItems: i18n.paywallItemKeys.map(k => t(k)),
+  };
 }
 
 export function isReportTypeId(v: string | null | undefined): v is ReportTypeId {

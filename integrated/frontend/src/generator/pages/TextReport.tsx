@@ -6,7 +6,7 @@ import type { NatalChart } from "../services/astrologyEngine";
 import { getSettings } from "../services/volcEngineApi";
 import { generateReportText } from "../services/reportGenerator";
 import { getGlobalReportType } from "../services/reportSession";
-import { getReportTypeMeta } from "../types/reportTypes";
+import { getTranslatedReportMeta } from "../types/reportTypes";
 import { generatorPath } from "../utils/generatorNav";
 import { P } from "../theme/prismColors";
 import { computeReportId } from "../services/reportId";
@@ -21,7 +21,7 @@ export default function TextReport({ chart, onTextConfirm }: Props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const reportType = getGlobalReportType();
-  const reportMeta = getReportTypeMeta(reportType);
+  const reportMeta = getTranslatedReportMeta(t, reportType);
   const [rawText, setRawText] = useState("");
   const [isGen, setIsGen] = useState(false);
   const [error, setError] = useState<string | null>(null);

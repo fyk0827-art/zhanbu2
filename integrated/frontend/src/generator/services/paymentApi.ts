@@ -6,36 +6,17 @@ export const PAYMENT_DISABLED = false;
 export type PaymentMode = "mock" | "alipay" | "wechat" | "paypal" | "disabled";
 export type PaymentChannel = "alipay" | "wechat" | "paypal";
 
-export function getPaymentLabels(mode: PaymentMode | null | undefined) {
+export function getPaymentLabels(mode: PaymentMode | null | undefined, t?: (key: string) => string) {
+  const tn = (key: string) => (t ? t(key) : key);
   switch (mode) {
     case "wechat":
-      return {
-        name: "微信",
-        paying: "正在跳转微信支付…",
-        button: "微信支付解锁",
-        buttonColor: "#07c160",
-      };
+      return { name: tn("paymentWechat"), paying: tn("paymentWechatPaying"), button: tn("paymentWechatButton"), buttonColor: "#07c160" };
     case "alipay":
-      return {
-        name: "支付宝",
-        paying: "正在跳转支付宝…",
-        button: "支付宝解锁",
-        buttonColor: "#1677ff",
-      };
+      return { name: tn("paymentAlipay"), paying: tn("paymentAlipayPaying"), button: tn("paymentAlipayButton"), buttonColor: "#1677ff" };
     case "paypal":
-      return {
-        name: "PayPal",
-        paying: "正在跳转 PayPal…",
-        button: "PayPal 解锁",
-        buttonColor: "#0070BA",
-      };
+      return { name: "PayPal", paying: tn("paymentPaypalPaying"), button: tn("paymentPaypalButton"), buttonColor: "#0070BA" };
     default:
-      return {
-        name: "模拟",
-        paying: "正在模拟支付…",
-        button: "模拟支付解锁",
-        buttonColor: "#5B3A8C",
-      };
+      return { name: tn("paymentMock"), paying: tn("paymentMockPaying"), button: tn("paymentMockButton"), buttonColor: "#5B3A8C" };
   }
 }
 
