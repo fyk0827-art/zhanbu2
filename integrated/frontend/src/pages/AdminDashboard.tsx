@@ -575,9 +575,6 @@ function OrdersTab() {
     mock: "模拟支付",
     partner: "合作方",
   };
-    queryKey: ["admin", "orders", page],
-    queryFn: () => adminOrdersApi.list(page, 50),
-  });
 
   if (isLoading) {
     return <div className="flex items-center justify-center py-20"><Loader2 size={24} className="animate-spin text-[#E8C547]" /></div>;
