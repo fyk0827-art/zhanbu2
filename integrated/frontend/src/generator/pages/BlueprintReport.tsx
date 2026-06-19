@@ -117,7 +117,9 @@ function premiumKeywordsFor(reportType: string): string[] {
   }
   return [
     "人生脉络", "环境与贵人", "避坑", "总结",
-    "life timeline", "life path", "life stages", "environment", "benefactor", "support", "pitfall", "avoid", "summary", "action",
+    "life timeline", "life path", "life stages", "environment", "benefactor", "support",
+    "pitfall", "avoid", "summary", "action",
+    "life areas", "life domains", "life fields",
   ];
 }
 
