@@ -555,6 +555,9 @@ function OrdersTab() {
   const [page, setPage] = useState(1);
   const [paypalMode, setPaypalMode] = useState("sandbox");
   const { data, isLoading } = useQuery({
+    queryKey: ["admin", "orders", page],
+    queryFn: () => adminOrdersApi.list(page, 50),
+  });
 
   useEffect(() => {
     fetch("/api/health")
