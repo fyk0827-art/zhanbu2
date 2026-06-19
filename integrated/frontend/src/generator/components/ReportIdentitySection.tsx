@@ -1,4 +1,5 @@
 import { type ElementType } from "react";
+import { useTranslation } from "react-i18next";
 
 const PRIMARY = "#5B3A8C";
 const SECONDARY = "#E8C87A";
@@ -26,6 +27,7 @@ export function ReportIdentitySection({
   description,
   badges,
 }: ReportIdentitySectionProps) {
+  const { t } = useTranslation();
   const descLines = description
     ?.split("\n")
     .map((l) => l.trim())
@@ -65,7 +67,7 @@ export function ReportIdentitySection({
               </span>
             </div>
             <h2 className="text-3xl font-black mb-1 tracking-tight text-white">
-              你是 <span className="text-amber-300">{roleLabel}</span>
+              {t("reportYouAre")} <span className="text-amber-300">{roleLabel}</span>
             </h2>
             {tagline && <div className="text-lg font-bold text-amber-200/90 mb-3">{tagline}</div>}
             {descLines && descLines.length > 0 && (

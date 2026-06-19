@@ -25,11 +25,11 @@ interface QuizFlowProps {
 type QuizStep = "age" | "answering" | "result";
 
 const DIMENSIONS = [
-  { key: "P", name: "◈ P 维度 · 肉身容器" },
-  { key: "R", name: "◈ R 维度 · 灵魂技艺" },
-  { key: "I", name: "◈ I 维度 · 感知之门" },
-  { key: "S", name: "◈ S 维度 · 价值天平" },
-  { key: "M", name: "◈ M 维度 · 使命方向" },
+  { key: "P", nameKey: "prismDimensionP" },
+  { key: "R", nameKey: "prismDimensionR" },
+  { key: "I", nameKey: "prismDimensionI" },
+  { key: "S", nameKey: "prismDimensionS" },
+  { key: "M", nameKey: "prismDimensionM" },
 ];
 
 function getDimIndex(qIndex: number, total: number): number {
@@ -202,7 +202,7 @@ export default function QuizFlow({ ageGroups, onClose }: QuizFlowProps) {
                     PRISM
                   </div>
                   <div className="prism-font-serif text-[13px] tracking-[3px] mb-7" style={{ color: "rgba(232,185,81,0.6)" }}>
-                    {DIMENSIONS[dimIdx].name}
+                    {t(DIMENSIONS[dimIdx].nameKey)}
                   </div>
                   <h3 className="prism-font-serif text-lg font-semibold leading-relaxed mb-9 min-h-[70px]" style={{ color: "var(--prism-cream)" }}>
                     {currentQ.title}
@@ -251,8 +251,8 @@ export default function QuizFlow({ ageGroups, onClose }: QuizFlowProps) {
               {t("answersSaved", "All Answers Saved!")}
             </h2>
             <p className="text-sm mb-6 leading-relaxed" style={{ color: "rgba(250,246,240,0.5)" }}>
-              你已完成 {answeredCount} 道灵魂校准。<br />
-              接下来填写出生信息生成报告——<strong style={{ color: "var(--prism-gold)" }}>可免费预览约 50%</strong>，满意后再支付解锁全文。
+              {t("quizResultCompleted", { count: answeredCount })}<br />
+              {t("quizResultNextReport")} <strong style={{ color: "var(--prism-gold)" }}>{t("quizResultPreviewFree")}</strong>{t("quizResultSeparator")}{t("quizResultUnlockAfter")}
             </p>
 
             <div className="prism-birth-form text-left mb-6">
@@ -276,11 +276,11 @@ export default function QuizFlow({ ageGroups, onClose }: QuizFlowProps) {
             </div>
 
             <button className="prism-btn-gold w-full inline-flex items-center justify-center gap-2" onClick={handleContinueToGenerator}>
-              生成人生剧本
+              {t("quizGenerateLifeScript")}
               <ChevronRight size={18} />
             </button>
             <p className="mt-4 text-xs" style={{ color: "rgba(250,246,240,0.25)" }}>
-              支付将在报告生成完成后进行
+              {t("quizPaymentAfterReport")}
             </p>
           </div>
         </div>

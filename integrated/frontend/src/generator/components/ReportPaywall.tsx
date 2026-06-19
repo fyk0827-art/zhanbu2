@@ -9,7 +9,7 @@ const SECONDARY = "#E8C87A";
 const DARK = "#2D1B4E";
 
 interface PaywallCardProps {
-  amountYuan?: string;
+  priceUsd?: string;
   onPay: () => void;
   paying: boolean;
   error: string | null;
@@ -20,7 +20,7 @@ interface PaywallCardProps {
 }
 
 export function PaywallCard({
-  amountYuan,
+  priceUsd,
   onPay,
   paying,
   error,
@@ -31,7 +31,7 @@ export function PaywallCard({
 }: PaywallCardProps) {
   const { t } = useTranslation();
   const labels = getPaymentLabels(paymentMode, t);
-  const price = amountYuan ?? reportMeta.priceYuan;
+  const price = priceUsd ?? reportMeta.priceYuan;
 
   return (
     <div
@@ -72,7 +72,7 @@ export function PaywallCard({
           className="w-full py-3.5 rounded-xl font-bold text-white transition-opacity disabled:opacity-50"
           style={{ background: paying ? PRIMARY : labels.buttonColor }}
         >
-          {paying ? labels.paying : `${labels.button} · ¥${price}`}
+          {paying ? labels.paying : `${labels.button} · $${price}`}
         </button>
         <p className="text-[10px] text-white/50 text-center mt-3">{t('paywallFooter')}</p>
       </div>
