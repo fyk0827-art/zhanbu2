@@ -21,13 +21,6 @@ const PROMPT_TABS: { key: ReportPromptType; label: string }[] = [
   { key: "career", label: "事业版" },
 ];
 
-const PROMPT_TAB_KEYS: Record<string, string> = {
-  full: "settingsPromptFull",
-  simple: "settingsPromptSimple",
-  marriage: "settingsPromptMarriage",
-  career: "settingsPromptCareer",
-};
-
 export default function SettingsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -325,7 +318,7 @@ export default function SettingsPage() {
                 style={promptTab === tab.key
                   ? { borderColor: 'rgba(196,162,101,0.5)', color: 'var(--color-gold)', background: 'rgba(196,162,101,0.06)' }
                   : { borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}>
-                {t(PROMPT_TAB_KEYS[tab.key]) || tab.label}
+                {tab.label}
               </button>
             ))}
           </div>

@@ -17,17 +17,10 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class PayPalService {
-
-    private static final String PAYPAL_CURRENCY = "USD";
-    private static final String STATUS_APPROVED = "APPROVED";
-    private static final String STATUS_COMPLETED = "COMPLETED";
-    private static final String EVENT_PAYMENT_CAPTURE_COMPLETED = "PAYMENT.CAPTURE.COMPLETED";
 
     private final PaymentProperties paymentProps;
     private final PayPalProperties paypalProps;
@@ -87,19 +80,17 @@ public class PayPalService {
         ArrayNode purchaseUnits = body.putArray("purchase_units");
         ObjectNode unit = purchaseUnits.addObject();
         unit.put("reference_id", order.id());
-        unit.put("custom_id", order.id());
-        unit.put("invoice_id", order.id());
         unit.put("description", order.title());
 
         ObjectNode amount = unit.putObject("amount");
-        String amountUsd = formatUsdAmount(order.amount());
-        amount.put("currency_code", PAYPAL_CURRENCY);
-        amount.put("value", amountUsd);
+        String amountYuan = String.format("%.2f", order.amount() / 100.0);
+        amount.put("currency_code", "USD");
+        amount.put("value", amountYuan);
 
         ObjectNode breakDown = unit.putObject("breakdown");
         ObjectNode itemTotal = breakDown.putObject("item_total");
-        itemTotal.put("currency_code", PAYPAL_CURRENCY);
-        itemTotal.put("value", amountUsd);
+        itemTotal.put("currency_code", "USD");
+        itemTotal.put("value", amountYuan);
 
         ObjectNode applicationContext = body.putObject("application_context");
         applicationContext.put("brand_name", "PRISM");
@@ -131,18 +122,19 @@ public class PayPalService {
         }
 
         JsonNode createdOrder = response.getBody();
-        String paypalOrderId = createdOrder.path("id").asText("");
-        if (paypalOrderId.isBlank()) {
-            throw new IllegalStateException("PayPal 响应中未找到 order ID");
-        }
+        String paypalOrderId = createdOrder.get("id").asText();
 
         // 存储 PayPal order ID 到 trade_no 字段（后续 capture 时使用）
         repo.markOrderPendingWithTradeNo(orderId, paypalOrderId);
 
         // 从 links 中找出 approval URL
-        Optional<String> approvalUrl = findApprovalUrl(createdOrder);
-        if (approvalUrl.isPresent()) {
-            return approvalUrl.get();
+        JsonNode links = createdOrder.get("links");
+        if (links != null && links.isArray()) {
+            for (JsonNode link : links) {
+                if ("approve".equals(link.get("rel").asText())) {
+                    return link.get("href").asText();
+                }
+            }
         }
 
         throw new IllegalStateException("PayPal 响应中未找到 approval URL");
@@ -178,11 +170,26 @@ public class PayPalService {
 
         JsonNode captureResult = response.getBody();
         JsonNode statusNode = captureResult.get("status");
-        if (statusNode == null || !STATUS_COMPLETED.equals(statusNode.asText())) {
+        if (statusNode == null || !"COMPLETED".equals(statusNode.asText())) {
             return Optional.empty();
         }
 
-        String captureId = extractFirstCaptureId(captureResult).orElse(null);
+        // 从 capture 结果中获取 PayPal 交易 ID
+        String captureId = null;
+        try {
+            JsonNode purchaseUnits = captureResult.get("purchase_units");
+            if (purchaseUnits != null && purchaseUnits.isArray() && purchaseUnits.size() > 0) {
+                JsonNode payments = purchaseUnits.get(0).get("payments");
+                if (payments != null) {
+                    JsonNode captures = payments.get("captures");
+                    if (captures != null && captures.isArray() && captures.size() > 0) {
+                        captureId = captures.get(0).get("id").asText();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // ignore parse errors
+        }
 
         // 根据 paypalOrderId 找到内部订单
         Optional<OrderRecord> order = repo.findOrderByTradeNo(paypalOrderId);
@@ -237,115 +244,32 @@ public class PayPalService {
             return Optional.empty();
         }
         String status = statusNode.asText();
-        if (!STATUS_APPROVED.equals(status) && !STATUS_COMPLETED.equals(status)) {
+        if (!"APPROVED".equals(status) && !"COMPLETED".equals(status)) {
             return Optional.empty();
         }
 
         // 如果已 APPROVED 但未 COMPLETED，尝试 capture
-        if (STATUS_APPROVED.equals(status)) {
+        if ("APPROVED".equals(status)) {
             return captureOrder(paypalOrderId);
         }
 
         // COMPLETED：直接标记已支付
-        String captureId = extractFirstCaptureId(orderInfo).orElse(null);
-        return repo.markOrderPaid(internalOrderId, captureId != null ? captureId : paypalOrderId);
-    }
-
-    public Optional<OrderRecord> handleWebhook(Map<String, String> headers, String rawBody) {
-        if (!paypalProps.isConfigured()) {
-            throw new IllegalStateException("PayPal 未配置");
-        }
-        JsonNode event;
+        String captureId = null;
         try {
-            event = objectMapper.readTree(rawBody);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("PayPal webhook JSON 无效");
-        }
-        if (!verifyWebhookSignature(headers, event)) {
-            throw new IllegalArgumentException("PayPal webhook 验签失败");
-        }
-
-        String eventType = event.path("event_type").asText("");
-        if (!EVENT_PAYMENT_CAPTURE_COMPLETED.equals(eventType)) {
-            return Optional.empty();
-        }
-
-        String internalOrderId = event.path("resource")
-                .path("supplementary_data")
-                .path("related_ids")
-                .path("order_id")
-                .asText("");
-        if (!internalOrderId.isBlank() && !internalOrderId.startsWith("BP")) {
-            Optional<OrderRecord> byPaypalOrder = repo.findOrderByTradeNo(internalOrderId);
-            if (byPaypalOrder.isPresent()) {
-                internalOrderId = byPaypalOrder.get().id();
-            }
-        }
-        if (internalOrderId.isBlank()) {
-            internalOrderId = event.path("resource").path("custom_id").asText("");
-        }
-        if (internalOrderId.isBlank()) {
-            internalOrderId = event.path("resource").path("invoice_id").asText("");
-        }
-        if (internalOrderId.isBlank()) {
-            String captureId = event.path("resource").path("id").asText("");
-            if (!captureId.isBlank()) {
-                Optional<OrderRecord> byTrade = repo.findOrderByTradeNo(captureId);
-                if (byTrade.isPresent()) {
-                    internalOrderId = byTrade.get().id();
+            JsonNode purchaseUnits = orderInfo.get("purchase_units");
+            if (purchaseUnits != null && purchaseUnits.isArray() && purchaseUnits.size() > 0) {
+                JsonNode payments = purchaseUnits.get(0).get("payments");
+                if (payments != null) {
+                    JsonNode captures = payments.get("captures");
+                    if (captures != null && captures.isArray() && captures.size() > 0) {
+                        captureId = captures.get(0).get("id").asText();
+                    }
                 }
             }
-        }
-        if (internalOrderId.isBlank()) {
-            return Optional.empty();
-        }
-
-        String captureId = event.path("resource").path("id").asText(null);
-        return repo.markOrderPaid(internalOrderId, captureId);
-    }
-
-    private boolean verifyWebhookSignature(Map<String, String> headers, JsonNode event) {
-        String webhookId = resolveWebhookId();
-        if (webhookId == null || webhookId.isBlank()) {
-            throw new IllegalStateException("PayPal webhook ID 未配置");
-        }
-        ObjectNode body = objectMapper.createObjectNode();
-        body.put("auth_algo", header(headers, "PAYPAL-AUTH-ALGO"));
-        body.put("cert_url", header(headers, "PAYPAL-CERT-URL"));
-        body.put("transmission_id", header(headers, "PAYPAL-TRANSMISSION-ID"));
-        body.put("transmission_sig", header(headers, "PAYPAL-TRANSMISSION-SIG"));
-        body.put("transmission_time", header(headers, "PAYPAL-TRANSMISSION-TIME"));
-        body.put("webhook_id", webhookId);
-        body.set("webhook_event", event);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(getAccessToken());
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<>(body.toString(), httpHeaders);
-
-        try {
-            ResponseEntity<JsonNode> response = restTemplate.exchange(
-                    paypalProps.getSandboxBaseUrl() + "/v1/notifications/verify-webhook-signature",
-                    HttpMethod.POST,
-                    request,
-                    JsonNode.class
-            );
-            return response.getStatusCode().is2xxSuccessful()
-                    && response.getBody() != null
-                    && "SUCCESS".equals(response.getBody().path("verification_status").asText());
         } catch (Exception e) {
-            return false;
+            // ignore
         }
-    }
-
-    private String resolveWebhookId() {
-        String frontend = paymentProps.getFrontendUrl();
-        String base = paymentProps.getBaseUrl();
-        if ((frontend != null && frontend.contains("dev."))
-                || (base != null && base.contains("dev."))) {
-            return paypalProps.getWebhookIdDev();
-        }
-        return paypalProps.getWebhookIdProd();
+        return repo.markOrderPaid(internalOrderId, captureId != null ? captureId : paypalOrderId);
     }
 
     private String getAccessToken() {
@@ -389,51 +313,7 @@ public class PayPalService {
         return paypalProps.isConfigured();
     }
 
-    private static String formatUsdAmount(int amountCents) {
-        return String.format(Locale.US, "%.2f", amountCents / 100.0);
-    }
-
-    private static Optional<String> findApprovalUrl(JsonNode order) {
-        JsonNode links = order.path("links");
-        if (!links.isArray()) {
-            return Optional.empty();
-        }
-        for (JsonNode link : links) {
-            if ("approve".equals(link.path("rel").asText())) {
-                String href = link.path("href").asText("");
-                if (!href.isBlank()) {
-                    return Optional.of(href);
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    private static Optional<String> extractFirstCaptureId(JsonNode order) {
-        JsonNode captures = order.path("purchase_units")
-                .path(0)
-                .path("payments")
-                .path("captures");
-        if (!captures.isArray() || captures.isEmpty()) {
-            return Optional.empty();
-        }
-        String captureId = captures.path(0).path("id").asText("");
-        return captureId.isBlank() ? Optional.empty() : Optional.of(captureId);
-    }
-
     private static String encode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
-    }
-
-    private static String header(Map<String, String> headers, String name) {
-        if (headers == null) {
-            return "";
-        }
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            if (entry.getKey() != null && entry.getKey().equalsIgnoreCase(name)) {
-                return entry.getValue() == null ? "" : entry.getValue();
-            }
-        }
-        return "";
     }
 }

@@ -8,6 +8,5 @@ public record CreateOrderRequest(
         String client,
         String payerContact,
         String reportType,
-        String location,
-        String eventSourceUrl
+        String location
 ) {}

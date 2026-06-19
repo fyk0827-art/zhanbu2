@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lifeblueprint.config.AlipayProperties;
 import com.lifeblueprint.config.PaymentProperties;
 import com.lifeblueprint.config.WechatPayProperties;
-import com.lifeblueprint.domain.OrderAttribution;
 import com.lifeblueprint.domain.OrderRecord;
 import com.lifeblueprint.domain.OrderStatus;
 import com.lifeblueprint.domain.ReportRecord;
@@ -33,7 +32,6 @@ public class PaymentService {
     private final AlipayService alipay;
     private final WechatPayService wechat;
     private final PayPalService paypal;
-    private final FacebookCapiService facebookCapi;
     private final AgeGroupRepository ageGroupRepo;
     private final ObjectMapper objectMapper;
 
@@ -45,7 +43,6 @@ public class PaymentService {
             AlipayService alipay,
             WechatPayService wechat,
             PayPalService paypal,
-            FacebookCapiService facebookCapi,
             AgeGroupRepository ageGroupRepo,
             ObjectMapper objectMapper
     ) {
@@ -56,7 +53,6 @@ public class PaymentService {
         this.alipay = alipay;
         this.wechat = wechat;
         this.paypal = paypal;
-        this.facebookCapi = facebookCapi;
         this.ageGroupRepo = ageGroupRepo;
         this.objectMapper = objectMapper;
     }
@@ -201,13 +197,7 @@ public class PaymentService {
         return body;
     }
 
-    public Map<String, Object> createOrder(
-            CreateOrderRequest req,
-            String userAgent,
-            String clientIp,
-            String fbp,
-            String fbc
-    ) {
+    public Map<String, Object> createOrder(CreateOrderRequest req, String userAgent) {
         String reportId = req.reportId().trim();
         if (props.isDisabledMode()) {
             Map<String, Object> body = new LinkedHashMap<>();
@@ -244,15 +234,6 @@ public class PaymentService {
                 null
         );
         repo.upsertOrder(order);
-        repo.upsertOrderAttribution(new OrderAttribution(
-                orderId,
-                blankToNull(clientIp),
-                blankToNull(userAgent),
-                blankToNull(fbp),
-                blankToNull(fbc),
-                blankToNull(req.eventSourceUrl()),
-                System.currentTimeMillis()
-        ));
 
         PayUrlResult pay = resolvePayUrl(orderId, reportId, client);
         boolean inWeChat = isWeChat(userAgent);
@@ -325,8 +306,7 @@ public class PaymentService {
         if (!wechatProps.isConfigured()) {
             throw new IllegalArgumentException("微信支付未配置");
         }
-        wechat.handleNotify(serial, nonce, signature, timestamp, body)
-                .ifPresent(this::reportFacebookPurchase);
+        wechat.handleNotify(serial, nonce, signature, timestamp, body);
     }
 
     public void handleAlipayNotify(Map<String, String> params) {
@@ -336,13 +316,8 @@ public class PaymentService {
         String tradeStatus = params.get("trade_status");
         String outTradeNo = params.get("out_trade_no");
         if (("TRADE_SUCCESS".equals(tradeStatus) || "TRADE_FINISHED".equals(tradeStatus)) && outTradeNo != null) {
-            repo.markOrderPaid(outTradeNo, params.get("trade_no"))
-                    .ifPresent(this::reportFacebookPurchase);
+            repo.markOrderPaid(outTradeNo, params.get("trade_no"));
         }
-    }
-
-    public void reportFacebookPurchase(OrderRecord order) {
-        facebookCapi.reportPurchase(order);
     }
 
     /**

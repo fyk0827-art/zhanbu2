@@ -16,8 +16,6 @@ public final class GeneratorSchemaSupport {
         ensureReports(jdbc);
         ensureOrders(jdbc);
         ensureUnlocks(jdbc);
-        ensureOrderAttribution(jdbc);
-        ensureFacebookEvents(jdbc);
         log.info("Generator schema (reports/orders/unlocks) is ready");
     }
 
@@ -82,36 +80,6 @@ public final class GeneratorSchemaSupport {
               order_id VARCHAR(64) NOT NULL,
               paid_at BIGINT NOT NULL,
               INDEX idx_unlocks_order_id (order_id)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-            """);
-    }
-
-    private static void ensureOrderAttribution(JdbcTemplate jdbc) {
-        jdbc.execute("""
-            CREATE TABLE IF NOT EXISTS order_attribution (
-              order_id VARCHAR(64) NOT NULL PRIMARY KEY,
-              client_ip VARCHAR(64) NULL,
-              user_agent TEXT NULL,
-              fbp VARCHAR(255) NULL,
-              fbc VARCHAR(255) NULL,
-              event_source_url TEXT NULL,
-              created_at BIGINT NOT NULL,
-              INDEX idx_order_attr_created (created_at)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-            """);
-    }
-
-    private static void ensureFacebookEvents(JdbcTemplate jdbc) {
-        jdbc.execute("""
-            CREATE TABLE IF NOT EXISTS facebook_events (
-              order_id VARCHAR(64) NOT NULL PRIMARY KEY,
-              event_id VARCHAR(128) NOT NULL,
-              status ENUM('pending', 'success', 'failed') NOT NULL DEFAULT 'pending',
-              response_text TEXT NULL,
-              created_at BIGINT NOT NULL,
-              updated_at BIGINT NOT NULL,
-              INDEX idx_facebook_events_status (status),
-              INDEX idx_facebook_events_event_id (event_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             """);
     }

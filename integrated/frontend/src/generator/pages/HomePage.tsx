@@ -27,7 +27,7 @@ const API_BASE = (import.meta as any).env?.VITE_API_BASE ?? "";
 export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [prepaidBanner, setPrepaidBanner] = useState<string | null>(null);
   const [prepaidError, setPrepaidError] = useState("");
   const [name, setName] = useState("");
@@ -52,19 +52,6 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
   const countryRef = useRef<HTMLDivElement>(null);
   const provinceRef = useRef<HTMLDivElement>(null);
   const cityRef = useRef<HTMLDivElement>(null);
-  const isChinese = i18n.language.startsWith("zh");
-  const countryLabel = useCallback((country?: CountryOption) => {
-    if (!country) return "";
-    return isChinese ? country.nameZh || country.nameEn : country.nameEn || country.nameZh;
-  }, [isChinese]);
-  const provinceLabel = useCallback((province?: ProvinceOption) => {
-    if (!province) return "";
-    return isChinese ? province.nameZh || province.nameEn : province.nameEn || province.nameZh;
-  }, [isChinese]);
-  const cityLabel = useCallback((city?: CityOption | null) => {
-    if (!city) return "";
-    return isChinese ? city.nameZh || city.nameEn : city.nameEn || city.nameZh;
-  }, [isChinese]);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/world/countries`)
@@ -128,15 +115,15 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
     fetchPartnerOrder(orderId)
       .then((order) => {
         if (order.prepaid && order.reportPending) {
-          setPrepaidBanner(t("prepaidReportPending", { orderId: order.orderId }));
+          setPrepaidBanner(`您已完成支付（订单 ${order.orderId}），请填写出生信息生成报告`);
         } else if (order.prepaid) {
-          setPrepaidBanner(t("prepaidContinue", { orderId: order.orderId }));
+          setPrepaidBanner(`订单 ${order.orderId} 已支付，请继续填写信息`);
         }
       })
       .catch((err) => {
-        setPrepaidError(err instanceof Error ? err.message : t("prepaidVerifyFailed"));
+        setPrepaidError(err instanceof Error ? err.message : "订单验证失败");
       });
-  }, [searchParams, t]);
+  }, [searchParams]);
 
   const handleSubmit = useCallback(() => {
     const errors: Record<string, boolean> = {};
@@ -164,13 +151,13 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
     const [year, month, day] = birthDate.split("-").map(Number);
     const [hour, minute] = birthTime.split(":").map(Number);
     setGlobalReportType("full");
-    const countryName = countryLabel(countries.find((c) => c.code === selectedCountry));
-    const provinceName = provinceLabel(provinces.find((p) => p.nameZh === selectedProvince || String(p.id) === selectedProvince));
-    const cityName = cityLabel(selectedCity);
+    const countryName = countries.find((c) => c.code === selectedCountry)?.nameZh || "";
+    const provinceName = selectedProvince || "";
+    const cityName = selectedCity?.nameZh || "";
     const locationStr = [countryName, provinceName, cityName].filter(Boolean).join(" · ");
     try { sessionStorage.setItem("birth_location", locationStr); } catch {}
     onGenerate({ year, month, day, hour, minute, latitude: lat, longitude: lng, timezone: tz, gender, name: name || undefined });
-  }, [birthDate, birthTime, selectedCountry, selectedProvince, selectedCity, countries, provinces, gender, name, onGenerate, useCustomCoords, customLat, customLng, customTz, countryLabel, provinceLabel, cityLabel]);
+  }, [birthDate, birthTime, selectedCountry, selectedProvince, selectedCity, countries, gender, name, onGenerate, useCustomCoords, customLat, customLng, customTz]);
 
   if (isLoading) {
     return (
@@ -208,7 +195,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
             PRISM
           </div>
           <div className="prism-font-serif text-[11px] tracking-[4px] mb-6" style={{ color: "rgba(232,185,81,0.45)" }}>
-            {t('generatorBrandSubtitle')}
+            人 生 剧 本
           </div>
           <h1 className="prism-font-serif text-[22px] font-bold leading-relaxed mb-2" style={{ color: "var(--prism-cream)" }}>
             {t('generatorTitle').split('\\n').map((line, i) => <span key={i}>{line}<br/></span>)}
@@ -315,7 +302,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                   <button type="button" onClick={() => setOpenDropdown(openDropdown === "country" ? null : "country")}
                     className={`prism-input w-full text-left flex items-center justify-between ${fieldErrors.city ? "error" : ""}`}>
                     <span style={{ color: selectedCountry ? "var(--prism-cream)" : "rgba(250,246,240,0.25)" }}>
-                      {selectedCountry ? countryLabel(countries.find((c) => c.code === selectedCountry)) || selectedCountry : t('generatorSelectCountry')}
+                      {selectedCountry ? countries.find((c) => c.code === selectedCountry)?.nameZh || selectedCountry : t('generatorSelectCountry')}
                     </span>
                     <ChevronDown size={14} style={{ color: "rgba(232,185,81,0.25)" }} />
                   </button>
@@ -328,10 +315,8 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                       ) : (
                         countries.map((c) => (
                           <div key={c.code} className="prism-city-opt" onClick={() => { setSelectedCountry(c.code); setOpenDropdown(null); setFieldErrors((p) => ({ ...p, city: false })); }}>
-                            {countryLabel(c)}
-                            {isChinese && (
-                              <span className="text-[11px] ml-2" style={{ color: "rgba(250,246,240,0.25)" }}>{c.nameEn}</span>
-                            )}
+                            {c.nameZh}
+                            <span className="text-[11px] ml-2" style={{ color: "rgba(250,246,240,0.25)" }}>{c.nameEn}</span>
                           </div>
                         ))
                       )}
@@ -343,18 +328,16 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                   <button type="button" onClick={() => { if (provinces.length > 0) setOpenDropdown(openDropdown === "province" ? null : "province"); }}
                     className="prism-input w-full text-left flex items-center justify-between">
                     <span style={{ color: selectedProvince ? "var(--prism-cream)" : "rgba(250,246,240,0.25)" }}>
-                      {provinceLabel(provinces.find((p) => p.nameZh === selectedProvince || String(p.id) === selectedProvince)) || t('generatorSelectProvince')}
+                      {selectedProvince || t('generatorSelectProvince')}
                     </span>
                     <ChevronDown size={14} style={{ color: "rgba(232,185,81,0.25)" }} />
                   </button>
                   {openDropdown === "province" && (
                     <div className="prism-city-dropdown mt-1 max-h-[32vh] overflow-y-auto">
                       {provinces.map((p) => (
-                        <div key={p.id} className="prism-city-opt" onClick={() => { setSelectedProvince(String(p.id)); setOpenDropdown(null); }}>
-                          {provinceLabel(p)}
-                          {isChinese && (
-                            <span className="text-[11px] ml-2" style={{ color: "rgba(250,246,240,0.25)" }}>{p.nameEn}</span>
-                          )}
+                        <div key={p.id} className="prism-city-opt" onClick={() => { setSelectedProvince(p.nameZh); setOpenDropdown(null); }}>
+                          {p.nameZh}
+                          <span className="text-[11px] ml-2" style={{ color: "rgba(250,246,240,0.25)" }}>{p.nameEn}</span>
                         </div>
                       ))}
                     </div>
@@ -365,7 +348,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                   <button type="button" onClick={() => { if (cities.length > 0) setOpenDropdown(openDropdown === "city" ? null : "city"); }}
                     className={`prism-input w-full text-left flex items-center justify-between ${fieldErrors.city ? "error" : ""}`}>
                     <span style={{ color: selectedCity ? "var(--prism-cream)" : "rgba(250,246,240,0.25)" }}>
-                      {selectedCity ? cityLabel(selectedCity) : t('generatorSelectCity')}
+                      {selectedCity ? `${selectedCity.nameZh}` : t('generatorSelectCity')}
                     </span>
                     <ChevronDown size={14} style={{ color: "rgba(232,185,81,0.25)" }} />
                   </button>
@@ -376,10 +359,8 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                       ) : (
                         cities.map((c) => (
                           <div key={c.id} className="prism-city-opt" onClick={() => { setSelectedCity(c); setOpenDropdown(null); setFieldErrors((p) => ({ ...p, city: false })); }}>
-                            {cityLabel(c)}
-                            {isChinese && (
-                              <span className="text-[11px] ml-2" style={{ color: "rgba(250,246,240,0.25)" }}>{c.nameEn}</span>
-                            )}
+                            {c.nameZh}
+                            <span className="text-[11px] ml-2" style={{ color: "rgba(250,246,240,0.25)" }}>{c.nameEn}</span>
                           </div>
                         ))
                       )}

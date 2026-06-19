@@ -40,10 +40,10 @@ function parseValue(value: string) {
   return { year, month, day: Math.min(day, maxDay) };
 }
 
-function formatDisplay(value: string, formatter: (key: string, options?: Record<string, number>) => string) {
+function formatDisplay(value: string) {
   if (!value) return "";
   const { year, month, day } = parseValue(value);
-  return formatter("datePickerDisplay", { year, month, day });
+  return `${year}年${month}月${day}日`;
 }
 
 function toValue(year: number, month: number, day: number) {
@@ -185,7 +185,7 @@ export default function BirthDatePicker({
         style={{ WebkitTapHighlightColor: "transparent" }}
       >
         <span style={{ color: value ? "var(--color-text, var(--prism-cream))" : "var(--color-text-dim, rgba(250,246,240,0.25))" }}>
-          {value ? formatDisplay(value, t) : placeholder}
+          {value ? formatDisplay(value) : placeholder}
         </span>
         <Calendar className="w-4 h-4 shrink-0" style={{ color: "var(--prism-gold, var(--color-gold))" }} />
       </button>
@@ -197,7 +197,7 @@ export default function BirthDatePicker({
         >
           <DrawerHeader className="border-b pb-4" style={{ borderColor: "var(--color-border)" }}>
             <DrawerTitle className="text-center text-base" style={{ color: "var(--color-text)" }}>
-              {t('datePickerBirthTitle')}
+              你降临人间的日期
             </DrawerTitle>
           </DrawerHeader>
 

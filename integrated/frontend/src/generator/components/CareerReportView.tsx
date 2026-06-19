@@ -18,7 +18,6 @@ import { ReportDeepReadingCTA } from "./ReportDeepReadingCTA";
 import { PaywallCard, LockedPreview } from "./ReportPaywall";
 import { ReportIdentitySection } from "./ReportIdentitySection";
 import { generatorPath } from "../utils/generatorNav";
-import { localizeAstroText } from "../utils/astroI18n";
 
 const PRIMARY = "#5B3A8C";
 const SECONDARY = "#E8C87A";
@@ -30,20 +29,9 @@ function cleanMd(text: string): string {
   return text.replace(/\*\*/g, "").replace(/^\s*[·•\-]\s*/gm, "• ").trim();
 }
 
-function includesAny(text: string, keywords: string[]): boolean {
-  const lower = text.toLowerCase();
-  return keywords.some((kw) => lower.includes(kw.toLowerCase()));
-}
-
-const CAREER_PREMIUM_KEYWORDS = [
-  "事业卡点", "突破策略", "创业还是打工", "行动指令",
-  "career blocker", "blockers", "breakthrough", "startup", "employment", "employee", "action",
-];
-
 function InlineMd({ text }: { text: string }) {
   if (!text) return null;
-  const { i18n } = useTranslation();
-  const parts = localizeAstroText(text, i18n.language).split(/(\*\*.+?\*\*)/);
+  const parts = text.split(/(\*\*.+?\*\*)/);
   return (
     <>
       {parts.map((p, i) =>
@@ -196,21 +184,20 @@ export interface CareerReportViewProps {
   paymentButtonLabel: string;
   paymentPayingLabel: string;
   paymentButtonColor: string;
-  priceUsd?: string;
 }
 
 function findPart(parts: { heading: string; content: string }[], kws: string[]) {
   for (const kw of kws) {
-    const f = parts.find((s) => includesAny(s.heading, [kw]));
+    const f = parts.find((s) => s.heading.includes(kw));
     if (f) return f;
   }
   return null;
 }
 
 export function parseCareerCoverMeta(coverText: string) {
-  const career = coverText.match(/(?:事业成就度|Career achievement)[：:]\s*(\d+\s*(?:分|pts)[^*\n]*)/i)?.[1];
-  const wealth = coverText.match(/(?:财富潜力度|Wealth potential)[：:]\s*(\d+\s*(?:分|pts)[^*\n]*)/i)?.[1];
-  const kw = coverText.match(/(?:事业关键词|Career keywords)[：:]\s*(.+)/i)?.[1];
+  const career = coverText.match(/事业成就度[：:]\s*(\d+分[^*\n]*)/)?.[1];
+  const wealth = coverText.match(/财富潜力度[：:]\s*(\d+分[^*\n]*)/)?.[1];
+  const kw = coverText.match(/事业关键词[：:]\s*(.+)/)?.[1];
   return { career, wealth, kw: kw ? cleanMd(kw) : undefined };
 }
 
@@ -239,21 +226,18 @@ export function CareerReportView({
   paymentButtonLabel,
   paymentPayingLabel,
   paymentButtonColor,
-  priceUsd,
 }: CareerReportViewProps) {
   const { t, i18n } = useTranslation();
-  const label = (zh: string, en: string) => (i18n.language.toLowerCase().startsWith("zh") ? zh : en);
-  const display = (text: string) => localizeAstroText(text, i18n.language);
-  const profilePart = findPart(parts, ["事业画像", "career profile", "professional profile", "work profile"]);
-  const directionPart = findPart(parts, ["职业方向", "career direction", "professional direction", "core track"]);
-  const wealthPart = findPart(parts, ["财富地图", "wealth map", "financial map"]);
-  const painPart = findPart(parts, ["事业卡点", "career blocker", "blockers", "stuck points"]);
-  const strategyPart = findPart(parts, ["突破策略", "breakthrough", "strategy"]);
-  const workStylePart = findPart(parts, ["创业还是打工", "startup", "employment", "entrepreneurship"]);
-  const actionPart = findPart(parts, ["行动指令", "action", "weekly checklist"]);
+  const profilePart = findPart(parts, ["事业画像"]);
+  const directionPart = findPart(parts, ["职业方向"]);
+  const wealthPart = findPart(parts, ["财富地图"]);
+  const painPart = findPart(parts, ["事业卡点"]);
+  const strategyPart = findPart(parts, ["突破策略"]);
+  const workStylePart = findPart(parts, ["创业还是打工"]);
+  const actionPart = findPart(parts, ["行动指令"]);
 
   const sectionIsPremium = (heading: string) =>
-    includesAny(heading, [...reportMeta.premiumKeywords, ...CAREER_PREMIUM_KEYWORDS]);
+    reportMeta.premiumKeywords.some((kw) => heading.includes(kw));
 
   const premiumLocked = (part: { heading: string; content: string } | null) =>
     Boolean(part && hasPremium && !showPremium && sectionIsPremium(part.heading));
@@ -272,17 +256,17 @@ export function CareerReportView({
             <div className="flex flex-wrap justify-center gap-3 text-xs text-white/90 mb-2">
               {careerScore && (
                 <span className="px-3 py-1 rounded-full" style={{ background: "rgba(232,200,122,0.2)" }}>
-                  {label("事业", "Career")} {display(careerScore)}
+                  事业 {careerScore}
                 </span>
               )}
               {wealthScore && (
                 <span className="px-3 py-1 rounded-full" style={{ background: "rgba(232,200,122,0.2)" }}>
-                  {label("财富", "Wealth")} {display(wealthScore)}
+                  财富 {wealthScore}
                 </span>
               )}
             </div>
           )}
-          {keywords && <p className="text-sm text-amber-200/90">{display(keywords)}</p>}
+          {keywords && <p className="text-sm text-amber-200/90">{keywords}</p>}
         </div>
         <button
           type="button"
@@ -325,48 +309,47 @@ export function CareerReportView({
             className="w-full py-3 rounded-full font-bold text-white shadow-lg disabled:opacity-60"
             style={{ background: paymentButtonColor }}
           >
-            {paying ? paymentPayingLabel : `${paymentButtonLabel} · $${priceUsd ?? reportMeta.priceYuan}`}
+            {paying ? paymentPayingLabel : `${paymentButtonLabel} · ¥${reportMeta.priceYuan}`}
           </button>
         </div>
       )}
 
       <ReportIdentitySection
         roleLabel={roleLabel}
-        tagline={keywords ? display(keywords) : keywords}
+        tagline={keywords}
         description={coverExtra}
         badges={[
           ...(careerScore
-            ? [{ icon: Briefcase, label: label("事业成就度", "Career achievement"), value: display(careerScore), color: PRIMARY }]
+            ? [{ icon: Briefcase, label: "事业成就度", value: careerScore, color: PRIMARY }]
             : []),
           ...(wealthScore
-            ? [{ icon: Wallet, label: label("财富潜力度", "Wealth potential"), value: display(wealthScore), color: "#059669" }]
+            ? [{ icon: Wallet, label: "财富潜力度", value: wealthScore, color: "#059669" }]
             : []),
         ]}
       />
 
       <ReportSection
         icon={Briefcase}
-        title={label("你的事业画像", "Your Career Profile")}
-        subtitle={label("职场真实面目 · 驱动力 · 职业陷阱", "Work identity · Drivers · Career traps")}
+        title="你的事业画像"
+        subtitle="职场真实面目 · 驱动力 · 职业陷阱"
         content={profilePart?.content ?? ""}
       />
       <ReportSection
         icon={Compass}
-        title={label("职业方向", "Career Direction")}
-        subtitle={label("核心赛道 · 金钥匙 · 不适合的方向", "Core tracks · Golden keys · Directions to avoid")}
+        title="职业方向"
+        subtitle="核心赛道 · 金钥匙 · 不适合的方向"
         content={directionPart?.content ?? ""}
       />
       <ReportSection
         icon={Wallet}
-        title={label("财富地图", "Wealth Map")}
-        subtitle={label("正财 · 偏财 · 财富节奏", "Earned income · Windfalls · Wealth rhythm")}
+        title="财富地图"
+        subtitle="正财 · 偏财 · 财富节奏"
         content={wealthPart?.content ?? ""}
       />
 
       {hasPremium && !showPremium && !unlockLoading && (
         <section className="py-4 px-6 max-w-[414px] mx-auto">
           <PaywallCard
-            priceUsd={priceUsd}
             onPay={startPay}
             paying={paying}
             error={payError}
@@ -408,30 +391,30 @@ export function CareerReportView({
 
       <ReportSection
         icon={AlertTriangle}
-        title={label("事业卡点", "Career Blockers")}
-        subtitle={label("重复模式与可执行突破方案", "Repeated patterns and practical breakthrough plan")}
+        title="事业卡点"
+        subtitle="重复模式与可执行突破方案"
         content={painPart?.content ?? ""}
         locked={premiumLocked(painPart)}
         dark={showPremium && Boolean(painPart)}
       />
       <ReportSection
         icon={TrendingUp}
-        title={label("突破策略", "Breakthrough Strategy")}
-        subtitle={label("事业加速器 · 财富护城河 · 核心课题", "Career accelerators · Wealth moat · Core lesson")}
+        title="突破策略"
+        subtitle="事业加速器 · 财富护城河 · 核心课题"
         content={strategyPart?.content ?? ""}
         locked={premiumLocked(strategyPart)}
       />
       <ReportSection
         icon={Briefcase}
-        title={label("创业还是打工", "Startup or Employment")}
-        subtitle={label("适合你的路径与前提条件", "The path and conditions that fit you")}
+        title="创业还是打工"
+        subtitle="适合你的路径与前提条件"
         content={workStylePart?.content ?? ""}
         locked={premiumLocked(workStylePart)}
       />
       <ReportSection
         icon={Star}
-        title={label("行动指令", "Action Plan")}
-        subtitle={label("本周清单与事业时间线", "This week's checklist and career timeline")}
+        title="行动指令"
+        subtitle="本周清单与事业时间线"
         content={actionPart?.content ?? ""}
         locked={premiumLocked(actionPart)}
         dark={showPremium && Boolean(actionPart)}

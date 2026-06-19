@@ -5,7 +5,6 @@ import com.lifeblueprint.domain.OrderRecord;
 import com.lifeblueprint.service.PaymentService;
 import com.lifeblueprint.web.dto.CreateOrderRequest;
 import com.lifeblueprint.web.dto.SaveReportRequest;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -72,19 +71,12 @@ public class PaymentApiController {
     @PostMapping("/orders")
     public Map<String, Object> createOrder(
             @RequestBody(required = false) CreateOrderRequest body,
-            @RequestHeader(value = "User-Agent", defaultValue = "") String userAgent,
-            HttpServletRequest request
+            @RequestHeader(value = "User-Agent", defaultValue = "") String userAgent
     ) {
         if (body == null || !StringUtils.hasText(body.reportId())) {
             throw new IllegalArgumentException("reportId 必填");
         }
-        return paymentService.createOrder(
-                body,
-                userAgent,
-                resolveClientIp(request),
-                cookie(request, "_fbp"),
-                cookie(request, "_fbc")
-        );
+        return paymentService.createOrder(body, userAgent);
     }
 
     @GetMapping("/orders/{orderId}")
@@ -113,31 +105,5 @@ public class PaymentApiController {
         } catch (IllegalArgumentException e) {
             return "fail";
         }
-    }
-
-    private static String resolveClientIp(HttpServletRequest request) {
-        String forwarded = request.getHeader("X-Forwarded-For");
-        if (StringUtils.hasText(forwarded)) {
-            int comma = forwarded.indexOf(',');
-            return comma > 0 ? forwarded.substring(0, comma).trim() : forwarded.trim();
-        }
-        String realIp = request.getHeader("X-Real-IP");
-        if (StringUtils.hasText(realIp)) {
-            return realIp.trim();
-        }
-        return request.getRemoteAddr();
-    }
-
-    private static String cookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return null;
-        }
-        for (Cookie c : cookies) {
-            if (name.equals(c.getName())) {
-                return c.getValue();
-            }
-        }
-        return null;
     }
 }

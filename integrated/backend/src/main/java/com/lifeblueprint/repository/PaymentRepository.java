@@ -1,7 +1,6 @@
 package com.lifeblueprint.repository;
 
 import com.lifeblueprint.domain.OrderRecord;
-import com.lifeblueprint.domain.OrderAttribution;
 import com.lifeblueprint.domain.OrderStatus;
 import com.lifeblueprint.domain.ReportRecord;
 import com.lifeblueprint.domain.UnlockRecord;
@@ -131,81 +130,6 @@ public class PaymentRepository {
         );
     }
 
-    public void upsertOrderAttribution(OrderAttribution attribution) {
-        jdbc.update(
-                """
-                INSERT INTO order_attribution (order_id, client_ip, user_agent, fbp, fbc, event_source_url, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE
-                  client_ip = COALESCE(VALUES(client_ip), client_ip),
-                  user_agent = COALESCE(VALUES(user_agent), user_agent),
-                  fbp = COALESCE(VALUES(fbp), fbp),
-                  fbc = COALESCE(VALUES(fbc), fbc),
-                  event_source_url = COALESCE(VALUES(event_source_url), event_source_url)
-                """,
-                attribution.orderId(),
-                attribution.clientIp(),
-                attribution.userAgent(),
-                attribution.fbp(),
-                attribution.fbc(),
-                attribution.eventSourceUrl(),
-                attribution.createdAt()
-        );
-    }
-
-    public Optional<OrderAttribution> findOrderAttribution(String orderId) {
-        try {
-            return Optional.ofNullable(jdbc.queryForObject(
-                    """
-                    SELECT order_id, client_ip, user_agent, fbp, fbc, event_source_url, created_at
-                    FROM order_attribution WHERE order_id = ? LIMIT 1
-                    """,
-                    (rs, rowNum) -> new OrderAttribution(
-                            rs.getString("order_id"),
-                            rs.getString("client_ip"),
-                            rs.getString("user_agent"),
-                            rs.getString("fbp"),
-                            rs.getString("fbc"),
-                            rs.getString("event_source_url"),
-                            rs.getLong("created_at")
-                    ),
-                    orderId
-            ));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
-    public boolean hasSuccessfulFacebookEvent(String orderId) {
-        Integer count = jdbc.queryForObject(
-                "SELECT COUNT(*) FROM facebook_events WHERE order_id = ? AND status = 'success'",
-                Integer.class,
-                orderId
-        );
-        return count != null && count > 0;
-    }
-
-    public void recordFacebookEvent(String orderId, String eventId, boolean success, String responseText) {
-        long now = System.currentTimeMillis();
-        jdbc.update(
-                """
-                INSERT INTO facebook_events (order_id, event_id, status, response_text, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE
-                  event_id = VALUES(event_id),
-                  status = VALUES(status),
-                  response_text = VALUES(response_text),
-                  updated_at = VALUES(updated_at)
-                """,
-                orderId,
-                eventId,
-                success ? "success" : "failed",
-                truncate(responseText, 4096),
-                now,
-                now
-        );
-    }
-
     public Optional<UnlockRecord> findUnlockByReportId(String reportId) {
         try {
             return Optional.ofNullable(jdbc.queryForObject(
@@ -316,12 +240,5 @@ public class PaymentRepository {
     public static String newOrderId() {
         String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 6).toUpperCase();
         return "BP" + System.currentTimeMillis() + suffix;
-    }
-
-    private static String truncate(String value, int max) {
-        if (value == null || value.length() <= max) {
-            return value;
-        }
-        return value.substring(0, max);
     }
 }

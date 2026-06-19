@@ -399,9 +399,9 @@ function AgeGroupsTab() {
         <p className="mb-4 text-sm text-[#6B6560]">{t("unifiedPriceDesc", "One price applies to all age groups.")}</p>
         <div className="flex flex-wrap items-end gap-3">
           <div>
-            <label className="mb-1 block text-sm text-[#6B6560]">{t("priceCny", "Price (USD)")}</label>
+            <label className="mb-1 block text-sm text-[#6B6560]">{t("priceCny", "Price (CNY)")}</label>
             <div className="flex items-center gap-2">
-              <span className="text-lg text-[#6B6560]">$</span>
+              <span className="text-lg text-[#6B6560]">¥</span>
               <input
                 type="number"
                 min="0.01"
@@ -427,7 +427,7 @@ function AgeGroupsTab() {
           </button>
         </div>
         <p className="mt-3 text-sm font-medium text-[#E07A5F]">
-          {t("currentUnifiedPrice", "Current price")}: ${currentPrice.toFixed(2)}
+          {t("currentUnifiedPrice", "Current price")}: ¥{currentPrice.toFixed(2)}
         </p>
       </div>
 
@@ -597,7 +597,7 @@ function OrdersTab() {
                 <td className="px-3 py-3 text-[#2D2A26] max-w-[180px] truncate" title={order.location ?? ""}>
                   {order.location || "-"}
                 </td>
-                <td className="px-3 py-3 font-medium text-[#2D2A26]">${order.amountYuan}</td>
+                <td className="px-3 py-3 font-medium text-[#2D2A26]">¥{order.amountYuan}</td>
                 <td className="px-3 py-3">
                   <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
                     order.status === "paid" ? "bg-green-50 text-green-600"

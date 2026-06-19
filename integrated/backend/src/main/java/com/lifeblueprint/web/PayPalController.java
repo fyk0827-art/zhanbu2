@@ -4,15 +4,9 @@ import com.lifeblueprint.config.PaymentProperties;
 import com.lifeblueprint.domain.OrderRecord;
 import com.lifeblueprint.service.PayPalService;
 import com.lifeblueprint.service.PaymentService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -57,8 +51,13 @@ public class PayPalController {
             Optional<OrderRecord> order = paypalService.captureOrder(token.trim());
             if (order.isPresent()) {
                 OrderRecord o = order.get();
-                paymentService.reportFacebookPurchase(o);
-                return paidResponse(o);
+                Map<String, Object> result = new LinkedHashMap<>();
+                result.put("ok", true);
+                result.put("orderId", o.id());
+                result.put("reportId", o.reportId());
+                result.put("status", "paid");
+                result.put("unlocked", true);
+                return result;
             }
         }
 
@@ -66,8 +65,13 @@ public class PayPalController {
             Optional<OrderRecord> order = paypalService.queryAndConfirmPaid(orderId.trim());
             if (order.isPresent()) {
                 OrderRecord o = order.get();
-                paymentService.reportFacebookPurchase(o);
-                return paidResponse(o);
+                Map<String, Object> result = new LinkedHashMap<>();
+                result.put("ok", true);
+                result.put("orderId", o.id());
+                result.put("reportId", o.reportId());
+                result.put("status", "paid");
+                result.put("unlocked", true);
+                return result;
             }
         }
 
@@ -77,38 +81,5 @@ public class PayPalController {
         if (token != null) pending.put("token", token);
         if (orderId != null) pending.put("orderId", orderId);
         return pending;
-    }
-
-    private static Map<String, Object> paidResponse(OrderRecord order) {
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("ok", true);
-        result.put("orderId", order.id());
-        result.put("reportId", order.reportId());
-        result.put("status", "paid");
-        result.put("unlocked", true);
-        return result;
-    }
-
-    @PostMapping("/webhook")
-    public ResponseEntity<Map<String, String>> webhook(HttpServletRequest request) throws IOException {
-        String rawBody = new String(request.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        try {
-            paypalService.handleWebhook(headers(request), rawBody)
-                    .ifPresent(paymentService::reportFacebookPurchase);
-            return ResponseEntity.ok(Map.of("status", "ok"));
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("status", "error", "message", e.getMessage()));
-        }
-    }
-
-    private static Map<String, String> headers(HttpServletRequest request) {
-        Map<String, String> headers = new LinkedHashMap<>();
-        Enumeration<String> names = request.getHeaderNames();
-        while (names != null && names.hasMoreElements()) {
-            String name = names.nextElement();
-            headers.put(name, request.getHeader(name));
-        }
-        return headers;
     }
 }

@@ -22,7 +22,6 @@ import { ReportIdentitySection } from "../components/ReportIdentitySection";
 import { MarriageReportView, parseMarriageCoverMeta } from "../components/MarriageReportView";
 import { CareerReportView, parseCareerCoverMeta } from "../components/CareerReportView";
 import { PAYMENT_DISABLED } from "../services/paymentApi";
-import { localizeAstroText } from "../utils/astroI18n";
 import * as echarts from "echarts";
 import { generateReportText } from "../services/reportGenerator";
 import PrismAnalysisAnimation from "@/components/prism/PrismAnalysisAnimation";
@@ -65,60 +64,6 @@ function splitChineseSections(text: string): { heading: string; content: string 
   }
   if (sections.length === 0 && text.trim()) sections.push({ heading: "__all__", content: text });
   return sections;
-}
-
-function shouldUseChinese(language: string): boolean {
-  return language.toLowerCase().startsWith("zh");
-}
-
-function isReportLanguageMismatch(text: string, language: string): boolean {
-  if (!text.trim()) return false;
-  if (shouldUseChinese(language)) return false;
-
-  const normalized = text.replace(/\s+/g, "");
-  const chineseReportSignals = [
-    "第一部分", "第二部分", "第三部分", "第四部分", "第五部分",
-    "你是谁", "天赋与行业", "性格与资源", "人生各领域", "人生脉络",
-    "环境与贵人", "避坑指南", "总结与行动", "感情画像", "事业画像",
-  ];
-  if (chineseReportSignals.some((signal) => text.includes(signal))) return true;
-
-  const cjkCount = (normalized.match(/[\u3400-\u9fff]/g) || []).length;
-  if (cjkCount < 80) return false;
-  return cjkCount / Math.max(normalized.length, 1) > 0.25;
-}
-
-function getGenericFreeCount(reportType: string): number {
-  if (reportType === "simple") return 3;
-  if (reportType === "marriage" || reportType === "career") return 3;
-  return 5;
-}
-
-function includesAny(text: string, keywords: string[]): boolean {
-  const lower = text.toLowerCase();
-  return keywords.some((kw) => lower.includes(kw.toLowerCase()));
-}
-
-function premiumKeywordsFor(reportType: string): string[] {
-  if (reportType === "simple") {
-    return ["人生各领域", "总结", "life areas", "life domains", "summary", "action"];
-  }
-  if (reportType === "marriage") {
-    return [
-      "正缘", "关系痛点", "关系修复", "行动指令",
-      "soulmate", "right person", "relationship pain", "pain points", "relationship repair", "repair", "action",
-    ];
-  }
-  if (reportType === "career") {
-    return [
-      "事业卡点", "突破策略", "创业还是打工", "行动指令",
-      "career blocker", "blockers", "breakthrough", "startup", "employment", "employee", "action",
-    ];
-  }
-  return [
-    "人生脉络", "环境与贵人", "避坑", "总结",
-    "life timeline", "life path", "life stages", "environment", "benefactor", "support", "pitfall", "avoid", "summary", "action",
-  ];
 }
 
 function cleanMd(text: string): string {
@@ -175,8 +120,7 @@ function parseCharacterByBoldHeaders(content: string) {
 
 function InlineMd({ text }: { text: string }) {
   if (!text) return null;
-  const { i18n } = useTranslation();
-  const parts = localizeAstroText(text, i18n.language).split(/(\*\*.+?\*\*)/);
+  const parts = text.split(/(\*\*.+?\*\*)/);
   return (
     <>
       {parts.map((p, i) =>
@@ -466,7 +410,7 @@ function BarChart({ data, title }: { data: { name: string; score: number; fullLa
               color: [PURPLE_LIGHT, PURPLE_MID, PRIMARY][i % 3] || PRIMARY,
               borderRadius: [0, 4, 4, 0],
             },
-            label: { show: true, position: "right", formatter: "{c} pts", fontSize: 9, color: DARK },
+            label: { show: true, position: "right", formatter: "{c}分", fontSize: 9, color: DARK },
           })),
           barWidth: "50%",
         }],
@@ -555,8 +499,6 @@ function parseLifeTimeline(content: string): {
 export default function BlueprintReport({ chart }: Props) {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const label = (zh: string, en: string) => (shouldUseChinese(i18n.language) ? zh : en);
-  const display = (text: string) => localizeAstroText(text, i18n.language);
 
   const PLANET_LABELS: Record<string, string> = {
     太阳: t('planetExplorer'), 月亮: t('planetEmpath'), 水星: t('planetThinker'),
@@ -583,7 +525,7 @@ export default function BlueprintReport({ chart }: Props) {
     getRouterSearchParams().get("reportType") || getGlobalReportType()
   );
   const reportMeta = getTranslatedReportMeta(t, reportType);
-  const [unifiedPriceUsd, setUnifiedPriceUsd] = useState(reportMeta.priceYuan);
+  const [unifiedPriceYuan, setUnifiedPriceYuan] = useState(reportMeta.priceYuan);
   useEffect(() => {
     const apiBase = (import.meta as any).env?.VITE_API_BASE ?? "";
     fetch(`${apiBase}/api/age-groups`)
@@ -591,7 +533,7 @@ export default function BlueprintReport({ chart }: Props) {
       .then((res) => {
         const data = res?.data ?? res;
         if (Array.isArray(data) && data.length > 0 && data[0].price) {
-          setUnifiedPriceUsd(Number(data[0].price).toFixed(2));
+          setUnifiedPriceYuan(Number(data[0].price).toFixed(2));
         }
       })
       .catch(() => {});
@@ -604,7 +546,6 @@ export default function BlueprintReport({ chart }: Props) {
   const [genError, setGenError] = useState<string | null>(null);
   const [genCharCount, setGenCharCount] = useState(0);
   const autoGenRef = useRef(false);
-  const languageRepairRef = useRef(false);
   const [reportId, setReportId] = useState<string | null>(() => {
     if (typeof window === "undefined") return null;
     return getRouterSearchParams().get("reportId") || loadReportId(reportType);
@@ -623,30 +564,20 @@ export default function BlueprintReport({ chart }: Props) {
   }, [activeChart, reportType]);
 
   useEffect(() => {
-    if (!activeChart || !reportText || languageRepairRef.current) return;
-    if (!isReportLanguageMismatch(reportText, i18n.language)) return;
-    languageRepairRef.current = true;
-    autoGenRef.current = false;
-    setReportText("");
-    setGlobalReportText("", reportType);
-    saveReportText("", reportType);
-  }, [activeChart, reportText, reportType, i18n.language]);
-
-  useEffect(() => {
     if (!activeChart || reportText || autoGenRef.current) return;
     autoGenRef.current = true;
     setGenerating(true);
     setGenError(null);
-    generateReportText(activeChart, reportType, (text) => setGenCharCount(text.length), i18n.language)
+    generateReportText(activeChart, reportType, (text) => setGenCharCount(text.length))
       .then((text) => {
-        if (!text.trim()) throw new Error(t("errorEmptyReport"));
+        if (!text.trim()) throw new Error("报告生成失败，未收到有效内容");
         setReportText(text);
         setGlobalReportText(text, reportType);
         saveReportText(text, reportType);
       })
       .catch((e) => setGenError(e instanceof Error ? e.message : String(e)))
       .finally(() => setGenerating(false));
-  }, [activeChart, reportText, reportType, i18n.language, t]);
+  }, [activeChart, reportText, reportType]);
 
   const {
     isUnlocked,
@@ -729,16 +660,16 @@ export default function BlueprintReport({ chart }: Props) {
   const paidAtLabel = paidAt ? new Date(paidAt).toLocaleString("zh-CN") : "";
 
   const calc = useMemo(() => (activeChart ? runV2Calculations(activeChart) : null), [activeChart]);
-  const name = activeChart?.birthData?.name || label("你", "You");
+  const name = activeChart?.birthData?.name || "你";
 
   const top3Chart = useMemo(() => {
     if (!calc) return [];
     return calc.sortedPlanets.slice(0, 3).map(p => ({
-      name: localizeAstroText(p.name, i18n.language),
+      name: p.name,
       score: p.score,
-      fullLabel: `${localizeAstroText(p.name, i18n.language)} ${PLANET_LABELS[p.name] || ""}`,
+      fullLabel: `${p.name} ${PLANET_LABELS[p.name] || ""}`,
     }));
-  }, [calc, i18n.language]);
+  }, [calc]);
 
   const parts = useMemo(() => {
     if (!reportText) return [];
@@ -815,48 +746,45 @@ export default function BlueprintReport({ chart }: Props) {
     const Icon = PLANET_ICONS[p.name] || Star;
     return {
       Icon,
-      name: localizeAstroText(p.name, i18n.language),
+      name: p.name,
       score: p.score,
-      sign: localizeAstroText(pd?.sign || "", i18n.language),
+      sign: pd?.sign || "",
       house: pd?.house || 0,
       label: PLANET_LABELS[p.name] || t('planetExplorer'),
       color: TALENT_COLORS[i] || PRIMARY,
-      value: pd ? `${localizeAstroText(pd.sign, i18n.language)} ${label(`第${pd.house}宫`, `${pd.house}${pd.house === 1 ? "st" : pd.house === 2 ? "nd" : pd.house === 3 ? "rd" : "th"} house`)}` : "",
+      value: pd ? `${pd.sign} ${pd.house}宫` : "",
     };
   });
 
   const findPart = (kws: string[]) => {
     for (const kw of kws) {
-      const f = parts.find(s => includesAny(s.heading, [kw]));
+      const f = parts.find(s => s.heading.includes(kw));
       if (f) return f;
     }
     return null;
   };
 
-  const coverPart = findPart(["封面", "cover", "memory anchor", "profile"]);
-  const whoPart = findPart(["你是谁", "内心", "who you are", "identity", "inner"]);
-  const talentPart = findPart(["天赋与行业", "talent", "industry", "career direction"]);
-  const charPart = findPart(["性格与资源", "character", "resources", "strength", "weakness", "opportunit"]);
+  const coverPart = findPart(["封面"]);
+  const whoPart = findPart(["你是谁", "内心"]);
+  const talentPart = findPart(["天赋与行业"]);
+  const charPart = findPart(["性格与资源"]);
   const charSections = charPart ? parseCharacterSections(charPart.content) : null;
-  const areaPart = findPart(["人生各领域", "life areas", "life domains", "life fields", "areas of life"]);
-  const timePart = findPart(["人生脉络", "life timeline", "life path", "life stages", "life trajectory"]);
-  const envPart = findPart(["环境与贵人", "environment", "benefactor", "supportive people"]);
-  const pitPart = findPart(["避坑", "pitfall", "avoid", "traps"]);
-  const summaryPart = findPart(["总结", "summary", "action"]);
+  const areaPart = findPart(["人生各领域"]);
+  const timePart = findPart(["人生脉络"]);
+  const envPart = findPart(["环境与贵人"]);
+  const pitPart = findPart(["避坑"]);
+  const summaryPart = findPart(["总结"]);
 
   const sectionIsPremium = (heading: string) =>
-    includesAny(heading, [...reportMeta.premiumKeywords, ...premiumKeywordsFor(reportType)]);
+    reportMeta.premiumKeywords.some((kw) => heading.includes(kw));
 
-  const bodyParts = parts.filter((p) => p.heading !== "__cover__" && p.content.trim());
-  const keywordPremium = parts.some((p) => sectionIsPremium(p.heading));
-  const genericPremium = bodyParts.length > getGenericFreeCount(reportType);
-  const hasPremium = keywordPremium || genericPremium;
+  const hasPremium = parts.some((p) => sectionIsPremium(p.heading));
   const showPremium = PAYMENT_DISABLED || isUnlocked;
   const areaLocked =
-    hasPremium && !showPremium && Boolean(areaPart) && sectionIsPremium(areaPart.heading);
+    hasPremium && !showPremium && Boolean(areaPart) && sectionIsPremium("人生各领域");
 
-  let mainTitle = label(`${dp}人`, `${localizeAstroText(dp, i18n.language)} type`);
-  let tagline = profiles[0] ? `${profiles[0].label} · ${label(`第${profiles[0].house}宫能量`, `${profiles[0].house}${profiles[0].house === 1 ? "st" : profiles[0].house === 2 ? "nd" : profiles[0].house === 3 ? "rd" : "th"} house energy`)}` : "";
+  let mainTitle = `${dp}人`;
+  let tagline = profiles[0] ? `${profiles[0].label} · 第${profiles[0].house}宫能量` : "";
   const coverLines = (coverPart?.content || "").split("\n").map(l => l.trim()).filter(Boolean);
   for (const l of coverLines) {
     if (l.startsWith("#") || l.startsWith("*")) continue;
@@ -867,7 +795,7 @@ export default function BlueprintReport({ chart }: Props) {
     }
     if (!tagline && c.length > 4 && c.length < 40) tagline = c;
   }
-  if (mainTitle.includes("封面")) mainTitle = label(`${PLANET_LABELS[dp] || dp}型`, `${localizeAstroText(dp, i18n.language)} type`);
+  if (mainTitle.includes("封面")) mainTitle = `${PLANET_LABELS[dp] || dp}型`;
 
   let whoExplanation = "";
   const whoContent = whoPart?.content || "";
@@ -887,7 +815,7 @@ export default function BlueprintReport({ chart }: Props) {
     if (fp) whoExplanation = cleanMd(fp);
   }
 
-  const deepPart = findPart(["内心深处", "你不说", "deep inside", "inner truth", "unspoken"]);
+  const deepPart = findPart(["内心深处", "你不说"]);
   const deepText = deepPart?.content || whoExplanation;
 
   const lifeAreas = (() => {
@@ -942,15 +870,9 @@ export default function BlueprintReport({ chart }: Props) {
       calc.sortedPlanets.slice(0, 3).forEach((p, i) => {
         const pd = activeChart!.planets.find(pl => pl.name === p.name);
         t.push({
-          title: label(
-            `【${PLANET_LABELS[p.name] || p.name}】（${p.name}·${pd?.sign || ""} 第${pd?.house || "?"}宫）`,
-            `【${PLANET_LABELS[p.name] || localizeAstroText(p.name, i18n.language)}】 (${localizeAstroText(p.name, i18n.language)} · ${localizeAstroText(pd?.sign || "", i18n.language)} ${pd?.house || "?"} house)`
-          ),
-          score: label(`${p.score}分`, `${p.score} pts`),
-          desc: label(
-            `${p.name}落在${pd?.sign}${pd?.house}宫，是你的${i === 0 ? "核心" : i === 1 ? "第二" : "第三"}天赋来源。`,
-            `${localizeAstroText(p.name, i18n.language)} in ${localizeAstroText(pd?.sign || "", i18n.language)} ${pd?.house || "?"} house is one of your ${i === 0 ? "core" : i === 1 ? "secondary" : "third"} talent sources.`
-          ),
+          title: `【${PLANET_LABELS[p.name] || p.name}】（${p.name}·${pd?.sign || ""} 第${pd?.house || "?"}宫）`,
+          score: `${p.score}分`,
+          desc: `${p.name}落在${pd?.sign}${pd?.house}宫，是你的${i === 0 ? "核心" : i === 1 ? "第二" : "第三"}天赋来源。`,
           color: TALENT_COLORS[i],
         });
       });
@@ -961,8 +883,8 @@ export default function BlueprintReport({ chart }: Props) {
   const careerBlock = talentPart ? extractBetween(talentPart.content, "事业方向", ["一般天赋", "TOP3"]) || extractBetween(talentPart.content, "最适合") : "";
   const roleLabel = (() => {
     const raw = mainTitle.replace(/^你是\s*/, "").trim();
-    if (raw.endsWith("人")) return localizeAstroText(raw, i18n.language);
-    return label(`${dp}人`, `${localizeAstroText(dp, i18n.language)} type`);
+    if (raw.endsWith("人")) return raw;
+    return `${dp}人`;
   })();
 
   if (reportType === "marriage") {
@@ -1013,7 +935,6 @@ export default function BlueprintReport({ chart }: Props) {
         paymentButtonLabel={paymentLabels.button}
         paymentPayingLabel={paymentLabels.paying}
         paymentButtonColor={paymentLabels.buttonColor}
-        priceUsd={unifiedPriceUsd}
       />
     );
   }
@@ -1066,7 +987,6 @@ export default function BlueprintReport({ chart }: Props) {
         paymentButtonLabel={paymentLabels.button}
         paymentPayingLabel={paymentLabels.paying}
         paymentButtonColor={paymentLabels.buttonColor}
-        priceUsd={unifiedPriceUsd}
       />
     );
   }
@@ -1085,7 +1005,7 @@ export default function BlueprintReport({ chart }: Props) {
           <div className="flex flex-wrap justify-center gap-3 text-sm text-white/80">
             {profiles.map((p, i) => (
               <span key={i} className="flex items-center gap-1">
-                <p.Icon size={14} /> {p.name} {label(`${p.score}分`, `${p.score} pts`)}
+                <p.Icon size={14} /> {p.name} {p.score}分
               </span>
             ))}
           </div>
@@ -1119,7 +1039,7 @@ export default function BlueprintReport({ chart }: Props) {
             className="w-full py-3 rounded-full font-bold text-white shadow-lg disabled:opacity-60"
             style={{ background: paymentLabels.buttonColor }}
           >
-            {paying ? paymentLabels.paying : `${paymentLabels.button} · $${unifiedPriceUsd}`}
+            {paying ? paymentLabels.paying : `${paymentLabels.button} · ¥${unifiedPriceYuan}`}
           </button>
         </div>
       )}
@@ -1130,9 +1050,9 @@ export default function BlueprintReport({ chart }: Props) {
         description={whoExplanation}
         badges={profiles.map((p) => ({
           icon: p.Icon,
-          label: label(`${p.name}星`, `${p.name} planet`),
+          label: `${p.name}星`,
           value: p.value || p.label,
-          score: label(`${p.score}分`, `${p.score} pts`),
+          score: `${p.score}分`,
           color: p.color,
         }))}
       />
@@ -1140,28 +1060,28 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Talents */}
       {talentPart && (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Star} title={label("天赋与行业", "Talents & Career Fit")} subtitle={label("你的核心天赋与最佳事业赛道（分数已标准化至100分制）", "Your core talents and strongest career lanes, scored on a 100-point scale")} />
+          <SectionTitle icon={Star} title="天赋与行业" subtitle="你的核心天赋与最佳事业赛道（分数已标准化至100分制）" />
           <div className="grid grid-cols-1 gap-4 mb-4">
             <div className="rounded-xl overflow-hidden shadow-md border border-gray-100 bg-white">
-              <RadarChart data={top3Chart} title={`${name} · ${label("三维度能量分布", "Three-Dimension Energy Map")}`} />
+              <RadarChart data={top3Chart} title={`${name} · 三维度能量分布`} />
             </div>
             <div className="rounded-xl overflow-hidden shadow-md border border-gray-100 bg-white">
-              <BarChart data={top3Chart} title={`${name} · ${label("TOP3 天赋能量对比", "Top 3 Talent Energy")}`} />
+              <BarChart data={top3Chart} title={`${name} · TOP3 天赋能量对比`} />
             </div>
           </div>
           <div className="space-y-3">
             {talents.map((item, idx) => (
               <div key={idx} className="rounded-xl p-4 border-l-4 shadow-sm bg-white" style={{ borderLeftColor: item.color }}>
-                <h4 className="text-sm font-bold text-gray-800 mb-1">{display(item.title)}</h4>
-                <div className="text-xs font-bold mb-2" style={{ color: item.color }}>{display(item.score)}</div>
-                <p className="text-sm text-gray-600 leading-relaxed">{display(item.desc)}</p>
+                <h4 className="text-sm font-bold text-gray-800 mb-1">{item.title}</h4>
+                <div className="text-xs font-bold mb-2" style={{ color: item.color }}>{item.score}</div>
+                <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
           {careerBlock && (
             <div className="mt-4 rounded-xl p-4 border" style={{ background: LIGHT, borderColor: "#d8cfe8" }}>
               <h4 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
-                <Briefcase size={16} style={{ color: PRIMARY }} /> {label("最适合的事业方向", "Best Career Direction")}
+                <Briefcase size={16} style={{ color: PRIMARY }} /> 最适合的事业方向
               </h4>
               <div className="text-sm text-gray-700 leading-relaxed"><AiParagraphs text={careerBlock} /></div>
             </div>
@@ -1172,24 +1092,24 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Character */}
       {charPart && charSections && (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Heart} title={label("性格与资源", "Character & Resources")} subtitle={label("你的性格特质与可利用资源", "Your traits and usable support resources")} />
+          <SectionTitle icon={Heart} title="性格与资源" subtitle="你的性格特质与可利用资源" />
           <div className="grid grid-cols-1 gap-4">
             {(charSections.strengths || charPart.content) && (
               <div className="rounded-xl p-4 border bg-white" style={{ borderColor: "#d8cfe8" }}>
-                <h4 className="text-sm font-bold text-green-700 mb-3 flex items-center gap-2"><Compass size={16} /> {label("性格优势", "Strengths")}</h4>
+                <h4 className="text-sm font-bold text-green-700 mb-3 flex items-center gap-2"><Compass size={16} /> 性格优势</h4>
                 <AiParagraphs text={charSections.strengths || charPart.content} />
               </div>
             )}
             {charSections.weaknesses && (
               <div className="rounded-xl p-4 border bg-white" style={{ borderColor: "#d8cfe8" }}>
-                <h4 className="text-sm font-bold text-red-700 mb-3 flex items-center gap-2"><AlertTriangle size={16} /> {label("性格劣势", "Growth Edges")}</h4>
+                <h4 className="text-sm font-bold text-red-700 mb-3 flex items-center gap-2"><AlertTriangle size={16} /> 性格劣势</h4>
                 <AiParagraphs text={charSections.weaknesses} />
               </div>
             )}
           </div>
           {charSections.opportunities && (
             <div className="mt-4 rounded-xl p-4 border" style={{ background: LIGHT, borderColor: "#d8cfe8" }}>
-              <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><Wallet size={16} style={{ color: PRIMARY }} /> {label("机会与资源", "Opportunities & Resources")}</h4>
+              <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><Wallet size={16} style={{ color: PRIMARY }} /> 机会与资源</h4>
               <AiParagraphs text={charSections.opportunities} />
             </div>
           )}
@@ -1199,7 +1119,7 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Deep */}
       {deepText && (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Heart} title={label("内心深处 —— 你不说，但我懂", "Deep Inside — What You Don't Say")} subtitle={label("读懂你内心最柔软的那部分", "Reading the quiet, tender part of your inner world")} />
+          <SectionTitle icon={Heart} title="内心深处 —— 你不说，但我懂" subtitle="读懂你内心最柔软的那部分" />
           <div className="rounded-2xl p-6 shadow-xl overflow-hidden relative" style={{ background: `linear-gradient(135deg, ${DARK} 0%, #1A0F2E 100%)` }}>
             <div className="absolute top-0 right-0 w-48 h-48 rounded-full -translate-y-1/3 translate-x-1/3" style={{ background: PRIMARY, opacity: 0.06 }} />
             <div className="relative text-sm text-white/85 leading-relaxed space-y-4">
@@ -1212,20 +1132,20 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Life areas */}
       {areaPart && !areaLocked && (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Compass} title={label("人生各领域（飞星结论）", "Life Areas")} subtitle={label("八大生活领域的关键洞察", "Key insights across the major domains of life")} />
+          <SectionTitle icon={Compass} title="人生各领域（飞星结论）" subtitle="八大生活领域的关键洞察" />
           {lifeAreas.length > 0 ? (
             <div className="grid grid-cols-1 gap-3">
               {lifeAreas.map((f, i) => (
                 <div key={i} className="rounded-xl p-4 border shadow-sm bg-white" style={{ borderColor: CARD_BORDER }}>
                   <div className="flex items-center gap-2 mb-2">
                     <f.icon size={16} style={{ color: PRIMARY }} />
-                    <span className="text-sm font-bold text-gray-800">{display(f.title)}</span>
-                    <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: PRIMARY }}>{display(f.tag)}</span>
+                    <span className="text-sm font-bold text-gray-800">{f.title}</span>
+                    <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: PRIMARY }}>{f.tag}</span>
                   </div>
-                  {f.source && <p className="text-xs text-gray-500 mb-1">{label("来源/入口：", "Source / Entry: ")}{display(f.source)}</p>}
-                  <p className="text-sm text-gray-700 leading-relaxed">{display(f.desc)}</p>
+                  {f.source && <p className="text-xs text-gray-500 mb-1">来源/入口：{f.source}</p>}
+                  <p className="text-sm text-gray-700 leading-relaxed">{f.desc}</p>
                   {f.advice && (
-                    <p className="text-xs text-gray-600 mt-2 p-2 rounded" style={{ background: LIGHT }}><strong>{label("建议：", "Advice: ")}</strong>{display(f.advice)}</p>
+                    <p className="text-xs text-gray-600 mt-2 p-2 rounded" style={{ background: LIGHT }}><strong>建议：</strong>{f.advice}</p>
                   )}
                 </div>
               ))}
@@ -1237,7 +1157,7 @@ export default function BlueprintReport({ chart }: Props) {
       )}
       {areaPart && areaLocked && (
         <section className="py-4 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Compass} title={label("人生各领域（飞星结论）", "Life Areas")} subtitle={label("解锁后查看", "Unlock to view")} />
+          <SectionTitle icon={Compass} title="人生各领域（飞星结论）" subtitle="解锁后查看" />
           <LockedPreview>
             <div className="rounded-xl p-4 bg-white border" style={{ borderColor: CARD_BORDER }}>
               <AiParagraphs text={areaPart.content.slice(0, 320)} />
@@ -1249,7 +1169,7 @@ export default function BlueprintReport({ chart }: Props) {
       {hasPremium && !showPremium && !unlockLoading && (
         <section className="py-4 px-6 max-w-[414px] mx-auto">
           <PaywallCard
-            priceUsd={unifiedPriceUsd}
+            amountYuan={unifiedPriceYuan}
             onPay={startPay}
             paying={paying}
             error={payError}
@@ -1287,18 +1207,18 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Timeline */}
       {timePart && (showPremium ? (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Compass} title={label("人生脉络建议", "Life Timeline Guidance")} subtitle={label("不同阶段的成长路径与行动指南", "Growth paths and action guidance across life stages")} />
+          <SectionTitle icon={Compass} title="人生脉络建议" subtitle="不同阶段的成长路径与行动指南" />
           {timelineData.length > 0 && (
             <div className="space-y-4 mb-4">
               {timelineData.map((item, i) => (
                 <div key={i} className="flex gap-4 items-start">
                   <div className="flex-shrink-0 w-20 text-center">
-                    <div className="text-xs font-bold text-white py-1 rounded-t" style={{ background: PHASE_COLORS[i % PHASE_COLORS.length] }}>{display(item.age)}</div>
+                    <div className="text-xs font-bold text-white py-1 rounded-t" style={{ background: PHASE_COLORS[i % PHASE_COLORS.length] }}>{item.age}</div>
                     <div className="h-full w-0.5 mx-auto min-h-[40px]" style={{ background: `${PHASE_COLORS[i % PHASE_COLORS.length]}30` }} />
                   </div>
                   <div className="flex-1 rounded-xl p-4 border shadow-sm bg-white" style={{ borderColor: CARD_BORDER }}>
-                    <h4 className="text-sm font-bold text-gray-800 mb-1">{display(item.title)}</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">{display(item.desc)}</p>
+                    <h4 className="text-sm font-bold text-gray-800 mb-1">{item.title}</h4>
+                    <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -1310,8 +1230,8 @@ export default function BlueprintReport({ chart }: Props) {
                 <div key={i} className="flex items-start gap-3 rounded-xl p-4 border bg-white" style={{ borderColor: CARD_BORDER }}>
                   <Compass size={18} style={{ color: PRIMARY }} className="mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="text-sm font-bold text-gray-800 mb-1">{display(line.label)}</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">{display(line.desc)}</p>
+                    <h4 className="text-sm font-bold text-gray-800 mb-1">{line.label}</h4>
+                    <p className="text-sm text-gray-600 leading-relaxed">{line.desc}</p>
                   </div>
                 </div>
               ))}
@@ -1325,12 +1245,12 @@ export default function BlueprintReport({ chart }: Props) {
         </section>
       ) : hasPremium ? (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Compass} title={label("人生脉络建议", "Life Timeline Guidance")} subtitle={label("不同阶段的成长路径与行动指南", "Growth paths and action guidance across life stages")} />
+          <SectionTitle icon={Compass} title="人生脉络建议" subtitle="不同阶段的成长路径与行动指南" />
           <LockedPreview>
             {timelineData.length > 0 ? (
               <div className="rounded-xl p-4 border bg-white" style={{ borderColor: CARD_BORDER }}>
-                <h4 className="text-sm font-bold text-gray-800">{display(timelineData[0].age)} · {display(timelineData[0].title)}</h4>
-                <p className="text-sm text-gray-600 mt-2">{display(timelineData[0].desc)}</p>
+                <h4 className="text-sm font-bold text-gray-800">{timelineData[0].age} · {timelineData[0].title}</h4>
+                <p className="text-sm text-gray-600 mt-2">{timelineData[0].desc}</p>
               </div>
             ) : (
               <div className="rounded-xl p-4 border bg-white" style={{ borderColor: CARD_BORDER }}>
@@ -1344,11 +1264,11 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Environment */}
       {envPart && showPremium && (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Users} title={label("环境与贵人", "Environment & Allies")} subtitle={label("适合的环境、贵人与需要远离的人", "The environments, allies, and dynamics to move toward or away from")} />
+          <SectionTitle icon={Users} title="环境与贵人" subtitle="适合的环境、贵人与需要远离的人" />
           <div className="space-y-3">
             {envBlocks.map((block) => (
               <div key={block.title} className="rounded-xl p-4 border bg-white" style={{ borderColor: "#d8cfe8" }}>
-                <h4 className="text-sm font-bold text-gray-800 mb-2" style={{ color: PRIMARY }}>{display(block.title)}</h4>
+                <h4 className="text-sm font-bold text-gray-800 mb-2" style={{ color: PRIMARY }}>{block.title}</h4>
                 <AiParagraphs text={block.text} />
               </div>
             ))}
@@ -1357,10 +1277,10 @@ export default function BlueprintReport({ chart }: Props) {
       )}
       {envPart && hasPremium && !showPremium && (
         <section className="py-4 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={Users} title={label("环境与贵人", "Environment & Allies")} subtitle={label("解锁后查看", "Unlock to view")} />
+          <SectionTitle icon={Users} title="环境与贵人" subtitle="解锁后查看" />
           <LockedPreview>
             <div className="rounded-xl p-4 border bg-white text-sm text-gray-600" style={{ borderColor: CARD_BORDER }}>
-              {display(envBlocks[0]?.text.slice(0, 120) || envPart.content.slice(0, 120) || label("适合你的环境与贵人分析…", "Your environment and ally analysis..."))}
+              {envBlocks[0]?.text.slice(0, 120) || envPart.content.slice(0, 120) || "适合你的环境与贵人分析…"}
             </div>
           </LockedPreview>
         </section>
@@ -1369,12 +1289,12 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Pitfalls */}
       {pitPart && showPremium && (
         <section className="py-6 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={AlertTriangle} title={label("避坑指南", "Pitfall Guide")} subtitle={label("一定要避开的人、事、环境", "People, choices, and environments to avoid")} />
+          <SectionTitle icon={AlertTriangle} title="避坑指南" subtitle="一定要避开的人、事、环境" />
           <div className="space-y-3">
             {pitfallsBlocks.map((block, i) => (
               <div key={block.key || i} className={`rounded-xl p-4 border shadow-sm ${block.special ? "border-2" : ""}`} style={{ background: block.bg, borderColor: block.border }}>
                 <h4 className="text-sm font-bold mb-2 flex items-center gap-2" style={{ color: block.titleColor }}>
-                  <block.icon size={16} /> {display(block.title)}
+                  <block.icon size={16} /> {block.title}
                 </h4>
                 {block.items.length === 1 && block.items[0].length > 80 ? (
                   <div className="text-sm text-gray-700 leading-relaxed"><AiParagraphs text={block.items[0]} /></div>
@@ -1395,10 +1315,10 @@ export default function BlueprintReport({ chart }: Props) {
       )}
       {pitPart && hasPremium && !showPremium && (
         <section className="py-4 px-6 max-w-[414px] mx-auto">
-          <SectionTitle icon={AlertTriangle} title={label("避坑指南", "Pitfall Guide")} subtitle={label("解锁后查看", "Unlock to view")} />
+          <SectionTitle icon={AlertTriangle} title="避坑指南" subtitle="解锁后查看" />
           <LockedPreview>
             <div className="rounded-xl p-4 text-sm text-gray-600" style={{ background: "#FFF5F5" }}>
-              {display(pitfallsBlocks[0]?.items[0] || label("针对你的避坑清单…", "Your personalized pitfall checklist..."))}
+              {pitfallsBlocks[0]?.items[0] || "针对你的避坑清单…"}
             </div>
           </LockedPreview>
         </section>
@@ -1407,7 +1327,7 @@ export default function BlueprintReport({ chart }: Props) {
       {/* Summary */}
       {summaryPart && showPremium && (
         <section className="py-6 px-6 max-w-[414px] mx-auto pb-24">
-          <SectionTitle icon={Star} title={label("总结与行动指令", "Summary & Action Plan")} subtitle={label("你的核心身份与行动清单", "Your core identity and action checklist")} />
+          <SectionTitle icon={Star} title="总结与行动指令" subtitle="你的核心身份与行动清单" />
           <div className="rounded-2xl p-6 shadow-xl overflow-hidden relative" style={{ background: `linear-gradient(135deg, ${DARK} 0%, #1A0F2E 100%)` }}>
             <div className="absolute top-0 right-0 w-48 h-48 rounded-full -translate-y-1/3 translate-x-1/3" style={{ background: PRIMARY, opacity: 0.06 }} />
             <div className="relative">
@@ -1420,7 +1340,7 @@ export default function BlueprintReport({ chart }: Props) {
               <div className="flex flex-wrap gap-2 justify-center mt-4 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.15)" }}>
                 {profiles.map(p => (
                   <span key={p.name} className="text-[10px] px-3 py-1 rounded-full text-amber-200" style={{ background: "rgba(232,200,122,0.15)" }}>
-                    {label(`${p.name}人`, `${p.name} type`)} · {p.label}
+                    {p.name}人 · {p.label}
                   </span>
                 ))}
               </div>
@@ -1433,7 +1353,7 @@ export default function BlueprintReport({ chart }: Props) {
       )}
       {summaryPart && hasPremium && !showPremium && (
         <section className="py-4 px-6 max-w-[414px] mx-auto pb-28">
-          <SectionTitle icon={Star} title={label("总结与行动指令", "Summary & Action Plan")} subtitle={label("解锁后查看", "Unlock to view")} />
+          <SectionTitle icon={Star} title="总结与行动指令" subtitle="解锁后查看" />
           <LockedPreview>
             <div className="rounded-2xl p-4 text-sm" style={{ background: DARK }}>
               <AiParagraphs text={summaryPart.content.slice(0, 200)} tone="dark" />

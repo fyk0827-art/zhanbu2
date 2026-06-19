@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const STEPS = [
-  { textKey: "analysisStep1Text", subKey: "analysisStep1Sub" },
-  { textKey: "analysisStep2Text", subKey: "analysisStep2Sub" },
-  { textKey: "analysisStep3Text", subKey: "analysisStep3Sub" },
-  { textKey: "analysisStep4Text", subKey: "analysisStep4Sub" },
-  { textKey: "analysisStep5Text", subKey: "analysisStep5Sub" },
-  { textKey: "analysisStep6Text", subKey: "analysisStep6Sub" },
+  { text: "正在连接你的本命星盘…", sub: "PRISM 五维校准引擎" },
+  { text: "读取行星位置与宫位配置…", sub: "Swiss Ephemeris 精度 0.01°" },
+  { text: "交叉验证你的答案与星盘数据…", sub: "五维度逐层比对" },
+  { text: "识别灵魂格局与飞宫链条…", sub: "格局分析 · 飞宫推演" },
+  { text: "正在生成图文报告…", sub: "AI 深度解读引擎" },
+  { text: "你的命运蓝图已生成", sub: "准备呈现" },
 ];
 
 interface Props {
@@ -15,7 +14,6 @@ interface Props {
 }
 
 export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
-  const { t } = useTranslation();
   const [stepIdx, setStepIdx] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -49,17 +47,17 @@ export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
         className="prism-font-serif text-base leading-relaxed transition-opacity duration-300"
         style={{ color: "var(--prism-cream)", opacity: visible ? 1 : 0 }}
       >
-        {t(step.textKey)}
+        {step.text}
       </p>
       <p className="text-xs mt-3 tracking-widest" style={{ color: "rgba(232,185,81,0.3)" }}>
-        {t(step.subKey)}
+        {step.sub}
       </p>
       {charCount > 0 && (
         <p
           className="text-xs mt-4 px-4 py-1.5 rounded-full inline-block"
           style={{ background: "rgba(232,185,81,0.08)", color: "rgba(232,185,81,0.55)" }}
         >
-          {t("analysisReceivedChars", { count: charCount })}
+          已接收 {charCount} 字符
         </p>
       )}
     </div>
