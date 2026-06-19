@@ -4,6 +4,7 @@ import { getSettings, streamChat } from "./volcEngineApi";
 import { buildPromptsForReportType, resolveSystemPrompt } from "./reportPrompt";
 import { fetchReportPrompts } from "./reportPromptApi";
 import { runV2Calculations } from "./v2ScoringEngine";
+import { trackEvent } from "../utils/track";
 import { localizeAstroText } from "../utils/astroI18n";
 
 function normalizeLanguage(language?: string): string {
@@ -46,6 +47,7 @@ export async function generateReportText(
   onChunk?: (text: string) => void,
   language = "en"
 ): Promise<string> {
+  trackEvent('report_generating', true);
   const s = getSettings();
   if (!s.apiKey) throw new Error("未配置 API Key，请先去设置页面配置");
 

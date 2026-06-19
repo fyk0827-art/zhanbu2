@@ -10,6 +10,7 @@ import { setGlobalReportType } from "../services/reportSession";
 import { fetchPartnerOrder, setPrepaidOrderId } from "../services/partnerApi";
 import { generatorPath } from "../utils/generatorNav";
 import BirthDatePicker from "../components/BirthDatePicker";
+import { trackEvent } from "../utils/track";
 import "@/styles/prism.css";
 
 interface Props {
@@ -148,6 +149,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
       return;
     }
     setFieldErrors({});
+    trackEvent('next', true);
 
     let lat: number, lng: number, tz: number;
     if (useCustomCoords) {
@@ -245,6 +247,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onBlur={() => { if (name) trackEvent('name', true); }}
               placeholder={t('generatorNamePlaceholder')}
               className="prism-input"
             />
@@ -278,7 +281,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
               </div>
               <BirthDatePicker
                 value={birthDate}
-                onChange={(v) => { setBirthDate(v); setFieldErrors((p) => ({ ...p, birthDate: false })); }}
+                onChange={(v) => { setBirthDate(v); setFieldErrors((p) => ({ ...p, birthDate: false })); if (v) trackEvent('birth', true); }}
                 className="prism-input"
                 error={fieldErrors.birthDate}
                 placeholder={t('generatorBirthDatePlaceholder')}
@@ -375,7 +378,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                         <div className="px-4 py-3 text-sm text-center" style={{ color: "rgba(250,246,240,0.3)" }}>{t('generatorSelectProvinceFirst')}</div>
                       ) : (
                         cities.map((c) => (
-                          <div key={c.id} className="prism-city-opt" onClick={() => { setSelectedCity(c); setOpenDropdown(null); setFieldErrors((p) => ({ ...p, city: false })); }}>
+                          <div key={c.id} className="prism-city-opt" onClick={() => { setSelectedCity(c); setOpenDropdown(null); setFieldErrors((p) => ({ ...p, city: false })); trackEvent('Place', true); }}>
                             {cityLabel(c)}
                             {isChinese && (
                               <span className="text-[11px] ml-2" style={{ color: "rgba(250,246,240,0.25)" }}>{c.nameEn}</span>

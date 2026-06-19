@@ -20,6 +20,7 @@ import { calculateNatalChart } from "./services/astrologyEngine";
 import type { BirthData, NatalChart } from "./services/astrologyEngine";
 import { generatorPath } from "./utils/generatorNav";
 import { generateReportText } from "./services/reportGenerator";
+import { trackEvent } from "./utils/track";
 
 let globalChart: NatalChart | null = null;
 let globalReportText: string = "";
@@ -70,6 +71,7 @@ export default function App() {
   }, []);
 
   const handleGenerate = useCallback(async (birthData: BirthData) => {
+    trackEvent('chart_calculate', true);
     setIsLoading(true);
     setGenerationError(null);
     setCharCount(0);
@@ -87,6 +89,7 @@ export default function App() {
       if (!text.trim()) throw new Error(t("errorEmptyReport"));
 
       const { reportId } = await persistReport(text, natalChart);
+      trackEvent('report_success', true);
       setIsLoading(false);
       if (!hasNavigated.current) {
         hasNavigated.current = true;
@@ -94,6 +97,7 @@ export default function App() {
       }
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : String(error);
+      trackEvent('report_fail', true);
       console.error("Error generating report:", error);
       setIsLoading(false);
       setGenerationError(t("errorNetworkFailed", { msg: errMsg }));

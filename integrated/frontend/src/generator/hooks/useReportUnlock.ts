@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { trackEvent } from "../utils/track";
 import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -119,6 +120,7 @@ export function useReportUnlock(
         try {
           const confirmed = await confirmAlipayReturn(alipayReturn);
           if (!cancelled && confirmed.unlocked) {
+            trackEvent('pay_success', true);
             setIsUnlocked(true);
             setOrderId(confirmed.orderId);
             stripRouterPaymentParams();
@@ -127,6 +129,7 @@ export function useReportUnlock(
           }
         } catch (e) {
           if (!cancelled) {
+            trackEvent('pay_fail', true);
             setError(
               e instanceof Error
                 ? e.message
@@ -145,6 +148,7 @@ export function useReportUnlock(
           try {
             const confirmed = await confirmPaypalReturn({ token: paypalToken, orderId: pendingOrderId });
             if (!cancelled && confirmed.unlocked) {
+              trackEvent('pay_success', true);
               setIsUnlocked(true);
               setOrderId(confirmed.orderId);
               stripRouterPaymentParams();
@@ -152,6 +156,7 @@ export function useReportUnlock(
               return;
             }
           } catch {
+            trackEvent('pay_fail', true);
             /* 由轮询兜底 */
           } finally {
             if (!cancelled) setConfirmingReturn(false);
@@ -164,6 +169,7 @@ export function useReportUnlock(
         try {
           const confirmed = await confirmWechatReturn({ orderId: pendingOrderId });
           if (!cancelled && confirmed.unlocked) {
+            trackEvent('pay_success', true);
             setIsUnlocked(true);
             setOrderId(confirmed.orderId);
             stripRouterPaymentParams();
@@ -171,6 +177,7 @@ export function useReportUnlock(
             return;
           }
         } catch {
+          trackEvent('pay_fail', true);
           /* notify 延迟时由轮询兜底 */
         } finally {
           if (!cancelled) setConfirmingReturn(false);
@@ -181,6 +188,7 @@ export function useReportUnlock(
         try {
           const o = await getOrderStatus(pendingOrderId);
           if (o.unlocked || o.status === "paid") {
+            trackEvent('pay_success', true);
             setIsUnlocked(true);
             setOrderId(o.orderId);
             setPaidAt(o.paidAt ?? null);
@@ -212,6 +220,7 @@ export function useReportUnlock(
       setError(t("errorNoReportId"));
       return;
     }
+    trackEvent('pay_click', true);
     setPaying(true);
     setError(null);
     setWechatHint(null);
@@ -251,6 +260,7 @@ export function useReportUnlock(
       if (mode === "mock") {
         const paid = await mockCompleteOrder(res.orderId);
         if (paid.unlocked) {
+          trackEvent('pay_success', true);
           setIsUnlocked(true);
           setOrderId(paid.orderId);
           await refresh();
