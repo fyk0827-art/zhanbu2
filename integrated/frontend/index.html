@@ -28,8 +28,8 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1523243282664759');
-      fbq('track', 'PageView');
+      fbq('init', '1523243282664759', {testEventCode: 'TEST9890'});
+      fbq('track', 'PageView', {}, {eventID: 'pageview-' + Date.now()});
     </script>
     <noscript>
       <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1523243282664759&ev=PageView&noscript=1" alt="" />
