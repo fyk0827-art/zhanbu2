@@ -77,7 +77,7 @@ export const REPORT_TYPES: ReportTypeMeta[] = [
     wordCount: "约 3500–4500 字",
     available: true,
     priceYuan: "29.90",
-    premiumKeywords: ["人生脉络", "环境与贵人", "避坑", "总结"],
+    premiumKeywords: ["人生各领域", "人生脉络", "环境与贵人", "避坑", "总结"],
     paywallTitle: "解锁完整行动蓝图",
     paywallItems: [
       "人生脉络建议（分阶段成长路径）",

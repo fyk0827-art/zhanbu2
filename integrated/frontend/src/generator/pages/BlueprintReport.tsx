@@ -91,7 +91,7 @@ function isReportLanguageMismatch(text: string, language: string): boolean {
 function getGenericFreeCount(reportType: string): number {
   if (reportType === "simple") return 3;
   if (reportType === "marriage" || reportType === "career") return 3;
-  return 5;
+  return 3;
 }
 
 function includesAny(text: string, keywords: string[]): boolean {
