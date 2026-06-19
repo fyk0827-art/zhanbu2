@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lifeblueprint.config.AlipayProperties;
+import com.lifeblueprint.config.PayPalProperties;
 import com.lifeblueprint.config.PaymentProperties;
 import com.lifeblueprint.config.WechatPayProperties;
 import com.lifeblueprint.domain.OrderAttribution;
@@ -34,6 +35,7 @@ public class PaymentService {
     private final WechatPayService wechat;
     private final PayPalService paypal;
     private final FacebookCapiService facebookCapi;
+    private final PayPalProperties paypalProps;
     private final AgeGroupRepository ageGroupRepo;
     private final ObjectMapper objectMapper;
 
@@ -45,6 +47,7 @@ public class PaymentService {
             AlipayService alipay,
             WechatPayService wechat,
             PayPalService paypal,
+            PayPalProperties paypalProps,
             FacebookCapiService facebookCapi,
             AgeGroupRepository ageGroupRepo,
             ObjectMapper objectMapper
@@ -56,6 +59,7 @@ public class PaymentService {
         this.alipay = alipay;
         this.wechat = wechat;
         this.paypal = paypal;
+        this.paypalProps = paypalProps;
         this.facebookCapi = facebookCapi;
         this.ageGroupRepo = ageGroupRepo;
         this.objectMapper = objectMapper;
@@ -77,6 +81,9 @@ public class PaymentService {
         body.put("alipayConfigured", alipayProps.isConfigured());
         body.put("wechatConfigured", wechatProps.isConfigured());
         body.put("paypalConfigured", paypal.isConfigured());
+        if (props.isPaypalMode()) {
+            body.put("paypalMode", paypalProps.getMode());
+        }
         body.put("database", dbOk ? "connected" : "disconnected");
         body.put("runtime", "spring-boot-java21");
         if (props.isAlipayMode() && !alipayProps.isConfigured()) {

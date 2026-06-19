@@ -550,18 +550,28 @@ function SettingsTab() {
   );
 }
 
-const CHANNEL_LABELS: Record<string, string> = {
-  paypal: "PayPal 沙盒",
-  alipay: "支付宝",
-  wechat: "微信支付",
-  mock: "模拟支付",
-  partner: "合作方",
-};
-
 function OrdersTab() {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
+  const [paypalMode, setPaypalMode] = useState("sandbox");
   const { data, isLoading } = useQuery({
+
+  useEffect(() => {
+    fetch("/api/health")
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.paypalMode) setPaypalMode(res.paypalMode);
+      })
+      .catch(() => {});
+  }, []);
+
+  const channelLabels: Record<string, string> = {
+    paypal: paypalMode === "live" ? "PayPal 正式" : "PayPal 沙盒",
+    alipay: "支付宝",
+    wechat: "微信支付",
+    mock: "模拟支付",
+    partner: "合作方",
+  };
     queryKey: ["admin", "orders", page],
     queryFn: () => adminOrdersApi.list(page, 50),
   });
@@ -607,7 +617,7 @@ function OrdersTab() {
                     {order.status === "paid" ? "已支付" : order.status === "closed" ? "已关闭" : "待支付"}
                   </span>
                 </td>
-                <td className="px-3 py-3 text-xs text-[#6B6560]">{CHANNEL_LABELS[order.channel] || order.channel || "-"}</td>
+                <td className="px-3 py-3 text-xs text-[#6B6560]">{channelLabels[order.channel] || order.channel || "-"}</td>
                 <td className="px-3 py-3 text-xs text-[#6B6560] font-mono max-w-[140px] truncate" title={order.orderId}>
                   {order.orderId}
                 </td>
