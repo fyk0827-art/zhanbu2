@@ -3,3 +3,10 @@ spring:
     url: jdbc:mysql://localhost:3306/integrated_platform_main?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
     username: divinlove2
     password: Fyk6112212...
+
+meta:
+  pixel-id: 1523243282664759
+  capi-access-token: ${META_CAPI_ACCESS_TOKEN}
+  test-event-code: ""
+  product-name: Full Life Blueprint Report
+  currency: USD
