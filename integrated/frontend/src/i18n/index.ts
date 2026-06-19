@@ -1920,8 +1920,9 @@ i18n
   .init({
     resources,
     fallbackLng: "en",
+    lng: "en",
     detection: {
-      order: ["localStorage", "navigator", "htmlTag"],
+      order: ["localStorage"],
       caches: ["localStorage"],
     },
     interpolation: {
