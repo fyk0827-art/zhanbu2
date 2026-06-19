@@ -1,0 +1,48 @@
+- generic [ref=e1]:
+  - generic:
+    - region "Notifications alt+T"
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - button "语言" [expanded] [active] [ref=e10] [cursor=pointer]:
+            - img [ref=e11]
+            - generic [ref=e14]: EN
+          - generic [ref=e35]:
+            - button "EN English" [ref=e36] [cursor=pointer]:
+              - generic [ref=e37]: EN
+              - generic [ref=e38]: English
+            - button "ZH 中文" [ref=e39] [cursor=pointer]:
+              - generic [ref=e40]: ZH
+              - generic [ref=e41]: 中文
+            - button "ES Español" [ref=e42] [cursor=pointer]:
+              - generic [ref=e43]: ES
+              - generic [ref=e44]: Español
+            - button "FR Français" [ref=e45] [cursor=pointer]:
+              - generic [ref=e46]: FR
+              - generic [ref=e47]: Français
+            - button "DE Deutsch" [ref=e48] [cursor=pointer]:
+              - generic [ref=e49]: DE
+              - generic [ref=e50]: Deutsch
+            - button "JA 日本語" [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]: JA
+              - generic [ref=e53]: 日本語
+            - button "KO 한국어" [ref=e54] [cursor=pointer]:
+              - generic [ref=e55]: KO
+              - generic [ref=e56]: 한국어
+            - button "PT Português" [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]: PT
+              - generic [ref=e59]: Português
+            - button "RU Русский" [ref=e60] [cursor=pointer]:
+              - generic [ref=e61]: RU
+              - generic [ref=e62]: Русский
+            - button "AR العربية" [ref=e63] [cursor=pointer]:
+              - generic [ref=e64]: AR
+              - generic [ref=e65]: العربية
+        - button [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+      - generic [ref=e20]:
+        - img [ref=e22]
+        - heading "你今年几岁？" [level=2] [ref=e30]
+        - paragraph [ref=e31]: 这帮助我们为你找到合适的问题。
+        - spinbutton [ref=e32]
+        - button "继续" [disabled] [ref=e33]
