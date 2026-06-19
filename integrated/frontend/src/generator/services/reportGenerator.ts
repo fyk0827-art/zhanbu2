@@ -4,11 +4,47 @@ import { getSettings, streamChat } from "./volcEngineApi";
 import { buildPromptsForReportType, resolveSystemPrompt } from "./reportPrompt";
 import { fetchReportPrompts } from "./reportPromptApi";
 import { runV2Calculations } from "./v2ScoringEngine";
+import { localizeAstroText } from "../utils/astroI18n";
+
+function normalizeLanguage(language?: string): string {
+  if (!language) return "en";
+  return language.toLowerCase().split("-")[0] || "en";
+}
+
+function getOutputLanguageName(language?: string): string {
+  const lang = normalizeLanguage(language);
+  const names: Record<string, string> = {
+    en: "English",
+    zh: "Chinese",
+    es: "Spanish",
+    fr: "French",
+    de: "German",
+    ja: "Japanese",
+    ko: "Korean",
+    pt: "Portuguese",
+    ru: "Russian",
+    ar: "Arabic",
+  };
+  return names[lang] ?? "English";
+}
+
+function appendOutputLanguageInstruction(prompt: string, language?: string): string {
+  const outputLanguage = getOutputLanguageName(language);
+  return `${prompt}
+
+## Output Language Requirement
+You must write the final report in ${outputLanguage}.
+This instruction overrides any earlier examples, templates, headings, or wording in another language.
+Translate all section headings, labels, scoring descriptions, advice, and narrative text into ${outputLanguage}.
+Translate all astrology terms too: planet names, zodiac signs, houses, scores, ages, and chart labels.
+Do not output Chinese unless the requested output language is Chinese.`;
+}
 
 export async function generateReportText(
   chart: NatalChart,
   reportType: ReportTypeId,
-  onChunk?: (text: string) => void
+  onChunk?: (text: string) => void,
+  language = "en"
 ): Promise<string> {
   const s = getSettings();
   if (!s.apiKey) throw new Error("未配置 API Key，请先去设置页面配置");
@@ -19,8 +55,8 @@ export async function generateReportText(
 
   const prompts = buildPromptsForReportType(reportType, chart, calcResult);
   const dbPrompts = await fetchReportPrompts();
-  const sp = resolveSystemPrompt(reportType, dbPrompts.prompts);
-  const up = prompts.user;
+  const sp = appendOutputLanguageInstruction(resolveSystemPrompt(reportType, dbPrompts.prompts), language);
+  const up = appendOutputLanguageInstruction(localizeAstroText(prompts.user, language), language);
   let received = "";
 
   for await (const chunk of streamChat(s.apiKey, {
@@ -35,5 +71,5 @@ export async function generateReportText(
     received += chunk;
     onChunk?.(received);
   }
-  return received;
+  return localizeAstroText(received, language);
 }

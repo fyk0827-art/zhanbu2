@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function TextReport({ chart, onTextConfirm }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const reportType = getGlobalReportType();
   const reportMeta = getTranslatedReportMeta(t, reportType);
@@ -49,7 +49,7 @@ export default function TextReport({ chart, onTextConfirm }: Props) {
         setRawText(text);
         setCharCount(text.length);
         setPhase("recv");
-      });
+      }, i18n.language);
       if (sessionId !== genSessionRef.current) return;
       setRawText(received);
       setCharCount(received.length);
@@ -64,7 +64,7 @@ export default function TextReport({ chart, onTextConfirm }: Props) {
         setIsGen(false);
       }
     }
-  }, [chart, reportType, t]);
+  }, [chart, reportType, t, i18n.language]);
 
   useEffect(() => {
     if (!chart || autoStartedRef.current) return;

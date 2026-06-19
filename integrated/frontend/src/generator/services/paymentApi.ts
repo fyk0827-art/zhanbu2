@@ -97,6 +97,7 @@ export async function createOrder(
   const client = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) ? "mobile" : "desktop";
   const res = await fetch(`${API_BASE}/api/orders`, {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       reportId,
@@ -104,6 +105,7 @@ export async function createOrder(
       payerContact: options?.payerContact,
       reportType: options?.reportType,
       location: options?.location,
+      eventSourceUrl: window.location.href,
     }),
   });
   return parseJson(res);

@@ -3,6 +3,7 @@ import "./index.css";
 import "@/styles/prism.css";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import PrismBackground from "@/components/prism/PrismBackground";
 import HomePage from "./pages/HomePage";
 import StarDataReview from "./pages/StarDataReview";
@@ -33,6 +34,7 @@ export function setGlobalReportText(text: string, reportType?: ReportTypeId) {
 
 export default function App() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [chart, setChart] = useState<NatalChart | null>(globalChart);
   const [isLoading, setIsLoading] = useState(false);
   const [charCount, setCharCount] = useState(0);
@@ -79,8 +81,8 @@ export default function App() {
       setChart(natalChart);
 
       const reportType = getGlobalReportType();
-      const text = await generateReportText(natalChart, reportType, (t) => setCharCount(t.length));
-      if (!text.trim()) throw new Error("报告生成失败，未收到有效内容");
+      const text = await generateReportText(natalChart, reportType, (chunk) => setCharCount(chunk.length), i18n.language);
+      if (!text.trim()) throw new Error(t("errorEmptyReport"));
 
       const { reportId } = await persistReport(text, natalChart);
       setIsLoading(false);
@@ -92,9 +94,9 @@ export default function App() {
       const errMsg = error instanceof Error ? error.message : String(error);
       console.error("Error generating report:", error);
       setIsLoading(false);
-      alert(`报告生成出错: ${errMsg}\n\n如果问题持续，请检查：\n1. 设置页是否已配置 API Key\n2. 网络连接是否正常`);
+      alert(t("errorNetworkFailed", { msg: errMsg }));
     }
-  }, [navigate, persistReport]);
+  }, [navigate, persistReport, t, i18n.language]);
 
   const handleTextConfirm = useCallback(async (text: string) => {
     const activeChart = globalChart;

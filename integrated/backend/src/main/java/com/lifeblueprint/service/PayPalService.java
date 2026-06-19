@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -80,6 +81,8 @@ public class PayPalService {
         ArrayNode purchaseUnits = body.putArray("purchase_units");
         ObjectNode unit = purchaseUnits.addObject();
         unit.put("reference_id", order.id());
+        unit.put("custom_id", order.id());
+        unit.put("invoice_id", order.id());
         unit.put("description", order.title());
 
         ObjectNode amount = unit.putObject("amount");
@@ -272,6 +275,103 @@ public class PayPalService {
         return repo.markOrderPaid(internalOrderId, captureId != null ? captureId : paypalOrderId);
     }
 
+    public Optional<OrderRecord> handleWebhook(Map<String, String> headers, String rawBody) {
+        if (!paypalProps.isConfigured()) {
+            throw new IllegalStateException("PayPal 未配置");
+        }
+        JsonNode event;
+        try {
+            event = objectMapper.readTree(rawBody);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("PayPal webhook JSON 无效");
+        }
+        if (!verifyWebhookSignature(headers, event)) {
+            throw new IllegalArgumentException("PayPal webhook 验签失败");
+        }
+
+        String eventType = event.path("event_type").asText("");
+        if (!"PAYMENT.CAPTURE.COMPLETED".equals(eventType)) {
+            return Optional.empty();
+        }
+
+        String internalOrderId = event.path("resource")
+                .path("supplementary_data")
+                .path("related_ids")
+                .path("order_id")
+                .asText("");
+        if (!internalOrderId.isBlank() && !internalOrderId.startsWith("BP")) {
+            Optional<OrderRecord> byPaypalOrder = repo.findOrderByTradeNo(internalOrderId);
+            if (byPaypalOrder.isPresent()) {
+                internalOrderId = byPaypalOrder.get().id();
+            }
+        }
+        if (internalOrderId.isBlank()) {
+            internalOrderId = event.path("resource").path("custom_id").asText("");
+        }
+        if (internalOrderId.isBlank()) {
+            internalOrderId = event.path("resource").path("invoice_id").asText("");
+        }
+        if (internalOrderId.isBlank()) {
+            String captureId = event.path("resource").path("id").asText("");
+            if (!captureId.isBlank()) {
+                Optional<OrderRecord> byTrade = repo.findOrderByTradeNo(captureId);
+                if (byTrade.isPresent()) {
+                    internalOrderId = byTrade.get().id();
+                }
+            }
+        }
+        if (internalOrderId.isBlank()) {
+            return Optional.empty();
+        }
+
+        String captureId = event.path("resource").path("id").asText(null);
+        return repo.markOrderPaid(internalOrderId, captureId);
+    }
+
+    private boolean verifyWebhookSignature(Map<String, String> headers, JsonNode event) {
+        String webhookId = resolveWebhookId();
+        if (webhookId == null || webhookId.isBlank()) {
+            throw new IllegalStateException("PayPal webhook ID 未配置");
+        }
+        ObjectNode body = objectMapper.createObjectNode();
+        body.put("auth_algo", header(headers, "PAYPAL-AUTH-ALGO"));
+        body.put("cert_url", header(headers, "PAYPAL-CERT-URL"));
+        body.put("transmission_id", header(headers, "PAYPAL-TRANSMISSION-ID"));
+        body.put("transmission_sig", header(headers, "PAYPAL-TRANSMISSION-SIG"));
+        body.put("transmission_time", header(headers, "PAYPAL-TRANSMISSION-TIME"));
+        body.put("webhook_id", webhookId);
+        body.set("webhook_event", event);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(getAccessToken());
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(body.toString(), httpHeaders);
+
+        try {
+            ResponseEntity<JsonNode> response = restTemplate.exchange(
+                    paypalProps.getSandboxBaseUrl() + "/v1/notifications/verify-webhook-signature",
+                    HttpMethod.POST,
+                    request,
+                    JsonNode.class
+            );
+            return response.getStatusCode().is2xxSuccessful()
+                    && response.getBody() != null
+                    && "SUCCESS".equals(response.getBody().path("verification_status").asText());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private String resolveWebhookId() {
+        String frontend = paymentProps.getFrontendUrl();
+        String base = paymentProps.getBaseUrl();
+        if ((frontend != null && frontend.contains("dev."))
+                || (base != null && base.contains("dev."))) {
+            return paypalProps.getWebhookIdDev();
+        }
+        return paypalProps.getWebhookIdProd();
+    }
+
     private String getAccessToken() {
         HttpHeaders headers = new HttpHeaders();
         String auth = paypalProps.getClientId() + ":" + paypalProps.getSecret();
@@ -315,5 +415,17 @@ public class PayPalService {
 
     private static String encode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    private static String header(Map<String, String> headers, String name) {
+        if (headers == null) {
+            return "";
+        }
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            if (entry.getKey() != null && entry.getKey().equalsIgnoreCase(name)) {
+                return entry.getValue() == null ? "" : entry.getValue();
+            }
+        }
+        return "";
     }
 }
