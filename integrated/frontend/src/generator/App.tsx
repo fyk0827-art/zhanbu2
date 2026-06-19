@@ -38,6 +38,7 @@ export default function App() {
   const [chart, setChart] = useState<NatalChart | null>(globalChart);
   const [isLoading, setIsLoading] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const hasNavigated = useRef(false);
 
   useEffect(() => {
@@ -62,14 +63,15 @@ export default function App() {
       if (prepaidOrderId) {
         await bindPrepaidReport(prepaidOrderId, reportId);
       }
-    } catch (e) {
-      console.warn("[report] 同步到服务器失败，请确认 payment API 已启动", e);
+    } catch {
+      // The local report is still usable; payment unlock can retry loading it by report ID.
     }
     return { reportId, reportType };
   }, []);
 
   const handleGenerate = useCallback(async (birthData: BirthData) => {
     setIsLoading(true);
+    setGenerationError(null);
     setCharCount(0);
     hasNavigated.current = false;
     try {
@@ -94,7 +96,7 @@ export default function App() {
       const errMsg = error instanceof Error ? error.message : String(error);
       console.error("Error generating report:", error);
       setIsLoading(false);
-      alert(t("errorNetworkFailed", { msg: errMsg }));
+      setGenerationError(t("errorNetworkFailed", { msg: errMsg }));
     }
   }, [navigate, persistReport, t, i18n.language]);
 
@@ -108,6 +110,11 @@ export default function App() {
     <div className="prism-root relative min-h-screen">
       <PrismBackground />
       <div className="relative z-10">
+        {generationError && (
+          <div className="fixed left-1/2 top-4 z-[100] w-[min(92vw,420px)] -translate-x-1/2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 shadow-lg">
+            {generationError}
+          </div>
+        )}
         <Routes>
           <Route index element={<HomePage onGenerate={handleGenerate} isLoading={isLoading} charCount={charCount} />} />
           <Route path="data-review" element={<StarDataReview chart={chart} />} />

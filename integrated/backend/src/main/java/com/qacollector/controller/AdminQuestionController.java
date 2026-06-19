@@ -10,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/questions")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AdminQuestionController {
     private final QuestionService questionService;
 

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/settings")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AdminSettingsController {
 
     private final SettingsService settingsService;

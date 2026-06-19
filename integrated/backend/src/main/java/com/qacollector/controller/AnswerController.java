@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/answers")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AnswerController {
     private final QuestionService questionService;
 

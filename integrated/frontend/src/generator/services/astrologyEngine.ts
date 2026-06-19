@@ -53,15 +53,6 @@ export async function initSwissEph(): Promise<any> {
       _swe_julday_wrap = (year: number, month: number, day: number, hour: number, cal: number) =>
         emModule.ccall("swe_julday_wrap", "number", ["number", "number", "number", "number", "number"], [year, month, day, hour, cal]);
 
-      console.log("[SwissEph] WASM initialized successfully");
-      console.log("[SwissEph] Runtime functions:", {
-        hasMalloc: !!emModule._malloc,
-        hasFree: !!emModule._free,
-        hasCcall: !!emModule.ccall,
-        hasCwrap: !!emModule.cwrap,
-        hasGetValue: !!emModule.getValue,
-      });
-
       return emModule;
     } catch (error) {
       console.error("[SwissEph] Initialization failed:", error);
@@ -80,13 +71,11 @@ export async function initSwissEph(): Promise<any> {
 function ensureRuntimeFunctions(mod: any) {
   // Check if _malloc exists
   if (typeof mod._malloc !== "function") {
-    console.warn("[SwissEph] _malloc not found, attempting to locate via wasm exports...");
     // Try to find malloc in wasm exports
     const exports = mod.asm || mod.wasmExports || (mod.wasmTable && mod.wasmTable.grow) || {};
     for (const [key, val] of Object.entries(exports)) {
       if (typeof val === "function" && key.toLowerCase().includes("malloc")) {
         mod._malloc = val;
-        console.log("[SwissEph] Found malloc alternative:", key);
         break;
       }
     }
@@ -94,7 +83,6 @@ function ensureRuntimeFunctions(mod: any) {
     if (typeof mod._malloc !== "function" && typeof mod.ccall === "function") {
       try {
         mod._malloc = mod.cwrap("malloc", "number", ["number"]);
-        console.log("[SwissEph] Using cwrap fallback for malloc");
       } catch {
         // ignore
       }
@@ -104,7 +92,6 @@ function ensureRuntimeFunctions(mod: any) {
   if (typeof mod._free !== "function") {
     try {
       mod._free = mod.cwrap("free", null, ["number"]);
-      console.log("[SwissEph] Using cwrap fallback for free");
     } catch {
       // ignore - memory will leak but functionally ok for short sessions
     }
@@ -220,8 +207,7 @@ function calcPlanetPosition(jd: number, body: PlanetType): PlanetPosition {
     const retflag = _swe_calc_ut_wrap(jd, body, DEFAULT_FLAGS, resultPtr, serrPtr);
 
     if (retflag < 0) {
-      const error = mod.UTF8ToString ? mod.UTF8ToString(serrPtr) : "Calculation error";
-      console.warn(`[SwissEph] calcPlanet(${body}) warning:`, error);
+      // Swiss Ephemeris can return partial results with a warning; downstream values are still read below.
     }
 
     const lon = mod.getValue(resultPtr, "double");

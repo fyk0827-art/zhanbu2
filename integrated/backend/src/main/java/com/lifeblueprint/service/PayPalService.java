@@ -111,7 +111,7 @@ public class PayPalService {
         ResponseEntity<JsonNode> response;
         try {
             response = restTemplate.exchange(
-                    paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders",
+                    paypalProps.getBaseUrl() + "/v2/checkout/orders",
                     HttpMethod.POST,
                     request,
                     JsonNode.class
@@ -158,7 +158,7 @@ public class PayPalService {
         ResponseEntity<JsonNode> response;
         try {
             response = restTemplate.exchange(
-                    paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders/" + paypalOrderId + "/capture",
+                    paypalProps.getBaseUrl() + "/v2/checkout/orders/" + paypalOrderId + "/capture",
                     HttpMethod.POST,
                     request,
                     JsonNode.class
@@ -228,7 +228,7 @@ public class PayPalService {
         ResponseEntity<JsonNode> response;
         try {
             response = restTemplate.exchange(
-                    paypalProps.getSandboxBaseUrl() + "/v2/checkout/orders/" + paypalOrderId,
+                    paypalProps.getBaseUrl() + "/v2/checkout/orders/" + paypalOrderId,
                     HttpMethod.GET,
                     request,
                     JsonNode.class
@@ -349,7 +349,7 @@ public class PayPalService {
 
         try {
             ResponseEntity<JsonNode> response = restTemplate.exchange(
-                    paypalProps.getSandboxBaseUrl() + "/v1/notifications/verify-webhook-signature",
+                    paypalProps.getBaseUrl() + "/v1/notifications/verify-webhook-signature",
                     HttpMethod.POST,
                     request,
                     JsonNode.class
@@ -363,13 +363,7 @@ public class PayPalService {
     }
 
     private String resolveWebhookId() {
-        String frontend = paymentProps.getFrontendUrl();
-        String base = paymentProps.getBaseUrl();
-        if ((frontend != null && frontend.contains("dev."))
-                || (base != null && base.contains("dev."))) {
-            return paypalProps.getWebhookIdDev();
-        }
-        return paypalProps.getWebhookIdProd();
+        return paypalProps.isLiveMode() ? paypalProps.getWebhookIdProd() : paypalProps.getWebhookIdDev();
     }
 
     private String getAccessToken() {
@@ -386,7 +380,7 @@ public class PayPalService {
 
         try {
             ResponseEntity<JsonNode> response = restTemplate.exchange(
-                    paypalProps.getSandboxBaseUrl() + "/v1/oauth2/token",
+                    paypalProps.getBaseUrl() + "/v1/oauth2/token",
                     HttpMethod.POST,
                     request,
                     JsonNode.class

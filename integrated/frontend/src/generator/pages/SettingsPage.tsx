@@ -24,10 +24,9 @@ const PROMPT_TABS: { key: ReportPromptType; label: string }[] = [
 export default function SettingsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem("settings_auth") === "1";
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordDigits, setPasswordDigits] = useState(["", "", "", "", "", ""]);
+  const [verifiedPassword, setVerifiedPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -81,8 +80,7 @@ export default function SettingsPage() {
     setPasswordError(false);
     try {
       await verifyReportPromptPassword(entered);
-      sessionStorage.setItem("settings_auth", "1");
-      sessionStorage.setItem("settings_password", entered);
+      setVerifiedPassword(entered);
       setIsAuthenticated(true);
     } catch {
       setPasswordError(true);
@@ -128,10 +126,10 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     setSaveError(null);
-    const password = sessionStorage.getItem("settings_password") || "";
+    const password = verifiedPassword;
     if (!password) {
       setSaveError("会话已过期，请重新输入密码");
-      sessionStorage.removeItem("settings_auth");
+      setVerifiedPassword("");
       setIsAuthenticated(false);
       return;
     }

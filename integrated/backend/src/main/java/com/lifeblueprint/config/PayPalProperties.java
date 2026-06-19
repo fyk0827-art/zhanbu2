@@ -7,7 +7,9 @@ public class PayPalProperties {
 
     private String clientId = "";
     private String secret = "";
+    private String mode = "sandbox";
     private String sandboxBaseUrl = "https://api-m.sandbox.paypal.com";
+    private String liveBaseUrl = "https://api-m.paypal.com";
     private String returnUrl = "";
     private String webhookIdDev = "";
     private String webhookIdProd = "";
@@ -28,12 +30,32 @@ public class PayPalProperties {
         this.secret = secret;
     }
 
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
     public String getSandboxBaseUrl() {
         return sandboxBaseUrl;
     }
 
     public void setSandboxBaseUrl(String sandboxBaseUrl) {
         this.sandboxBaseUrl = sandboxBaseUrl;
+    }
+
+    public String getLiveBaseUrl() {
+        return liveBaseUrl;
+    }
+
+    public void setLiveBaseUrl(String liveBaseUrl) {
+        this.liveBaseUrl = liveBaseUrl;
+    }
+
+    public String getBaseUrl() {
+        return isLiveMode() ? liveBaseUrl : sandboxBaseUrl;
     }
 
     public String getReturnUrl() {
@@ -63,5 +85,9 @@ public class PayPalProperties {
     public boolean isConfigured() {
         return clientId != null && !clientId.isBlank()
                 && secret != null && !secret.isBlank();
+    }
+
+    public boolean isLiveMode() {
+        return "live".equalsIgnoreCase(mode) || "prod".equalsIgnoreCase(mode) || "production".equalsIgnoreCase(mode);
     }
 }

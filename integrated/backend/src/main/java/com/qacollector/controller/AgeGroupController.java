@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/age-groups")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AgeGroupController {
     private final AgeGroupService ageGroupService;
 

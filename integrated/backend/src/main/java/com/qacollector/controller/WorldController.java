@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/world")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class WorldController {
 
     private final WorldService worldService;

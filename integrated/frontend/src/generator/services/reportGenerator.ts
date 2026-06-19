@@ -50,8 +50,6 @@ export async function generateReportText(
   if (!s.apiKey) throw new Error("未配置 API Key，请先去设置页面配置");
 
   const calcResult = runV2Calculations(chart);
-  console.log("[V2.8] Calculated scores:", calcResult.scores);
-  console.log("[V2.8] Dominant planet:", calcResult.dominantPlanet);
 
   const prompts = buildPromptsForReportType(reportType, chart, calcResult);
   const dbPrompts = await fetchReportPrompts();
