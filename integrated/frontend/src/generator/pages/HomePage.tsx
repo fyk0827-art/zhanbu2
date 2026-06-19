@@ -247,7 +247,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              onBlur={() => { if (name) trackEvent('name', true); }}
+              onBlur={(e) => { if (e.target.value) trackEvent('name', true); }}
               placeholder={t('generatorNamePlaceholder')}
               className="prism-input"
             />
