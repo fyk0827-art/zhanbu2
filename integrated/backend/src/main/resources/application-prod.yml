@@ -1,8 +1,45 @@
+server:
+  port: 8880
+
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/integrated_platform_main?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/integrated_platform?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
     username: divinlove2
     password: Fyk6112212...
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+jwt:
+  secret: ${JWT_SECRET:dev-jwt-secret-key-2024}
+  expiration: 86400000
+
+payment:
+  mode: paypal
+  order-amount: 2990
+  product-title: "人生蓝图·完整行动版"
+  frontend-url: https://dev.divinlove.com
+  base-url: https://dev.divinlove.com
+
+pay:
+  alipay:
+    appId: ${ALIPAY_APP_ID:}
+    merchantPrivateKey: ${ALIPAY_PRIVATE_KEY:}
+    alipayPublicKey: ${ALIPAY_PUBLIC_KEY:}
+  wechat:
+    appId: ${WECHAT_APP_ID:}
+    mchId: ${WECHAT_MCH_ID:}
+  paypal:
+    client-id: AfXm2ti4T23Ys-DglNzOIIjEPFV9FUM6IjwOyBXyasNK6p2jyn8b7qyyrthuefIzub3Z4AQ5aEuqcWWK
+    secret: EERPl40QbcPqhwgt4YsqKPO6qdlHyP_jOeXY2ev0IRqO7LQxgbdxWiKPktRboI_A5R4Jl-zF0dldJUTW
+    sandbox-base-url: https://api-m.sandbox.paypal.com
+
+logging:
+  level:
+    com.qacollector: INFO
+    com.lifeblueprint: INFO
 
 meta:
   pixel-id: 1000287272912455
