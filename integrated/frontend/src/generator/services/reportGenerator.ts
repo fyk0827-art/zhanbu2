@@ -73,7 +73,7 @@ export async function generateReportText(
     received += chunk;
     onChunk?.(received);
 
-    const headingRegex = /(?:^|\n)#{2,3}\s+[^\n]+/g;
+    const headingRegex = /(?:^|\n)#{1,3}\s+[^\n]+/g;
     const positions: number[] = [];
     let match: RegExpExecArray | null;
     while ((match = headingRegex.exec(received)) !== null) {
@@ -85,7 +85,7 @@ export async function generateReportText(
       const end = positions[1];
       const raw = received.slice(start, end).trim();
       const lines = raw.split("\n");
-      const heading = lines[0].replace(/^#{2,3}\s+/, "").trim();
+      const heading = lines[0].replace(/^#{1,3}\s+/, "").trim();
       const content = lines.slice(1).join("\n").trim();
       if (heading && content) {
         pushSection({ heading, content });
@@ -98,7 +98,7 @@ export async function generateReportText(
   const remaining = received.slice(lastSplit).trim();
   if (remaining) {
     const lines = remaining.split("\n");
-    const heading = lines[0]?.replace(/^#{2,3}\s+/, "").trim();
+    const heading = lines[0]?.replace(/^#{1,3}\s+/, "").trim();
     const content = lines.slice(1).join("\n").trim();
     if (heading && content) {
       pushSection({ heading, content });
