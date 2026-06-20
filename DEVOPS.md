@@ -36,12 +36,12 @@
    # 返回 events_received:1 即 OK
    ```
 
-3. **浏览器 Pixel 测试（唯一正确方式，不要改代码）：**
-   - ❌ `fbq('init', ..., {testEventCode: '...'})` 对这个 Pixel 不生效（参数被当作用户数据处理）
-   - ❌ 不要在代码里加任何 `testEventCode`
-   - ✅ **Events Manager → 测试事件 → 输入代码 → 「打开链接」** → 在弹窗里操作网站
-   - 浏览器 Pixel 发的是真实事件，Test Events 面板只显示 CAPI 的测试事件
-   - 要看浏览器事件 → 去 Events Dashboard 主面板看实时 PageView
+3. **浏览器 Pixel 测试（只看 CAPI，浏览器不要折腾了）：**
+   - ❌ `fbq('init', ..., {testEventCode: '...'})` 传的是 `ud[testEventCode]`（用户数据），不是测试事件标记
+   - ❌ Cookie `fb_test_event_code` 也没用，Pixel SDK 不认
+   - ❌ 手机浏览器没办法主动进入测试模式（除非 Events Manager UI 「打开链接」）
+   - ✅ 直接用 Events Dashboard 主面板看实时 PageView
+   - ✅ CAPI 的 `test_event_code` 放请求体顶层 → Test Events 能正常显示
 
 4. **⚠️ 必须同时更新两处（最容易忘的坑）：**
    - `application-prod.yml` — 改 `pixel-id` + `capi-access-token`
