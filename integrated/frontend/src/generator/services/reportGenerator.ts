@@ -67,7 +67,7 @@ export async function generateReportText(
       { role: "system" as const, content: sp },
       { role: "user" as const, content: up },
     ],
-    max_tokens: s.maxTokens || 8192,
+    max_tokens: s.maxTokens || 16384,
     temperature: s.temperature ?? 0.1,
   })) {
     received += chunk;
