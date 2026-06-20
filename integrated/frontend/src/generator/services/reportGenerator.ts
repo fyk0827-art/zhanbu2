@@ -74,28 +74,24 @@ export async function generateReportText(
     onChunk?.(received);
 
     const headingRegex = /(?:^|\n)#{2,3}\s+[^\n]+/g;
-    headingRegex.lastIndex = lastSplit;
-    let m: RegExpExecArray | null;
-    const boundaries: number[] = [];
-    while ((m = headingRegex.exec(received)) !== null) {
-      if (m.index > lastSplit + 2) boundaries.push(m.index);
+    const positions: number[] = [];
+    let match: RegExpExecArray | null;
+    while ((match = headingRegex.exec(received)) !== null) {
+      const pos = match.index + (match[0].startsWith("\n") ? 1 : 0);
+      if (pos > lastSplit) positions.push(pos);
     }
-    let sectionEnd = -1;
-    for (const pos of boundaries) {
-      if (sectionEnd === -1) sectionEnd = pos;
-    }
-    if (sectionEnd > 0) {
-      const raw = received.slice(lastSplit, sectionEnd).trim();
-      lastSplit = sectionEnd;
+    while (positions.length >= 2) {
+      const start = positions[0];
+      const end = positions[1];
+      const raw = received.slice(start, end).trim();
       const lines = raw.split("\n");
-      const sep = lines[0]?.startsWith("##") || lines[0]?.startsWith("###");
-      if (sep && lines.length > 1) {
-        const heading = lines[0].replace(/^#{2,3}\s+/, "").trim();
-        const content = lines.slice(1).join("\n").trim();
-        if (heading && content) {
-          pushSection({ heading, content });
-        }
+      const heading = lines[0].replace(/^#{2,3}\s+/, "").trim();
+      const content = lines.slice(1).join("\n").trim();
+      if (heading && content) {
+        pushSection({ heading, content });
       }
+      lastSplit = end;
+      positions.shift();
     }
   }
 
