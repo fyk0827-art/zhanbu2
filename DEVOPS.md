@@ -36,12 +36,12 @@
    # 返回 events_received:1 即 OK
    ```
 
-3. **浏览器 Pixel 测试（唯一正确方式）：**
-   - ❌ `fbq('init', ..., {testEventCode: '...'})` 不生效，这个参数是给 CAPI Gateway 的
-   - ❌ 不需要在代码里加任何东西
-   - ✅ **Events Manager → 测试事件 → 输入代码 → 「打开链接」** → 在打开的页面操作
-   - 浏览器 Pixel 的 PageView 是真事件，只看 Test Events 看不见，要去主面板看
-   - CAPI 的 `test_event_code` 放请求体顶层即可在 Test Events 看到
+3. **浏览器 Pixel 测试（唯一正确方式，不要改代码）：**
+   - ❌ `fbq('init', ..., {testEventCode: '...'})` 对这个 Pixel 不生效（参数被当作用户数据处理）
+   - ❌ 不要在代码里加任何 `testEventCode`
+   - ✅ **Events Manager → 测试事件 → 输入代码 → 「打开链接」** → 在弹窗里操作网站
+   - 浏览器 Pixel 发的是真实事件，Test Events 面板只显示 CAPI 的测试事件
+   - 要看浏览器事件 → 去 Events Dashboard 主面板看实时 PageView
 
 4. **⚠️ 必须同时更新两处（最容易忘的坑）：**
    - `application-prod.yml` — 改 `pixel-id` + `capi-access-token`
