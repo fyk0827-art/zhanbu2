@@ -10,6 +10,8 @@ const STEPS = [
   { textKey: "analysisStep6Text", subKey: "analysisStep6Sub" },
 ];
 
+const INITIAL_COUNTDOWN = Math.floor(Math.random() * 301) + 600;
+
 interface Props {
   charCount?: number;
 }
@@ -18,7 +20,7 @@ export default function PrismAnalysisAnimation({ charCount: _charCount }: Props)
   const { t } = useTranslation();
   const [stepIdx, setStepIdx] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [countdown, setCountdown] = useState(() => Math.floor(Math.random() * 401) + 800);
+  const [countdown, setCountdown] = useState(INITIAL_COUNTDOWN);
   const doneRef = useRef(false);
 
   useEffect(() => {
