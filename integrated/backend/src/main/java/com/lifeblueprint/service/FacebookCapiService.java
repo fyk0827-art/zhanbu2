@@ -100,6 +100,12 @@ public class FacebookCapiService {
             putIfText(userData, "fbp", attribution.fbp());
             putIfText(userData, "fbc", attribution.fbc());
         }
+        if (!userData.has("client_ip_address")) {
+            userData.put("client_ip_address", "127.0.0.1");
+        }
+        if (!userData.has("client_user_agent")) {
+            userData.put("client_user_agent", "unknown");
+        }
 
         ObjectNode customData = event.putObject("custom_data");
         customData.put("currency", blankToDefault(metaProps.getCurrency(), "USD"));
