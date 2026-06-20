@@ -41,6 +41,16 @@
    - ✅ 用 Events Manager → 测试事件 → 输入代码 → 「打开链接」
    - CAPI 的 `test_event_code` 放请求体顶层即可在 Test Events 看到
 
+4. **⚠️ 必须同时更新两处（最容易忘的坑）：**
+   - `application-prod.yml` — 改 `pixel-id` + `capi-access-token`
+   - `/etc/divinlove/main.env` — 改 `META_CAPI_ACCESS_TOKEN`（环境变量优先级高于 yml，不更新的话旧 token 会覆盖新配置）
+   - 只改 yml 不改 env → 后端用旧 token 请求新 pixel → Facebook 报 400 permission error → 排查半天
+
+5. **CAPI 的 user_data 不能为空：**
+   - Facebook 要求至少包含 `client_ip_address` 和 `client_user_agent`
+   - 后端已加 fallback：`127.0.0.1` + `unknown`
+   - 测试时也要带上这两个字段，否则 Facebook 返回 `error_subcode: 2804050`
+
 4. **注意事项：**
    - CAPI `user_data` 不能为空！至少要有 `client_ip_address` 和 `client_user_agent`
    - 新 token 生成后有几分钟权限延迟，400 不代表一定有问题，等几分钟重试
