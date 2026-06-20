@@ -58,6 +58,11 @@ export default function PrismAnalysisAnimation({ charCount: _charCount }: Props)
           className="absolute top-1/2 left-1/2 w-3 h-3 -mt-1.5 -ml-1.5 rounded-full"
           style={{ background: "var(--prism-gold)", boxShadow: "0 0 30px rgba(232,185,81,0.4)" }}
         />
+        <p className="absolute inset-0 flex items-center justify-center text-xs font-mono mt-5" style={{ color: "var(--prism-cream)" }}>
+          {countdown > 0
+            ? `Estimated time: ${(countdown / 10).toFixed(1)}s`
+            : "The results are coming soon, please be patient"}
+        </p>
       </div>
       <p
         className="prism-font-serif text-base leading-relaxed transition-opacity duration-300"
@@ -67,11 +72,6 @@ export default function PrismAnalysisAnimation({ charCount: _charCount }: Props)
       </p>
       <p className="text-xs mt-3 tracking-widest" style={{ color: "rgba(232,185,81,0.3)" }}>
         {t(step.subKey)}
-      </p>
-      <p className="text-xs mt-4 font-mono" style={{ color: "var(--prism-cream)" }}>
-        {countdown > 0
-          ? `Estimated time: ${(countdown / 10).toFixed(1)}s`
-          : "The results are coming soon, please be patient"}
       </p>
     </div>
   );
