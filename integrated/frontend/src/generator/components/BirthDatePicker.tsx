@@ -184,7 +184,7 @@ export default function BirthDatePicker({
         className={`w-full text-left flex items-center justify-between ${className}${error ? " error" : ""}`}
         style={{ WebkitTapHighlightColor: "transparent" }}
       >
-        <span style={{ color: value ? "var(--color-text, var(--prism-cream))" : "var(--color-text-dim, rgba(250,246,240,0.25))" }}>
+        <span className="text-[12px]" style={{ color: value ? "var(--color-text, var(--prism-cream))" : "var(--color-text-dim, rgba(250,246,240,0.25))" }}>
           {value ? formatDisplay(value, t) : placeholder}
         </span>
         <Calendar className="w-4 h-4 shrink-0" style={{ color: "var(--prism-gold, var(--color-gold))" }} />

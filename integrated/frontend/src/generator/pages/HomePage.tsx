@@ -403,14 +403,14 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
               </div>
             )}
 
-            <button
+            {/* <button
               type="button"
               onClick={() => setUseCustomCoords(!useCustomCoords)}
               className="text-[11px] mt-3 hover:underline"
               style={{ color: "var(--prism-gold)" }}
             >
               {useCustomCoords ? t('generatorUseCityList') : t('generatorManualCoords')}
-            </button>
+            </button> */}
           </div>
 
           <button
