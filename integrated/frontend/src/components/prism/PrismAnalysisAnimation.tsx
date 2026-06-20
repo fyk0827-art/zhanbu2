@@ -18,6 +18,7 @@ export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
   const { t } = useTranslation();
   const [stepIdx, setStepIdx] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     const timers = STEPS.map((_, i) =>
@@ -30,6 +31,11 @@ export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
       }, i * 2000)
     );
     return () => timers.forEach(clearTimeout);
+  }, []);
+
+  useEffect(() => {
+    const t = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(t);
   }, []);
 
   const step = STEPS[stepIdx];
@@ -60,6 +66,11 @@ export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
           style={{ background: "rgba(232,185,81,0.08)", color: "rgba(232,185,81,0.55)" }}
         >
           {t("analysisReceivedChars", { count: charCount })}
+        </p>
+      )}
+      {elapsed > 3 && (
+        <p className="text-xs mt-4" style={{ color: "rgba(232,185,81,0.35)" }}>
+          Elapsed: {elapsed}s
         </p>
       )}
     </div>
