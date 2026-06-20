@@ -639,18 +639,36 @@ export default function BlueprintReport({ chart }: Props) {
   useEffect(() => {
     if (!activeChart || reportText || autoGenRef.current) return;
     autoGenRef.current = true;
+
+    const saved = loadReportText(reportType) || getGlobalReportText();
+    if (saved) {
+      setReportText(saved);
+      setGlobalReportText(saved, reportType);
+      return;
+    }
+
     setGenerating(true);
     setGenError(null);
+
+    const timer = setTimeout(() => {
+      setGenerating(false);
+      setGenError("Generation timed out. Please try again.");
+    }, 60000);
+
     generateReportText(activeChart, reportType, (text) => setGenCharCount(text.length), i18n.language)
       .then((text) => {
+        clearTimeout(timer);
         if (!text.trim()) throw new Error(t("errorEmptyReport"));
         setReportText(text);
         setGlobalReportText(text, reportType);
         saveReportText(text, reportType);
       })
-      .catch((e) => setGenError(e instanceof Error ? e.message : String(e)))
+      .catch((e) => {
+        clearTimeout(timer);
+        setGenError(e instanceof Error ? e.message : String(e));
+      })
       .finally(() => setGenerating(false));
-  }, [activeChart, reportText, reportType, i18n.language, t]);
+  }, [activeChart, reportType, i18n.language, t]);
 
   const {
     isUnlocked,
