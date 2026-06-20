@@ -6,6 +6,7 @@ import { fetchReportPrompts } from "./reportPromptApi";
 import { runV2Calculations } from "./v2ScoringEngine";
 import { trackEvent } from "../utils/track";
 import { localizeAstroText } from "../utils/astroI18n";
+import { pushSection } from "../utils/streamStore";
 
 function normalizeLanguage(language?: string): string {
   if (!language) return "en";
@@ -58,6 +59,7 @@ export async function generateReportText(
   const sp = appendOutputLanguageInstruction(resolveSystemPrompt(reportType, dbPrompts.prompts), language);
   const up = appendOutputLanguageInstruction(localizeAstroText(prompts.user, language), language);
   let received = "";
+  let lastSplit = 0;
 
   for await (const chunk of streamChat(s.apiKey, {
     model: s.model || "deepseek-v4-pro",
@@ -65,11 +67,43 @@ export async function generateReportText(
       { role: "system" as const, content: sp },
       { role: "user" as const, content: up },
     ],
-    max_tokens: s.maxTokens || 8192,
+    max_tokens: s.maxTokens || 16384,
     temperature: s.temperature ?? 0.1,
   })) {
     received += chunk;
     onChunk?.(received);
+
+    const headingRegex = /(?:^|\n)#{1,3}\s+[^\n]+/g;
+    const positions: number[] = [];
+    let match: RegExpExecArray | null;
+    while ((match = headingRegex.exec(received)) !== null) {
+      const pos = match.index + (match[0].startsWith("\n") ? 1 : 0);
+      if (pos >= lastSplit) positions.push(pos);
+    }
+    while (positions.length >= 2) {
+      const start = positions[0];
+      const end = positions[1];
+      const raw = received.slice(start, end).trim();
+      const lines = raw.split("\n");
+      const heading = lines[0].replace(/^#{1,3}\s+/, "").trim();
+      const content = lines.slice(1).join("\n").trim();
+      if (heading && content) {
+        pushSection({ heading, content });
+      }
+      lastSplit = end;
+      positions.shift();
+    }
   }
+
+  const remaining = received.slice(lastSplit).trim();
+  if (remaining) {
+    const lines = remaining.split("\n");
+    const heading = lines[0]?.replace(/^#{1,3}\s+/, "").trim();
+    const content = lines.slice(1).join("\n").trim();
+    if (heading && content) {
+      pushSection({ heading, content });
+    }
+  }
+
   return localizeAstroText(received, language);
 }

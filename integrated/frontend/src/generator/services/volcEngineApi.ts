@@ -111,7 +111,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   apiKey: "",
   model: "deepseek-v4-pro",
   temperature: 0.1,
-  maxTokens: 8192,
+  maxTokens: 16384,
   customPrompt: "",
 };
 
@@ -127,6 +127,9 @@ export function getSettings(): AppSettings {
       }
       if (parsed.model === "deepseek-v4-pro") {
         parsed.model = DEFAULT_SETTINGS.model;
+      }
+      if (parsed.maxTokens === 8192) {
+        parsed.maxTokens = DEFAULT_SETTINGS.maxTokens;
       }
       Object.assign(base, parsed);
     }
