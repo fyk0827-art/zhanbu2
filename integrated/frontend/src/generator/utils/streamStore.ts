@@ -28,8 +28,19 @@ export function getState() {
   return { sections, done };
 }
 
+let streamingActive = false;
+
+export function setStreamingActive(active: boolean) {
+  streamingActive = active;
+}
+
+export function isStreamingActive() {
+  return streamingActive;
+}
+
 export function reset() {
   sections = [];
   done = false;
   listeners = [];
+  streamingActive = false;
 }

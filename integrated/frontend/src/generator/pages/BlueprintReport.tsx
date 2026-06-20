@@ -17,7 +17,7 @@ import { getPaymentLabels } from "../services/paymentApi";
 import { getRouterSearchParams } from "../utils/routerQuery";
 import { generatorPath } from "../utils/generatorNav";
 import { ReportDeepReadingCTA } from "../components/ReportDeepReadingCTA";
-import { subscribe as streamSubscribe, getState as getStreamState } from "../utils/streamStore";
+import { subscribe as streamSubscribe, getState as getStreamState, isStreamingActive } from "../utils/streamStore";
 import { PaywallCard, LockedPreview } from "../components/ReportPaywall";
 import { ReportIdentitySection } from "../components/ReportIdentitySection";
 import { MarriageReportView, parseMarriageCoverMeta } from "../components/MarriageReportView";
@@ -656,6 +656,10 @@ export default function BlueprintReport({ chart }: Props) {
   useEffect(() => {
     if (!activeChart || reportText || autoGenRef.current) return;
     autoGenRef.current = true;
+
+    if (isStreamingActive()) {
+      return;
+    }
 
     const saved = loadReportText(reportType) || getGlobalReportText();
     if (saved) {

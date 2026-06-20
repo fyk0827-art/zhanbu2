@@ -21,7 +21,7 @@ import type { BirthData, NatalChart } from "./services/astrologyEngine";
 import { generatorPath } from "./utils/generatorNav";
 import { generateReportText } from "./services/reportGenerator";
 import { trackEvent } from "./utils/track";
-import { reset as resetStore, subscribe, getState } from "./utils/streamStore";
+import { reset as resetStore, subscribe, getState, setStreamingActive } from "./utils/streamStore";
 
 let globalChart: NatalChart | null = null;
 let globalReportText: string = "";
@@ -93,15 +93,16 @@ export default function App() {
         const s = getState();
         if (s.sections.length >= 2 && !hasNavigated.current) {
           hasNavigated.current = true;
-          setIsLoading(false);
           navigate(`${generatorPath("final-report")}?reportType=${encodeURIComponent(reportType)}`);
         }
       });
 
+      setStreamingActive(true);
       try {
         fullText = await generateReportText(natalChart, reportType, (chunk) => setCharCount(chunk.length), i18n.language);
       } finally {
         unsub();
+        setStreamingActive(false);
       }
 
       if (!fullText.trim()) throw new Error(t("errorEmptyReport"));

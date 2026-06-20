@@ -78,7 +78,7 @@ export async function generateReportText(
     let match: RegExpExecArray | null;
     while ((match = headingRegex.exec(received)) !== null) {
       const pos = match.index + (match[0].startsWith("\n") ? 1 : 0);
-      if (pos > lastSplit) positions.push(pos);
+      if (pos >= lastSplit) positions.push(pos);
     }
     while (positions.length >= 2) {
       const start = positions[0];
