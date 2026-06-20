@@ -691,6 +691,15 @@ export default function BlueprintReport({ chart }: Props) {
       .finally(() => setGenerating(false));
   }, [activeChart, reportType, i18n.language, t]);
 
+  useEffect(() => {
+    if (streaming || reportText) return;
+    const full = getGlobalReportText();
+    if (full) {
+      setReportText(full);
+      setGlobalReportText(full, reportType);
+    }
+  }, [streaming, reportText, reportType]);
+
   const {
     isUnlocked,
     orderId,
@@ -842,11 +851,13 @@ export default function BlueprintReport({ chart }: Props) {
         </div>
       );
     }
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#0D1B2A", color: "#9CA3AF" }}>
-        {t('reportPreparing')}
-      </div>
-    );
+    if (liveSections.length === 0) {
+      return (
+        <div className="min-h-screen flex items-center justify-center" style={{ background: "#0D1B2A", color: "#9CA3AF" }}>
+          {t('reportPreparing')}
+        </div>
+      );
+    }
   }
 
   const dp = calc.dominantPlanet;
