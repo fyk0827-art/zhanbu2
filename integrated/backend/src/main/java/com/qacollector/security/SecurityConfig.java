@@ -81,6 +81,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/wechat/**").permitAll()
                 .requestMatchers("/api/paypal/**").permitAll()
                 .requestMatchers("/api/world/**").permitAll()
+                .requestMatchers("/api/proxy/**").permitAll()
                 .requestMatchers("/api/notify/**").permitAll()
                 // Admin-only endpoints (specific paths before public wildcards)
                 .requestMatchers("/api/dev/**").hasAnyRole("ADMIN", "SUPER_ADMIN")

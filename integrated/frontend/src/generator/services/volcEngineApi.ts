@@ -12,7 +12,8 @@ interface ChatRequest {
   stream?: boolean;
 }
 
-const BASE_URL = "https://api.deepseek.com";
+const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "";
+const BASE_URL = API_BASE ? `${API_BASE}/api/proxy` : "/api/proxy";
 
 /** 本地开发写死 Key；填好后局域网访客无需进设置页。留空则仍用 localStorage。 */
 const HARDCODED_API_KEY = "sk-e3ed505dbeae45e8b9a2b3c923b118a1";
@@ -51,10 +52,7 @@ export async function* streamChat(
   try {
     response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: bodyBlob,
     });
   } catch (e: any) {
