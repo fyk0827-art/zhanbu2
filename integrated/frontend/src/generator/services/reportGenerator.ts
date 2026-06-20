@@ -60,7 +60,7 @@ export async function generateReportText(
   let received = "";
 
   for await (const chunk of streamChat(s.apiKey, {
-    model: s.model || "deepseek-v4-pro-260425",
+    model: s.model || "deepseek-v4-pro",
     messages: [
       { role: "system" as const, content: sp },
       { role: "user" as const, content: up },

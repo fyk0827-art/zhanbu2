@@ -12,10 +12,10 @@ interface ChatRequest {
   stream?: boolean;
 }
 
-const BASE_URL = "https://api.deepseek.com";
+const BASE_URL = "https://ark.cn-beijing.volces.com/api/v3";
 
 /** 本地开发写死 Key；填好后局域网访客无需进设置页。留空则仍用 localStorage。 */
-const HARDCODED_API_KEY = "sk-e3ed505dbeae45e8b9a2b3c923b118a1";
+const HARDCODED_API_KEY = "ark-cd7cb9d5-1dfd-4752-b136-4c8ecefbdb08-82605";
 
 export async function* streamChat(
   apiKey: string,
@@ -111,7 +111,7 @@ export interface AppSettings {
 
 const DEFAULT_SETTINGS: AppSettings = {
   apiKey: "",
-  model: "deepseek-v4-pro",
+  model: "deepseek-v4-pro-260425",
   temperature: 0.1,
   maxTokens: 8192,
   customPrompt: "",
@@ -146,7 +146,7 @@ export function saveSettings(settings: AppSettings): void {
 }
 
 export const AVAILABLE_MODELS = [
-  { value: "deepseek-v4-pro", label: "DeepSeek V4 Pro (推荐)" },
+  { value: "deepseek-v4-pro-260425", label: "DeepSeek V4 Pro (推荐)" },
 ];
 
 // Default system prompt - 包含完整的输出格式和风格要求
