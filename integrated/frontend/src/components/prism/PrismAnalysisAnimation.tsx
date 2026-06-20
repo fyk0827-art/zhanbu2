@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 const STEPS = [
@@ -14,12 +14,12 @@ interface Props {
   charCount?: number;
 }
 
-export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
+export default function PrismAnalysisAnimation({ charCount: _charCount }: Props) {
   const { t } = useTranslation();
   const [stepIdx, setStepIdx] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [startTime] = useState(() => Date.now());
-  const [elapsed, setElapsed] = useState(0);
+  const [countdown, setCountdown] = useState(() => Math.floor(Math.random() * 301) + 900);
+  const doneRef = useRef(false);
 
   useEffect(() => {
     const timers = STEPS.map((_, i) =>
@@ -35,9 +35,14 @@ export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
   }, []);
 
   useEffect(() => {
-    const t = setInterval(() => setElapsed(Date.now() - startTime), 100);
+    const t = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) { doneRef.current = true; return 0; }
+        return prev - 1;
+      });
+    }, 100);
     return () => clearInterval(t);
-  }, [startTime]);
+  }, []);
 
   const step = STEPS[stepIdx];
 
@@ -61,19 +66,11 @@ export default function PrismAnalysisAnimation({ charCount = 0 }: Props) {
       <p className="text-xs mt-3 tracking-widest" style={{ color: "rgba(232,185,81,0.3)" }}>
         {t(step.subKey)}
       </p>
-      {charCount > 0 && (
-        <p
-          className="text-xs mt-4 px-4 py-1.5 rounded-full inline-block"
-          style={{ background: "rgba(232,185,81,0.08)", color: "rgba(232,185,81,0.55)" }}
-        >
-          {t("analysisReceivedChars", { count: charCount })}
-        </p>
-      )}
-      {elapsed > 3000 && (
-        <p className="text-xs mt-4 font-mono" style={{ color: "rgba(232,185,81,0.35)" }}>
-          Elapsed: {(elapsed / 1000).toFixed(1)}s
-        </p>
-      )}
+      <p className="text-xs mt-4 font-mono" style={{ color: "var(--prism-cream)" }}>
+        {countdown > 0
+          ? `Estimated time: ${(countdown / 10).toFixed(1)}s`
+          : "The results are coming soon, please be patient"}
+      </p>
     </div>
   );
 }
