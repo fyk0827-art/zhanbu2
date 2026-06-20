@@ -7,6 +7,6 @@ spring:
 meta:
   pixel-id: 1000287272912455
   capi-access-token: ${META_CAPI_ACCESS_TOKEN}
-  test-event-code: TEST56505
+  test-event-code: ""
   product-name: Full Life Blueprint Report
   currency: USD
