@@ -643,15 +643,29 @@ export default function BlueprintReport({ chart }: Props) {
     const unsub = streamSubscribe(() => {
       const s = getStreamState();
       setLiveSections([...s.sections]);
-      if (s.done) setStreaming(false);
+      if (s.done) {
+        setStreaming(false);
+        const full = getGlobalReportText();
+        if (full) {
+          setReportText(full);
+          setGlobalReportText(full, reportType);
+        }
+      }
     });
     const initial = getStreamState();
     if (initial.sections.length > 0) {
       setLiveSections([...initial.sections]);
-      if (initial.done) setStreaming(false);
+      if (initial.done) {
+        setStreaming(false);
+        const full = getGlobalReportText();
+        if (full) {
+          setReportText(full);
+          setGlobalReportText(full, reportType);
+        }
+      }
     }
     return unsub;
-  }, []);
+  }, [reportType]);
 
   useEffect(() => {
     if (!activeChart || reportText || autoGenRef.current) return;
@@ -690,15 +704,6 @@ export default function BlueprintReport({ chart }: Props) {
       })
       .finally(() => setGenerating(false));
   }, [activeChart, reportType, i18n.language, t]);
-
-  useEffect(() => {
-    if (streaming || reportText) return;
-    const full = getGlobalReportText();
-    if (full) {
-      setReportText(full);
-      setGlobalReportText(full, reportType);
-    }
-  }, [streaming, reportText, reportType]);
 
   const {
     isUnlocked,
