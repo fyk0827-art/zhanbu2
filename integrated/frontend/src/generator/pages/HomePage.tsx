@@ -287,7 +287,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                 placeholder={t('generatorBirthDatePlaceholder')}
               />
             </div>
-            <div className="flex-1 text-left min-w-0">
+            <div className="w-[150px] shrink-0 text-left">
               <div className="mb-2">
                 <span className="prism-font-serif text-[13px] font-semibold" style={{ color: "rgba(250,246,240,0.7)" }}>
                   {t('generatorBirthTime')} <span style={{ color: "var(--prism-gold)" }}>*</span>
@@ -297,7 +297,7 @@ export default function HomePage({ onGenerate, isLoading, charCount = 0 }: Props
                 type="time"
                 value={birthTime}
                 onChange={(e) => setBirthTime(e.target.value)}
-                className="prism-input w-full max-w-full"
+                className="prism-input"
               />
               <p className="text-[10px] mt-1 italic" style={{ color: "rgba(232,185,81,0.35)" }}>{t('generatorBirthTimeHint')}</p>
             </div>
