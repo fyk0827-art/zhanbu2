@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useRef, type ElementType } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
-  ArrowLeft, Settings, Download, Star, Heart, AlertTriangle, Users, Wallet, Home,
+  ArrowLeft, Download, Star, Heart, AlertTriangle, Users, Wallet, Home,
   Briefcase, Compass, KeyRound, Moon, Sparkles, Zap, CheckCircle2,
 } from "lucide-react";
 import type { NatalChart } from "../services/astrologyEngine";
@@ -799,9 +799,6 @@ export default function BlueprintReport({ chart }: Props) {
             <button type="button" className="px-4 py-2 rounded-lg text-sm border" style={{ borderColor: "rgba(232,185,81,0.3)", color: "#E8B951" }} onClick={() => navigate(generatorPath())}>
               {t('reportBackHome')}
             </button>
-            <button type="button" className="px-4 py-2 rounded-lg text-sm text-white" style={{ background: PRIMARY }} onClick={() => navigate(generatorPath("settings"))}>
-              {t('textReportCheckSettings')}
-            </button>
           </div>
         </div>
       );
@@ -1095,9 +1092,9 @@ export default function BlueprintReport({ chart }: Props) {
         <button type="button" onClick={() => navigate(generatorPath())} className="no-print absolute top-4 left-4 p-2 rounded-full flex items-center gap-1" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", zIndex: 20 }}>
           <ArrowLeft size={16} /><span className="text-xs">{t('reportBack')}</span>
         </button>
-        <button type="button" onClick={() => navigate(generatorPath("settings"))} className="no-print absolute top-4 right-4 p-2 rounded-full" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", zIndex: 20 }}>
+        {/* <button type="button" onClick={() => navigate(generatorPath("settings"))} className="no-print absolute top-4 right-4 p-2 rounded-full" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", zIndex: 20 }}>
           <Settings size={16} />
-        </button>
+        </button> */}
       </div>
 
       <button
