@@ -10,7 +10,7 @@ const STEPS = [
   { textKey: "analysisStep6Text", subKey: "analysisStep6Sub" },
 ];
 
-const INITIAL_COUNTDOWN = Math.floor(Math.random() * 301) + 600;
+const INITIAL_COUNTDOWN = Math.floor(Math.random() * 201) + 1000;
 
 interface Props {
   charCount?: number;

@@ -1,0 +1,176 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e87]:
+    - generic [ref=e88]:
+      - generic [ref=e89]:
+        - paragraph [ref=e90]: Life Blueprint Report
+        - heading "hkhlh · Sun type" [level=1] [ref=e91]
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - img [ref=e95]
+            - text: Sun 87 pts
+          - generic [ref=e97]:
+            - img [ref=e98]
+            - text: Saturn 79 pts
+          - generic [ref=e101]:
+            - img [ref=e102]
+            - text: Moon 68 pts
+      - button "Back" [ref=e104] [cursor=pointer]:
+        - img [ref=e105]
+        - generic [ref=e107]: Back
+    - button "Print Free Section" [ref=e108] [cursor=pointer]:
+      - img [ref=e109]
+      - generic [ref=e112]: Print Free Section
+    - button "Unlock with PayPal · $9.99" [ref=e114] [cursor=pointer]
+    - generic [ref=e115]:
+      - generic [ref=e121]:
+        - generic [ref=e122]: Identity Revealed
+        - heading "You are Sun type" [level=2] [ref=e123]
+        - generic [ref=e124]: Explorer · 9th house energy
+        - paragraph [ref=e126]: This ambitious drive is channeled through a personality that is first and foremost a bold initiator and an independent spearhead. Your approach to life is direct, competitive, and instinctively action-oriented. You don’t wait for permission; you see a challenge and you charge. This gives you a courageous, pioneering spirit that is impossible to ignore. However, this is seasoned by a deeply private and sensitive emotional core. Your inner world is not about logic; it is a boundless, intuitive sea of feelings that border on the universal. You feel everything, often before you can articulate it, making you an extraordinarily empathetic and imaginative person who processes the world through a deeply personal, subjective filter. You are a warrior with a poet’s soul, building a fortress for the dreams you hold dear.
+      - generic [ref=e127]:
+        - generic [ref=e128]:
+          - img [ref=e129]
+          - generic [ref=e131]: Sun planet
+          - generic [ref=e132]: Capricorn 9th house
+          - generic [ref=e133]: 87 pts
+        - generic [ref=e134]:
+          - img [ref=e135]
+          - generic [ref=e138]: Saturn planet
+          - generic [ref=e139]: Capricorn 10th house
+          - generic [ref=e140]: 79 pts
+        - generic [ref=e141]:
+          - img [ref=e142]
+          - generic [ref=e144]: Moon planet
+          - generic [ref=e145]: Pisces 12th house
+          - generic [ref=e146]: 68 pts
+    - generic [ref=e147]:
+      - generic [ref=e148]:
+        - img [ref=e150]
+        - generic [ref=e152]:
+          - heading "Talents & Career Fit" [level=3] [ref=e153]
+          - paragraph [ref=e154]: Your core talents and strongest career lanes, scored on a 100-point scale
+      - generic [ref=e164]:
+        - generic [ref=e165]:
+          - heading "【Explorer】 (Sun · Capricorn 9 house)" [level=4] [ref=e166]
+          - generic [ref=e167]: 87 pts
+          - paragraph [ref=e168]: Sun in Capricorn 9 house is one of your core talent sources.
+        - generic [ref=e169]:
+          - heading "【Builder】 (Saturn · Capricorn 10 house)" [level=4] [ref=e170]
+          - generic [ref=e171]: 79 pts
+          - paragraph [ref=e172]: Saturn in Capricorn 10 house is one of your secondary talent sources.
+        - generic [ref=e173]:
+          - heading "【Empath】 (Moon · Pisces 12 house)" [level=4] [ref=e174]
+          - generic [ref=e175]: 68 pts
+          - paragraph [ref=e176]: Moon in Pisces 12 house is one of your third talent sources.
+    - generic [ref=e177]:
+      - generic [ref=e178]:
+        - img [ref=e180]
+        - generic [ref=e182]:
+          - heading "Character & Resources" [level=3] [ref=e183]
+          - paragraph [ref=e184]: Your traits and usable support resources
+      - generic [ref=e186]:
+        - heading "Strengths" [level=4] [ref=e187]:
+          - img [ref=e188]
+          - text: Strengths
+        - paragraph [ref=e191]:
+          - generic [ref=e192]: •
+          - generic [ref=e193]:
+            - strong [ref=e194]: Formidable Execution with Visionary Foresight
+            - text: ": You don't just dream; you build. Your ability to take a nebulous, intuitive feeling and forge it into a concrete 10-year plan is your superpower. You have the discipline of a master craftsman and the imagination of a poet, allowing you to create enduring systems that others find impossible."
+        - paragraph [ref=e195]:
+          - generic [ref=e196]: •
+          - generic [ref=e197]:
+            - strong [ref=e198]: Authentic and Transformative Leadership
+            - text: ": Your power comes from complete self-mastery. Others are drawn to your intensity and your ability to handle psychological and real-world crises without flinching. You lead by diving into the depths, whether it's a financial restructuring or a personal conflict, and emerging with a solution that rebuilds things from the ground up."
+    - generic [ref=e199]:
+      - generic [ref=e200]:
+        - img [ref=e202]
+        - generic [ref=e204]:
+          - heading "Deep Inside — What You Don't Say" [level=3] [ref=e205]
+          - paragraph [ref=e206]: Reading the quiet, tender part of your inner world
+      - paragraph [ref=e210]: This ambitious drive is channeled through a personality that is first and foremost a bold initiator and an independent spearhead. Your approach to life is direct, competitive, and instinctively action-oriented. You don’t wait for permission; you see a challenge and you charge. This gives you a courageous, pioneering spirit that is impossible to ignore. However, this is seasoned by a deeply private and sensitive emotional core. Your inner world is not about logic; it is a boundless, intuitive sea of feelings that border on the universal. You feel everything, often before you can articulate it, making you an extraordinarily empathetic and imaginative person who processes the world through a deeply personal, subjective filter. You are a warrior with a poet’s soul, building a fortress for the dreams you hold dear.
+    - generic [ref=e211]:
+      - generic [ref=e212]:
+        - img [ref=e214]
+        - generic [ref=e217]:
+          - heading "Life Areas" [level=3] [ref=e218]
+          - paragraph [ref=e219]: Unlock to view
+      - generic [ref=e220]:
+        - generic:
+          - generic:
+            - paragraph:
+              - strong: "[Love & Creativity]"
+            - paragraph: Your creative expression and romantic life are deeply tied to your mission of building an intellectual legacy. You attract or are attracted to grand, adventurous, and optimistic scenarios. A key orientation is "5 to 9," meaning your love affairs, children, or artistic projects act as a direct ca
+    - generic [ref=e225]:
+      - generic [ref=e226]:
+        - img [ref=e227]
+        - heading "Unlock Full Action Blueprint" [level=3] [ref=e230]
+      - paragraph [ref=e231]: You've seen the preview. Pay to unlock permanent access to the complete Complete Life Blueprint (bound to birth info, not a membership).
+      - list [ref=e232]:
+        - listitem [ref=e233]:
+          - img [ref=e234]
+          - generic [ref=e237]: Life path suggestions (stage-by-stage growth)
+        - listitem [ref=e238]:
+          - img [ref=e239]
+          - generic [ref=e242]: Environment & benefactors (wealth-boosting / must-avoid)
+        - listitem [ref=e243]:
+          - img [ref=e244]
+          - generic [ref=e247]: Pitfall guide (people / things / environments)
+        - listitem [ref=e248]:
+          - img [ref=e249]
+          - generic [ref=e252]: Summary & action items
+      - button "Unlock with PayPal · $9.99" [ref=e253] [cursor=pointer]
+      - paragraph [ref=e254]: Free preview · Unlock full text after payment
+    - generic [ref=e255]:
+      - generic [ref=e256]:
+        - img [ref=e258]
+        - generic [ref=e261]:
+          - heading "Life Timeline Guidance" [level=3] [ref=e262]
+          - paragraph [ref=e263]: Growth paths and action guidance across life stages
+      - generic [ref=e264]:
+        - generic:
+          - generic:
+            - paragraph:
+              - strong: "0-20: The Awakening of the Inner World"
+            - paragraph: "Your childhood felt like a dialogue between two conflicting forces: a need for conventional success and a vivid, dreamy inner life that was mostly invisible to others. You learned early that the world demanded results, but your true sanctuary was in solitary reflection and creative visualization. You matured your sense of responsibility"
+    - generic [ref=e266]:
+      - generic [ref=e267]:
+        - img [ref=e269]
+        - generic [ref=e274]:
+          - heading "Environment & Allies" [level=3] [ref=e275]
+          - paragraph [ref=e276]: Unlock to view
+      - generic [ref=e277]:
+        - generic:
+          - generic: "### Environmental Fit You thrive in settings that are both high-stakes and structurally respected. Imagine a modern, gl"
+    - generic [ref=e279]:
+      - generic [ref=e280]:
+        - img [ref=e282]
+        - generic [ref=e284]:
+          - heading "Pitfall Guide" [level=3] [ref=e285]
+          - paragraph [ref=e286]: Unlock to view
+      - generic [ref=e287]:
+        - generic:
+          - generic: "• The Pitfall of the Isolated Martyr: Your deep and private well of emotion, hidden behind a wall of extreme professional competence, can lead you to feel utterly alone. Trigger: You successfully handle a personal or professional crisis for others while internally falling apart, refusing to ask for help. Strategy: Separately schedule time for \"leadership\" and time for \"vulnerability.\" Confide in a trusted, non-judgmental guide who understands that sharing a burden is a form of strategic mastery, not weakness."
+    - generic [ref=e289]:
+      - generic [ref=e290]:
+        - img [ref=e292]
+        - generic [ref=e294]:
+          - heading "Summary & Action Plan" [level=3] [ref=e295]
+          - paragraph [ref=e296]: Unlock to view
+      - generic [ref=e297]:
+        - generic:
+          - generic:
+            - paragraph: Your life is a testament to the fact that the strongest fortresses are built on the deepest foundations of self-awareness. You are not here to choose between being a powerful leader and a sensitive so
+    - generic [ref=e302]:
+      - paragraph [ref=e303]: DEEP READING
+      - heading "This is just the" [level=3] [ref=e304]
+      - heading "tip of the iceberg" [level=3] [ref=e305]
+      - paragraph [ref=e306]: You've seen the 5-dimension overview
+      - paragraph [ref=e307]: Full chart depth reading delivered 1-on-1 by your personal interpreter
+      - link "Contact Interpreter on WhatsApp" [ref=e308] [cursor=pointer]:
+        - /url: https://api.whatsapp.com/send/?phone=85284805768
+        - img [ref=e309]
+        - generic [ref=e311]: Contact Interpreter on WhatsApp
+      - paragraph [ref=e312]: Click to add your personal interpreter
+      - paragraph [ref=e313]: Unlock all 8 deep reading modules

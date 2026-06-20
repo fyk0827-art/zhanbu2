@@ -1,0 +1,6 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e77]:
+    - paragraph [ref=e84]: "Estimated time: 62.4s"
+    - paragraph [ref=e85]: Reading planetary positions and house placements…
+    - paragraph [ref=e86]: Swiss Ephemeris precision 0.01°
