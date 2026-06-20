@@ -91,7 +91,7 @@ export default function App() {
 
       const unsub = subscribe(() => {
         const s = getState();
-        if (s.sections.length >= 2 && !hasNavigated.current) {
+        if (s.sections.length >= 1 && !hasNavigated.current) {
           hasNavigated.current = true;
           navigate(`${generatorPath("final-report")}?reportType=${encodeURIComponent(reportType)}`);
         }
