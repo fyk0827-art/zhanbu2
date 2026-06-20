@@ -6,7 +6,7 @@ import { fetchReportPrompts } from "./reportPromptApi";
 import { runV2Calculations } from "./v2ScoringEngine";
 import { trackEvent } from "../utils/track";
 import { localizeAstroText } from "../utils/astroI18n";
-import { pushSection } from "../utils/streamStore";
+import { pushSection, markDone } from "../utils/streamStore";
 
 function normalizeLanguage(language?: string): string {
   if (!language) return "en";
@@ -105,5 +105,6 @@ export async function generateReportText(
     }
   }
 
+  markDone();
   return localizeAstroText(received, language);
 }
