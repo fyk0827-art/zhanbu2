@@ -22,7 +22,7 @@ export async function* streamChat(
   apiKey: string,
   request: ChatRequest
 ): AsyncGenerator<string, void, unknown> {
-  const url = `${BASE_URL}/chat/completions`;
+  const url = `${BASE_URL}/chat`;
 
   // Build request body with explicit validation
   // V2.8: temperature=0 for deterministic output
