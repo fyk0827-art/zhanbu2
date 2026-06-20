@@ -21,6 +21,7 @@ import type { BirthData, NatalChart } from "./services/astrologyEngine";
 import { generatorPath } from "./utils/generatorNav";
 import { generateReportText } from "./services/reportGenerator";
 import { trackEvent } from "./utils/track";
+import { reset as resetStore, subscribe, getState } from "./utils/streamStore";
 
 let globalChart: NatalChart | null = null;
 let globalReportText: string = "";
@@ -76,6 +77,7 @@ export default function App() {
     setGenerationError(null);
     setCharCount(0);
     hasNavigated.current = false;
+    resetStore();
     try {
       const natalChart = await calculateNatalChart(birthData);
       saveBirthData(birthData);
@@ -85,10 +87,26 @@ export default function App() {
       setChart(natalChart);
 
       const reportType = getGlobalReportType();
-      const text = await generateReportText(natalChart, reportType, (chunk) => setCharCount(chunk.length), i18n.language);
-      if (!text.trim()) throw new Error(t("errorEmptyReport"));
+      let fullText = "";
 
-      const { reportId } = await persistReport(text, natalChart);
+      const unsub = subscribe(() => {
+        const s = getState();
+        if (s.sections.length >= 2 && !hasNavigated.current) {
+          hasNavigated.current = true;
+          setIsLoading(false);
+          navigate(`${generatorPath("final-report")}?reportType=${encodeURIComponent(reportType)}`);
+        }
+      });
+
+      try {
+        fullText = await generateReportText(natalChart, reportType, (chunk) => setCharCount(chunk.length), i18n.language);
+      } finally {
+        unsub();
+      }
+
+      if (!fullText.trim()) throw new Error(t("errorEmptyReport"));
+
+      const { reportId } = await persistReport(fullText, natalChart);
       trackEvent('report_success', true);
       setIsLoading(false);
       if (!hasNavigated.current) {

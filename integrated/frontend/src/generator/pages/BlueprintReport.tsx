@@ -17,6 +17,7 @@ import { getPaymentLabels } from "../services/paymentApi";
 import { getRouterSearchParams } from "../utils/routerQuery";
 import { generatorPath } from "../utils/generatorNav";
 import { ReportDeepReadingCTA } from "../components/ReportDeepReadingCTA";
+import { subscribe as streamSubscribe, getState as getStreamState } from "../utils/streamStore";
 import { PaywallCard, LockedPreview } from "../components/ReportPaywall";
 import { ReportIdentitySection } from "../components/ReportIdentitySection";
 import { MarriageReportView, parseMarriageCoverMeta } from "../components/MarriageReportView";
@@ -607,6 +608,8 @@ export default function BlueprintReport({ chart }: Props) {
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
   const [genCharCount, setGenCharCount] = useState(0);
+  const [liveSections, setLiveSections] = useState<{heading: string; content: string}[]>([]);
+  const [streaming, setStreaming] = useState(true);
   const autoGenRef = useRef(false);
   const languageRepairRef = useRef(false);
   const [reportId, setReportId] = useState<string | null>(() => {
@@ -635,6 +638,20 @@ export default function BlueprintReport({ chart }: Props) {
     setGlobalReportText("", reportType);
     saveReportText("", reportType);
   }, [activeChart, reportText, reportType, i18n.language]);
+
+  useEffect(() => {
+    const unsub = streamSubscribe(() => {
+      const s = getStreamState();
+      setLiveSections([...s.sections]);
+      if (s.done) setStreaming(false);
+    });
+    const initial = getStreamState();
+    if (initial.sections.length > 0) {
+      setLiveSections([...initial.sections]);
+      if (initial.done) setStreaming(false);
+    }
+    return unsub;
+  }, []);
 
   useEffect(() => {
     if (!activeChart || reportText || autoGenRef.current) return;
@@ -1460,6 +1477,24 @@ export default function BlueprintReport({ chart }: Props) {
       )}
       {hasPremium && !showPremium && (
         <div className="h-20 max-w-[414px] mx-auto" aria-hidden />
+      )}
+      {streaming && liveSections.filter((s) => {
+        const known = findPart([s.heading]);
+        return !known;
+      }).length > 0 && (
+        <section className="py-4 px-6 max-w-[414px] mx-auto">
+          {liveSections.filter((s) => !findPart([s.heading])).map((sec, i) => (
+            <div key={i} className="rounded-xl p-5 mb-3 text-center" style={{ border: "1px dashed rgba(232,185,81,0.2)", background: "rgba(232,185,81,0.03)" }}>
+              <p className="text-sm font-medium mb-3" style={{ color: "rgba(250,246,240,0.5)" }}>{sec.heading}</p>
+              <div className="flex items-center justify-center gap-1.5 mb-3">
+                {[0,1,2].map((j) => (
+                  <span key={j} className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--prism-gold)", animationDelay: `${j * 0.3}s` }} />
+                ))}
+              </div>
+              <p className="text-xs tracking-wider" style={{ color: "rgba(232,185,81,0.45)" }}>Divining · the stars are aligning</p>
+            </div>
+          ))}
+        </section>
       )}
       <ReportDeepReadingCTA />
     </div>

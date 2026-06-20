@@ -18,7 +18,7 @@ export default function PrismAnalysisAnimation({ charCount: _charCount }: Props)
   const { t } = useTranslation();
   const [stepIdx, setStepIdx] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [countdown, setCountdown] = useState(() => Math.floor(Math.random() * 301) + 900);
+  const [countdown, setCountdown] = useState(() => Math.floor(Math.random() * 101) + 200);
   const doneRef = useRef(false);
 
   useEffect(() => {

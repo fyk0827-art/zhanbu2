@@ -6,6 +6,7 @@ import { fetchReportPrompts } from "./reportPromptApi";
 import { runV2Calculations } from "./v2ScoringEngine";
 import { trackEvent } from "../utils/track";
 import { localizeAstroText } from "../utils/astroI18n";
+import { pushSection } from "../utils/streamStore";
 
 function normalizeLanguage(language?: string): string {
   if (!language) return "en";
@@ -58,6 +59,7 @@ export async function generateReportText(
   const sp = appendOutputLanguageInstruction(resolveSystemPrompt(reportType, dbPrompts.prompts), language);
   const up = appendOutputLanguageInstruction(localizeAstroText(prompts.user, language), language);
   let received = "";
+  let lastSplit = 0;
 
   for await (const chunk of streamChat(s.apiKey, {
     model: s.model || "deepseek-v4-pro",
@@ -70,6 +72,42 @@ export async function generateReportText(
   })) {
     received += chunk;
     onChunk?.(received);
+
+    const headingRegex = /(?:^|\n)#{2,3}\s+[^\n]+/g;
+    headingRegex.lastIndex = lastSplit;
+    let m: RegExpExecArray | null;
+    const boundaries: number[] = [];
+    while ((m = headingRegex.exec(received)) !== null) {
+      if (m.index > lastSplit + 2) boundaries.push(m.index);
+    }
+    let sectionEnd = -1;
+    for (const pos of boundaries) {
+      if (sectionEnd === -1) sectionEnd = pos;
+    }
+    if (sectionEnd > 0) {
+      const raw = received.slice(lastSplit, sectionEnd).trim();
+      lastSplit = sectionEnd;
+      const lines = raw.split("\n");
+      const sep = lines[0]?.startsWith("##") || lines[0]?.startsWith("###");
+      if (sep && lines.length > 1) {
+        const heading = lines[0].replace(/^#{2,3}\s+/, "").trim();
+        const content = lines.slice(1).join("\n").trim();
+        if (heading && content) {
+          pushSection({ heading, content });
+        }
+      }
+    }
   }
+
+  const remaining = received.slice(lastSplit).trim();
+  if (remaining) {
+    const lines = remaining.split("\n");
+    const heading = lines[0]?.replace(/^#{2,3}\s+/, "").trim();
+    const content = lines.slice(1).join("\n").trim();
+    if (heading && content) {
+      pushSection({ heading, content });
+    }
+  }
+
   return localizeAstroText(received, language);
 }
