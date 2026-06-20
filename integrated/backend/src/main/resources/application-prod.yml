@@ -5,8 +5,8 @@ spring:
     password: Fyk6112212...
 
 meta:
-  pixel-id: 1523243282664759
+  pixel-id: 1000287272912455
   capi-access-token: ${META_CAPI_ACCESS_TOKEN}
-  test-event-code: ""
+  test-event-code: TEST56505
   product-name: Full Life Blueprint Report
   currency: USD
