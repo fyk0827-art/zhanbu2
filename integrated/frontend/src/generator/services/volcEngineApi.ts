@@ -15,8 +15,7 @@ interface ChatRequest {
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "";
 const BASE_URL = API_BASE ? `${API_BASE}/api/proxy` : "/api/proxy";
 
-/** 本地开发写死 Key；填好后局域网访客无需进设置页。留空则仍用 localStorage。 */
-const HARDCODED_API_KEY = "sk-e3ed505dbeae45e8b9a2b3c923b118a1";
+/** API Key 由后端 proxy 自动注入，前端仅做设置页 UI 展示。 */
 
 export async function* streamChat(
   apiKey: string,
@@ -135,9 +134,6 @@ export function getSettings(): AppSettings {
     }
   } catch {
     // ignore
-  }
-  if (HARDCODED_API_KEY && !HARDCODED_API_KEY.startsWith("在此粘贴")) {
-    base.apiKey = HARDCODED_API_KEY;
   }
   return base;
 }
