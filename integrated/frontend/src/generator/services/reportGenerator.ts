@@ -50,7 +50,6 @@ export async function generateReportText(
 ): Promise<string> {
   trackEvent('report_generating', true);
   const s = getSettings();
-  if (!s.apiKey) throw new Error("未配置 API Key，请先去设置页面配置");
 
   const calcResult = runV2Calculations(chart);
 

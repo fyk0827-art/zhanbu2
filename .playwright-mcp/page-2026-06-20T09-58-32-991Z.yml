@@ -1,6 +1,0 @@
-- generic [ref=e2]:
-  - region "Notifications alt+T"
-  - generic [ref=e73]:
-    - paragraph [ref=e80]: "Estimated time: 17.0s"
-    - paragraph [ref=e81]: Your life blueprint is ready
-    - paragraph [ref=e82]: Preparing the reveal

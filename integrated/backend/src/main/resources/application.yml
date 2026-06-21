@@ -87,7 +87,7 @@ pay:
     webhook-id-prod: ${PAYPAL_WEBHOOK_ID_PROD:3A432358DX639405T}
 
 proxy:
-  api-key: ${PROXY_API_KEY:sk-e3ed505dbeae45e8b9a2b3c923b118a1}
+  api-key: ${PROXY_API_KEY:sk-fd7052e9abda4e5e9e21cd50bf9be400}
   base-url: ${PROXY_BASE_URL:https://api.deepseek.com}
 
 logging:
