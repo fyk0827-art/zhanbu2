@@ -13,7 +13,8 @@ interface ChatRequest {
 }
 
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "";
-const BASE_URL = API_BASE ? `${API_BASE}/api/proxy` : "/api/proxy";
+const PROXY_BASE = (import.meta.env.VITE_PROXY_BASE as string | undefined) ?? "";
+const BASE_URL = PROXY_BASE || (API_BASE ? `${API_BASE}/api/proxy` : "/api/proxy");
 
 /** API Key 由后端 proxy 自动注入，前端仅做设置页 UI 展示。 */
 
@@ -108,7 +109,7 @@ export interface AppSettings {
 
 const DEFAULT_SETTINGS: AppSettings = {
   apiKey: "",
-  model: "deepseek-v4-pro",
+  model: "deepseek-v4-flash",
   temperature: 0.1,
   maxTokens: 16384,
   customPrompt: "",
@@ -143,7 +144,8 @@ export function saveSettings(settings: AppSettings): void {
 }
 
 export const AVAILABLE_MODELS = [
-  { value: "deepseek-v4-pro", label: "DeepSeek V4 Pro (推荐)" },
+  { value: "deepseek-v4-flash", label: "DeepSeek V4 Flash" },
+  { value: "deepseek-v4-pro", label: "DeepSeek V4 Pro" },
 ];
 
 // Default system prompt - 包含完整的输出格式和风格要求
