@@ -19,7 +19,9 @@ import { bindPrepaidReport, getPrepaidOrderId } from "./services/partnerApi";
 import { calculateNatalChart } from "./services/astrologyEngine";
 import type { BirthData, NatalChart } from "./services/astrologyEngine";
 import { generatorPath } from "./utils/generatorNav";
-import { generateReportText } from "./services/reportGenerator";
+import { generateReportPart } from "./services/reportGenerator";
+import { buildUserPrompt, PARTS } from "./services/reportPrompt";
+import { runV2Calculations } from "./services/v2ScoringEngine";
 import { trackEvent } from "./utils/track";
 import { reset as resetStore, subscribe, getState, setStreamingActive, markDone } from "./utils/streamStore";
 
@@ -87,7 +89,8 @@ export default function App() {
       setChart(natalChart);
 
       const reportType = getGlobalReportType();
-      let fullText = "";
+      const calcResult = runV2Calculations(natalChart);
+      const dbPrompts: { prompts?: Record<string, string> | null } = { prompts: null };
 
       const unsub = subscribe(() => {
         const s = getState();
@@ -98,8 +101,12 @@ export default function App() {
       });
 
       setStreamingActive(true);
+      let fullText = "";
       try {
-        fullText = await generateReportText(natalChart, reportType, (chunk) => setCharCount(chunk.length), i18n.language);
+        const results = await Promise.all(PARTS.map(part =>
+          generateReportPart(part, natalChart, reportType, calcResult, i18n.language, dbPrompts)
+        ));
+        fullText = results.join("");
       } finally {
         unsub();
         setStreamingActive(false);
