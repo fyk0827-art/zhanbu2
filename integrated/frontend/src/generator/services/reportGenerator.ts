@@ -1,7 +1,7 @@
 import type { NatalChart } from "./astrologyEngine";
 import type { ReportTypeId } from "../types/reportTypes";
 import { getSettings, streamChat } from "./volcEngineApi";
-import { buildPromptsForReportType, resolveSystemPrompt } from "./reportPrompt";
+import { buildPromptsForReportType, resolveSystemPrompt, buildSystemPromptForPart, buildUserPrompt, PARTS } from "./reportPrompt";
 import { fetchReportPrompts } from "./reportPromptApi";
 import { runV2Calculations } from "./v2ScoringEngine";
 import { trackEvent } from "../utils/track";
@@ -40,6 +40,76 @@ This instruction overrides any earlier examples, templates, headings, or wording
 Translate all section headings, labels, scoring descriptions, advice, and narrative text into ${outputLanguage}.
 Translate all astrology terms too: planet names, zodiac signs, houses, scores, ages, and chart labels.
 Do not output Chinese unless the requested output language is Chinese.`;
+}
+
+async function streamToSections(
+  systemPrompt: string,
+  userPrompt: string,
+  language: string
+): Promise<string> {
+  const s = getSettings();
+  let received = "";
+  let lastSplit = 0;
+
+  for await (const chunk of streamChat(s.apiKey, {
+    model: s.model || "deepseek-v4-flash",
+    messages: [
+      { role: "system" as const, content: systemPrompt },
+      { role: "user" as const, content: userPrompt },
+    ],
+    max_tokens: s.maxTokens || 16384,
+    temperature: s.temperature ?? 0.1,
+  })) {
+    received += chunk;
+
+    const headingRegex = /(?:^|\n)#{1,3}\s+[^\n]+/g;
+    const positions: number[] = [];
+    let match: RegExpExecArray | null;
+    while ((match = headingRegex.exec(received)) !== null) {
+      const pos = match.index + (match[0].startsWith("\n") ? 1 : 0);
+      if (pos >= lastSplit) positions.push(pos);
+    }
+    while (positions.length >= 2) {
+      const start = positions[0];
+      const end = positions[1];
+      const raw = received.slice(start, end).trim();
+      const lines = raw.split("\n");
+      const heading = lines[0].replace(/^#{1,3}\s+/, "").trim();
+      const content = lines.slice(1).join("\n").trim();
+      if (heading && content) {
+        pushSection({ heading, content });
+      }
+      lastSplit = end;
+      positions.shift();
+    }
+  }
+
+  const remaining = received.slice(lastSplit).trim();
+  if (remaining) {
+    const lines = remaining.split("\n");
+    const heading = lines[0]?.replace(/^#{1,3}\s+/, "").trim();
+    const content = lines.slice(1).join("\n").trim();
+    if (heading && content) {
+      pushSection({ heading, content });
+    }
+  }
+
+  return localizeAstroText(received, language);
+}
+
+export async function generateReportPart(
+  part: number,
+  chart: NatalChart,
+  reportType: ReportTypeId,
+  calcResult: V2CalculationResult,
+  language: string,
+  dbPrompts: { prompts?: Record<string, string> | null }
+): Promise<string> {
+  const sp = buildSystemPromptForPart(part);
+  const up = buildUserPrompt(chart, calcResult);
+  const fullSp = appendOutputLanguageInstruction(sp, language);
+  const fullUp = appendOutputLanguageInstruction(localizeAstroText(up, language), language);
+  return streamToSections(fullSp, fullUp, language);
 }
 
 export async function generateReportText(
