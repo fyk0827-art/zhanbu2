@@ -119,6 +119,7 @@ export default function App() {
       if (hasNavigated.current) return;
       const errMsg = error instanceof Error ? error.message : String(error);
       trackEvent('report_fail', true);
+      try { localStorage.setItem("last_report_error", errMsg); } catch {}
       console.error("Error generating report:", error);
       setIsLoading(false);
       setGenerationError(t("errorNetworkFailed", { msg: errMsg }));
