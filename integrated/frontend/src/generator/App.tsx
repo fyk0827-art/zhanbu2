@@ -116,6 +116,7 @@ export default function App() {
         navigate(`${generatorPath("final-report")}?reportType=${encodeURIComponent(reportType)}&reportId=${encodeURIComponent(reportId)}`);
       }
     } catch (error) {
+      if (hasNavigated.current) return;
       const errMsg = error instanceof Error ? error.message : String(error);
       trackEvent('report_fail', true);
       console.error("Error generating report:", error);
